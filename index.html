@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="assets/logo.jpg" />
+  <title>Red Store</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- AGE GATE (FORCE ON ENTRY) -->
+  <div id="ageGate" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="ageTitle">
+    <div class="modal">
+      <h2 id="ageTitle">Age Verification</h2>
+      <p class="muted" id="ageText">
+        This store sells alcohol and tobacco. You must confirm you are of legal age to enter.
+      </p>
+
+      <div class="age-logo">
+        <img src="assets/logo.jpg" alt="Red Store logo" />
+      </div>
+      <div class="row gap wrap">
+        <button id="ageYes" class="btn primary" type="button">Yes, I’m 18+</button>
+        <button id="ageNo" class="btn ghost" type="button">No</button>
+      </div>
+
+      <p class="small muted" id="ageHint">
+        If you are underage, you will be redirected out of the website.
+      </p>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand">
+      <!-- <div class="logo" >RED</div> -->
+      <div class="logo">
+        <img src="assets/logo.jpg" alt="Red Store logo" />
+      </div>
+      <div class="brand-text">
+        <div class="title" id="storeTitle">Red Store</div>
+        <div class="subtitle" id="storeSubtitle">Cigarettes • Alcohol • Snacks • Handmade Coffee</div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <a class="icon-btn" id="instagramBtn" href="#" target="_blank" rel="noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4.5A3.5 3.5 0 1 1 8.5 12 3.5 3.5 0 0 1 12 8.5zm0 2A1.5 1.5 0 1 0 13.5 12 1.5 1.5 0 0 0 12 10.5zM17.75 6.25a.75.75 0 1 1-.75.75.75.75 0 0 1 .75-.75z"></path>
+        </svg>
+      </a>
+
+      <a class="icon-btn" id="wazeBtn" href="#" target="_blank" rel="noreferrer" aria-label="Waze">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2a9 9 0 0 0-9 9c0 3.7 2.2 6.9 5.4 8.3.4.2.6.6.6 1v.4c0 .6.5 1 1 1h4c.6 0 1-.4 1-1v-.4c0-.4.2-.8.6-1A9 9 0 0 0 21 11a9 9 0 0 0-9-9zm0 16.2A7.2 7.2 0 1 1 19.2 11 7.2 7.2 0 0 1 12 18.2z"></path>
+          <path d="M9.2 11.2a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm5.6 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"></path>
+          <path d="M9.5 14.2c.8.8 4.2.8 5 0 .3-.3.3-.8 0-1.1-.3-.3-.8-.3-1.1 0-.2.2-2.6.2-2.8 0-.3-.3-.8-.3-1.1 0-.3.3-.3.8 0 1.1z"></path>
+        </svg>
+      </a>
+
+      <select id="langSelect" class="input lang" aria-label="Language">
+        <option value="en">EN</option>
+        <option value="he">HE</option>
+        <option value="ar">AR</option>
+      </select>
+
+      <button class="btn cartbtn" id="openCartBtn" type="button">
+        <span id="cartLabel">Cart</span>
+        <span class="pill" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- HERO -->
+    <section class="hero card">
+      <div class="hero-left">
+        <h1 id="heroTitle">Order fast with WhatsApp</h1>
+        <p class="muted" id="heroText">
+          Choose products, add to cart, then send your order with one tap.
+        </p>
+        <div class="row gap wrap">
+          <a class="btn primary" href="#shop" id="shopNowBtn">Shop now</a>
+          <a class="btn ghost" id="waQuickBtn" href="#" target="_blank" rel="noreferrer">WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-badge">
+          <div class="hero-badge-title" id="badge1Title">Pickup / Delivery</div>
+          <div class="muted small" id="badge1Text">Payment later (cash / in store)</div>
+        </div>
+        <div class="hero-badge">
+          <div class="hero-badge-title" id="badge2Title">Restricted items</div>
+          <div class="muted small" id="badge2Text">Age confirmation required</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="card">
+      <div class="section-head">
+        <h2 id="catTitle">Categories</h2>
+        <div class="muted small" id="catHint">Swipe on phone • Scroll on desktop</div>
+      </div>
+
+      <div class="cat-wrap">
+        <button class="arrow left" id="catLeft" aria-label="Scroll left" type="button">‹</button>
+        <div class="cat-slider" id="categorySlider" tabindex="0"></div>
+        <button class="arrow right" id="catRight" aria-label="Scroll right" type="button">›</button>
+      </div>
+    </section>
+
+    <!-- SHOP -->
+    <section class="card" id="shop">
+      <div class="shop-head">
+        <h2 id="shopTitle">Shop</h2>
+        <div class="controls">
+          <input id="searchInput" class="input" placeholder="Search products…" />
+          <select id="categorySelect" class="input"></select>
+        </div>
+      </div>
+
+      <div class="products" id="productList"></div>
+    </section>
+
+  </main>
+
+  <div id="cartBackdrop" class="backdrop hidden"></div>
+
+  <aside id="cartDrawer" class="cart hidden" aria-label="Cart">
+    <div class="cart-head">
+      <div>
+        <div class="cart-title" id="cartTitle">Your Cart</div>
+        <div class="muted small"><span id="totalLabel">Total</span>: ₪<span id="cartTotal">0</span></div>
+      </div>
+      <button class="btn ghost" id="closeCartBtn" type="button">Close</button>
+    </div>
+
+    <div class="cart-body" id="cartItems"></div>
+
+    <div class="cart-foot">
+      <div class="grid">
+        <input id="name" class="input" placeholder="Name (required)" />
+        <input id="phone" class="input" placeholder="Phone (required)" />
+        <input id="address" class="input" placeholder="Address (optional)" />
+        <textarea id="notes" class="input" rows="3" placeholder="Notes (optional)"></textarea>
+      </div>
+
+      <button class="btn primary full" id="checkoutWaBtn" type="button">Send order via WhatsApp</button>
+      <button class="btn ghost full" id="clearCartBtn" type="button">Clear cart</button>
+
+      <p class="small muted" style="margin-top:10px;" id="legalText">
+        Restricted items require legal age. By continuing you confirm you are of legal age.
+      </p>
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>
