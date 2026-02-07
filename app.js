@@ -12,6 +12,7 @@ const CART_KEY = "redstore_cart_v3";
 const LANG_KEY = "redstore_lang_v1";
 const productEls = new Map(); // id -> element
 
+
 // ======== DATA ========
 const categories = [
   { id: "all", icon: "🛒", restricted: false },
