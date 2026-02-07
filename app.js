@@ -1,8 +1,12 @@
 // ======== CONFIG: change these ========
 const STORE_NAME = "Red Store";
-const STORE_WHATSAPP = "9725XXXXXXXX"; // no +, example: 972501234567
-const INSTAGRAM_URL = "https://instagram.com/YOUR_PROFILE"; // change
-const WAZE_URL = "https://waze.com/ul?q=Red%20Store";        // change
+// const STORE_WHATSAPP = "9725XXXXXXXX"; // no +, example: 972501234567
+const STORE_WHATSAPP = "972532415523";
+// const INSTAGRAM_URL = "https://instagram.com/YOUR_PROFILE"; // change
+const INSTAGRAM_URL = "https://www.instagram.com/red_store_ramah/";
+// const WAZE_URL = "https://waze.com/ul?q=Red%20Store";        // change
+const WAZE_URL =
+  "https://ul.waze.com/ul?place=ChIJXbDQDq4xHBURMSYTp0TbYQ4&ll=32.93647600%2C35.36472470&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location";
 
 // ======== KEYS ========
 // ✅ Age gate in sessionStorage => shows again when browser/tab is reopened
@@ -209,6 +213,12 @@ function formatILS(n){
 }
 function cartCount(){ return cart.reduce((s,i)=>s+i.qty,0); }
 function cartTotal(){ return cart.reduce((s,i)=>s+i.price*i.qty,0); }
+
+// ======== WHATSAPP LINK HELPER ========
+function waLink(message){
+  return `https://api.whatsapp.com/send?phone=${STORE_WHATSAPP}&text=${encodeURIComponent(message)}`;
+}
+
 
 // ======== AGE GATE (show every time site opens) ========
 function showAgeGate(){
@@ -523,8 +533,7 @@ function checkoutWhatsApp(){
   const { text, name, phone } = buildOrderText();
   if (!name || !phone) return alert(t.namePhoneReq);
 
-  const url = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(text)}`;
-  window.open(url, "_blank");
+window.open(waLink(text), "_blank");
 }
 
 // ======== EVENTS ========
@@ -547,8 +556,11 @@ function initEvents(){
   $("closeCartBtn").addEventListener("click", closeCart);
   $("cartBackdrop").addEventListener("click", closeCart);
 
+  // $("waQuickBtn").href =
+  //   `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent("Hi! I want to order from Red Store.")}`;
   $("waQuickBtn").href =
-    `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent("Hi! I want to order from Red Store.")}`;
+  `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent("Hi! I want to order from Red Store.")}`;
+
 
   $("searchInput").addEventListener("input", (e)=>{
     searchTerm = e.target.value || "";
