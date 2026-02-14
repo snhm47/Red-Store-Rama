@@ -155,15 +155,41 @@ async function handleUploadButton(){
     alert("Image upload failed:\n" + e.message);
   }
 }
+// async function resizeImage(file, maxWidth = 1200, quality = 0.7) {
+//   return new Promise((resolve) => {
+//     const img = new Image();
+//     const reader = new FileReader();
+
+//     reader.onload = e => img.src = e.target.result;
+
+//     img.onload = () => {
+//       const canvas = document.createElement("canvas");
+//       const scale = maxWidth / img.width;
+//       const width = img.width > maxWidth ? maxWidth : img.width;
+//       const height = img.width > maxWidth ? img.height * scale : img.height;
+
+//       canvas.width = width;
+//       canvas.height = height;
+
+//       const ctx = canvas.getContext("2d");
+//       ctx.drawImage(img, 0, 0, width, height);
+
+//       canvas.toBlob(
+//         (blob) => resolve(blob),
+//         "image/jpeg",
+//         quality
+//       );
+//     };
+
+//     reader.readAsDataURL(file);
+//   });
+// }
 
 async function saveProduct(){
   const user = auth.currentUser;
-  if (!user) return alert("Not logged in");
-
-  if (user.email !== OWNER_EMAIL) {
-    alert("This email is not allowed to edit.");
-    return;
-  }
+  if (!user) return setMsg($("formMsg"), "Not logged in", true);
+  if (user.email !== OWNER_EMAIL)
+    return setMsg($("formMsg"), "Not owner email", true);
 
   const name = $("pName").value.trim();
   const price = Number($("pPrice").value);
@@ -171,14 +197,41 @@ async function saveProduct(){
   const restricted = $("pRestricted").checked;
   const inStock = $("pInStock").checked;
 
-  // if admin uploaded image, pImgUrl will be filled
-  const imgUrl = ($("pImgUrl")?.value || "").trim();
-
-  if (!name) return alert("Name required");
-  if (!Number.isFinite(price) || price < 0) return alert("Price must be a number");
+  if (!name) return setMsg($("formMsg"), "Name required", true);
+  if (!Number.isFinite(price) || price < 0)
+    return setMsg($("formMsg"), "Price must be a number", true);
 
   try {
-    setMsg($("formMsg"), "Saving...");
+    setMsg($("formMsg"), "Uploading image...");
+
+    let imgUrl = PLACEHOLDER_IMG;
+
+    const file = $("pImage").files[0];
+
+    if (file) {
+      const compressedBlob = await resizeImage(file);
+
+      const formData = new FormData();
+      formData.append("file", compressedBlob);
+      formData.append("upload_preset", "YOUR_UPLOAD_PRESET");
+
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload",
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+
+      const data = await res.json();
+
+      if (!data.secure_url)
+        throw new Error("Image upload failed");
+
+      imgUrl = data.secure_url;
+    }
+
+    setMsg($("formMsg"), "Saving product...");
 
     if (!editingId) {
       await addDoc(collection(db, "products"), {
@@ -187,37 +240,33 @@ async function saveProduct(){
         category,
         restricted,
         inStock,
-        imgUrl: imgUrl || PLACEHOLDER_IMG,
+        imgUrl,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
 
-      setMsg($("formMsg"), "✅ Added");
+      setMsg($("formMsg"), "✅ Product Added");
       clearForm();
-    } else {
-      const refDoc = doc(db, "products", editingId);
 
-      const patch = {
+    } else {
+      await updateDoc(doc(db, "products", editingId), {
         name,
         price,
         category,
         restricted,
         inStock,
+        imgUrl,
         updatedAt: serverTimestamp(),
-      };
+      });
 
-      if (imgUrl) patch.imgUrl = imgUrl;
-
-      await updateDoc(refDoc, patch);
-      setMsg($("formMsg"), "✅ Updated");
+      setMsg($("formMsg"), "✅ Product Updated");
     }
+
   } catch (e) {
-    // If you see "Missing or insufficient permissions"
-    // it means Firestore rules don’t allow this user/email to write.
-    alert("Save failed:\n" + e.message);
     setMsg($("formMsg"), e.message, true);
   }
 }
+
 
 async function editProduct(id){
   const snap = await getDoc(doc(db, "products", id));
