@@ -1,5 +1,8 @@
 // admin.js
-import { auth, db, storage, OWNER_EMAIL } from "./firebase-config.js";
+import {
+  auth, db, OWNER_EMAIL,
+  CLOUDINARY_CLOUD_NAME, CLOUDINARY_UNSIGNED_PRESET
+} from "./firebase-config.js";
 
 import {
   signInWithEmailAndPassword,
@@ -20,123 +23,147 @@ import {
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
-
-const PLACEHOLDER_IMG = "assets/products/placeholder.jpg";
-const MAX_IMG_MB = 3;
-
+const PLACEHOLDER_IMG = "assets/logo.jpg";
 const $ = (id) => document.getElementById(id);
 
-let editingId = null; // Firestore doc id
+let editingId = null;
 
-function setMsg(el, msg, isError = false) {
+function setMsg(el, msg, isError=false){
   if (!el) return;
   el.textContent = msg || "";
   el.style.color = isError ? "#ff7a7a" : "";
 }
 
-function showPopupError(message) {
-  alert(message); // simple popup requested
-}
-
-// ===== LOGIN (with popup) =====
-async function login() {
-  const email = $("email")?.value.trim();
-  const password = $("password")?.value;
+// ---------- AUTH ----------
+async function login(){
+  const email = $("email").value.trim();
+  const password = $("password").value;
 
   if (!email || !password) {
     setMsg($("loginMsg"), "Missing email/password", true);
-    showPopupError("Missing email or password");
+    alert("Missing email/password");
     return;
   }
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
     setMsg($("loginMsg"), "");
-    // Dashboard will show via onAuthStateChanged
   } catch (e) {
-    const msg = firebaseNiceError(e);
-    setMsg($("loginMsg"), msg, true);
-    showPopupError(msg);
+    // Popup + message
+    setMsg($("loginMsg"), e.message, true);
+    alert("Login failed:\n" + e.message);
   }
 }
 
-async function logout() {
+async function logout(){
   await signOut(auth);
 }
 
-// Make Firebase errors readable
-function firebaseNiceError(e) {
-  const code = e?.code || "";
-  if (code === "auth/invalid-credential") return "Wrong email or password.";
-  if (code === "auth/wrong-password") return "Wrong password.";
-  if (code === "auth/user-not-found") return "No user found with this email.";
-  if (code === "auth/too-many-requests") return "Too many tries. Wait a bit and try again.";
-  if (code === "auth/network-request-failed") return "Network error. Check internet.";
-  return e?.message || "Login error.";
-}
-
-// ===== FORM =====
-function clearForm() {
+// ---------- FORM ----------
+function clearForm(){
   editingId = null;
-
   $("pName").value = "";
   $("pPrice").value = "";
   $("pCategory").value = "snacks";
   $("pRestricted").checked = false;
   $("pInStock").checked = true;
 
-  if ($("pImage")) $("pImage").value = "";
-
-  const preview = $("imgPreview");
-  if (preview) {
-    preview.src = "";
-    preview.classList.add("hidden");
-  }
+  // URL + file input
+  const urlEl = $("pImgUrl");
+  if (urlEl) urlEl.value = "";
+  const fileEl = $("pImageFile");
+  if (fileEl) fileEl.value = "";
 
   setMsg($("formMsg"), "");
+  setMsg($("imgMsg"), "");
 }
 
-function setupImagePreview() {
-  const input = $("pImage");
-  const preview = $("imgPreview");
-  if (!input || !preview) return;
+async function resizeImage(file, maxWidth = 1200, quality = 0.7) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const reader = new FileReader();
 
-  input.addEventListener("change", () => {
-    const file = input.files?.[0];
-    if (!file) {
-      preview.src = "";
-      preview.classList.add("hidden");
-      return;
-    }
-    preview.src = URL.createObjectURL(file);
-    preview.classList.remove("hidden");
+    reader.onload = e => {
+      img.src = e.target.result;
+    };
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const scale = maxWidth / img.width;
+      const width = img.width > maxWidth ? maxWidth : img.width;
+      const height = img.width > maxWidth ? img.height * scale : img.height;
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => resolve(blob),
+        "image/jpeg",
+        quality
+      );
+    };
+
+    reader.readAsDataURL(file);
   });
 }
 
-async function uploadImageIfAny() {
-  const file = $("pImage")?.files?.[0];
-  if (!file) return null;
 
-  if (!file.type.startsWith("image/")) throw new Error("Please choose an image file.");
-  if (file.size > MAX_IMG_MB * 1024 * 1024) throw new Error(`Image too large. Max ${MAX_IMG_MB}MB.`);
+async function uploadToCloudinary(file){
+  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UNSIGNED_PRESET ||
+      CLOUDINARY_CLOUD_NAME.includes("YOUR_") || CLOUDINARY_UNSIGNED_PRESET.includes("YOUR_")) {
+    throw new Error("Cloudinary is not configured (cloud name / upload preset).");
+  }
 
-  const safeName = `${Date.now()}_${file.name}`.replace(/[^\w.\-]+/g, "_");
-  const storagePath = `products/${safeName}`;
-  const storageRef = ref(storage, storagePath);
+  const form = new FormData();
+  form.append("file", file);
+  form.append("upload_preset", CLOUDINARY_UNSIGNED_PRESET);
 
-  await uploadBytes(storageRef, file, { contentType: file.type });
-  return await getDownloadURL(storageRef);
+  // (optional) put images in folder
+  // form.append("folder", "red-store/products");
+
+  const endpoint = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
+  const res = await fetch(endpoint, { method: "POST", body: form });
+  const data = await res.json();
+
+  if (!res.ok) {
+    // Cloudinary errors come as { error: { message: ... } }
+    throw new Error(data?.error?.message || "Cloudinary upload failed");
+  }
+
+  return data.secure_url || data.url;
 }
 
-async function saveProduct() {
+async function handleUploadButton(){
+  const file = $("pImageFile")?.files?.[0];
+  if (!file) {
+    setMsg($("imgMsg"), "Choose an image first (camera/gallery).", true);
+    alert("Choose an image first.");
+    return;
+  }
+
+  try {
+    setMsg($("imgMsg"), "Uploading...");
+    const url = await uploadToCloudinary(file);
+    $("pImgUrl").value = url;
+    setMsg($("imgMsg"), "✅ Uploaded! URL filled in.", false);
+  } catch (e) {
+    setMsg($("imgMsg"), e.message, true);
+    alert("Image upload failed:\n" + e.message);
+  }
+}
+
+async function saveProduct(){
   const user = auth.currentUser;
-  if (!user) return setMsg($("formMsg"), "Not logged in", true);
-  if (user.email !== OWNER_EMAIL) return setMsg($("formMsg"), "Not owner email", true);
+  if (!user) return alert("Not logged in");
+
+  if (user.email !== OWNER_EMAIL) {
+    alert("This email is not allowed to edit.");
+    return;
+  }
 
   const name = $("pName").value.trim();
   const price = Number($("pPrice").value);
@@ -144,23 +171,23 @@ async function saveProduct() {
   const restricted = $("pRestricted").checked;
   const inStock = $("pInStock").checked;
 
-  if (!name) return setMsg($("formMsg"), "Name required", true);
-  if (!Number.isFinite(price) || price < 0) return setMsg($("formMsg"), "Price must be a number", true);
+  // if admin uploaded image, pImgUrl will be filled
+  const imgUrl = ($("pImgUrl")?.value || "").trim();
+
+  if (!name) return alert("Name required");
+  if (!Number.isFinite(price) || price < 0) return alert("Price must be a number");
 
   try {
     setMsg($("formMsg"), "Saving...");
 
-    const uploadedUrl = await uploadImageIfAny(); // null if no file
-
     if (!editingId) {
-      // CREATE
       await addDoc(collection(db, "products"), {
         name,
         price,
         category,
         restricted,
         inStock,
-        imgUrl: uploadedUrl || PLACEHOLDER_IMG,
+        imgUrl: imgUrl || PLACEHOLDER_IMG,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
@@ -168,7 +195,6 @@ async function saveProduct() {
       setMsg($("formMsg"), "✅ Added");
       clearForm();
     } else {
-      // UPDATE
       const refDoc = doc(db, "products", editingId);
 
       const patch = {
@@ -180,30 +206,21 @@ async function saveProduct() {
         updatedAt: serverTimestamp(),
       };
 
-      // only update image if user selected a new file
-      if (uploadedUrl) patch.imgUrl = uploadedUrl;
+      if (imgUrl) patch.imgUrl = imgUrl;
 
       await updateDoc(refDoc, patch);
-
       setMsg($("formMsg"), "✅ Updated");
-
-      // reset file + preview
-      if ($("pImage")) $("pImage").value = "";
-      const preview = $("imgPreview");
-      if (preview) {
-        preview.src = "";
-        preview.classList.add("hidden");
-      }
     }
   } catch (e) {
+    // If you see "Missing or insufficient permissions"
+    // it means Firestore rules don’t allow this user/email to write.
+    alert("Save failed:\n" + e.message);
     setMsg($("formMsg"), e.message, true);
-    showPopupError(e.message);
   }
 }
 
-async function editProduct(id) {
-  const refDoc = doc(db, "products", id);
-  const snap = await getDoc(refDoc);
+async function editProduct(id){
+  const snap = await getDoc(doc(db, "products", id));
   if (!snap.exists()) return;
 
   const p = snap.data();
@@ -214,36 +231,30 @@ async function editProduct(id) {
   $("pCategory").value = p.category || "snacks";
   $("pRestricted").checked = !!p.restricted;
   $("pInStock").checked = p.inStock !== false;
+  $("pImgUrl").value = p.imgUrl || "";
+  if ($("pImageFile")) $("pImageFile").value = "";
 
-  // show current image as preview (not a selected file)
-  const preview = $("imgPreview");
-  if (preview) {
-    preview.src = p.imgUrl || PLACEHOLDER_IMG;
-    preview.classList.remove("hidden");
-  }
-
-  if ($("pImage")) $("pImage").value = "";
   setMsg($("formMsg"), `Editing: ${id}`);
 }
 
-async function toggleStock(id, current) {
+async function toggleStock(id, current){
   await updateDoc(doc(db, "products", id), {
     inStock: !current,
     updatedAt: serverTimestamp(),
   });
 }
 
-async function removeProduct(id) {
+async function removeProduct(id){
   if (!confirm("Delete this product?")) return;
   await deleteDoc(doc(db, "products", id));
 }
 
-// ===== LIST =====
-function renderAdminList(items) {
+// ---------- LIST ----------
+function renderAdminList(items){
   const box = $("productAdminList");
   box.innerHTML = "";
 
-  items.forEach((p) => {
+  items.forEach(p=>{
     const el = document.createElement("div");
     el.className = "admin-item";
 
@@ -252,8 +263,8 @@ function renderAdminList(items) {
         <div class="row gap" style="align-items:flex-start;">
           <div class="admin-thumb"><img src="${p.imgUrl || PLACEHOLDER_IMG}" alt=""></div>
           <div>
-            <div style="font-weight:900;">${escapeHtml(p.name)}</div>
-            <div class="muted small">₪${p.price} • ${escapeHtml(p.category)} • ${p.restricted ? "18+" : "OK"} • ${p.inStock ? "In stock" : "Out of stock"}</div>
+            <div style="font-weight:900;">${p.name}</div>
+            <div class="muted small">₪${p.price} • ${p.category} • ${p.restricted ? "18+" : "OK"} • ${p.inStock ? "In stock" : "Out of stock"}</div>
             <div class="muted small">id: ${p.id}</div>
           </div>
         </div>
@@ -269,70 +280,66 @@ function renderAdminList(items) {
     box.appendChild(el);
   });
 
-  box.querySelectorAll("[data-edit]").forEach((b) => {
-    b.addEventListener("click", () => editProduct(b.getAttribute("data-edit")));
+  box.querySelectorAll("[data-edit]").forEach(b=>{
+    b.addEventListener("click", ()=> editProduct(b.getAttribute("data-edit")));
   });
-
-  box.querySelectorAll("[data-stock]").forEach((b) => {
+  box.querySelectorAll("[data-stock]").forEach(b=>{
     const id = b.getAttribute("data-stock");
-    const p = items.find((x) => x.id === id);
-    b.addEventListener("click", () => toggleStock(id, !!p?.inStock));
+    const p = items.find(x=>x.id===id);
+    b.addEventListener("click", ()=> toggleStock(id, !!p?.inStock));
   });
-
-  box.querySelectorAll("[data-del]").forEach((b) => {
-    b.addEventListener("click", () => removeProduct(b.getAttribute("data-del")));
+  box.querySelectorAll("[data-del]").forEach(b=>{
+    b.addEventListener("click", ()=> removeProduct(b.getAttribute("data-del")));
   });
 }
 
-function listenAdminProducts() {
+function listenAdminProducts(){
   const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
-  onSnapshot(q, (snap) => {
-    const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  onSnapshot(q, (snap)=>{
+    const items = snap.docs.map(d=>({ id: d.id, ...d.data() }));
     renderAdminList(items);
   });
 }
 
-// Prevent HTML injection in admin list
-function escapeHtml(str) {
-  return String(str ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-// ===== BOOT =====
-function showLogin() {
+// ---------- UI ----------
+function showLogin(){
   $("loginCard").classList.remove("hidden");
   $("dashCard").classList.add("hidden");
 }
-
-function showDash(user) {
+function showDash(user){
   $("loginCard").classList.add("hidden");
   $("dashCard").classList.remove("hidden");
   $("userInfo").textContent = `Logged in as: ${user.email}`;
 }
 
-function init() {
+function init(){
   $("loginBtn").addEventListener("click", login);
   $("logoutBtn").addEventListener("click", logout);
 
   $("saveBtn").addEventListener("click", saveProduct);
   $("clearFormBtn").addEventListener("click", clearForm);
 
-  setupImagePreview();
+  // image upload button
+  const uploadBtn = $("uploadImgBtn");
+  if (uploadBtn) uploadBtn.addEventListener("click", handleUploadButton);
 
-  onAuthStateChanged(auth, (user) => {
+  // optional: auto-upload when file selected
+  const fileEl = $("pImageFile");
+  if (fileEl) fileEl.addEventListener("change", () => {
+    // comment this out if you only want manual "Upload" click
+    // handleUploadButton();
+  });
+
+  onAuthStateChanged(auth, (user)=>{
     if (!user) {
       showLogin();
       return;
     }
 
-    if (user.email !== OWNER_EMAIL) {
+    if (user.email !== OWNER_EMAIL){
       showLogin();
       setMsg($("loginMsg"), "This email is not allowed to edit.", true);
-      showPopupError("This email is not allowed to edit.");
+      alert("This email is not allowed to edit.");
       signOut(auth);
       return;
     }
