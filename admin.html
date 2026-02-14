@@ -72,7 +72,20 @@
 
           <!-- <input class="input" id="pImage" type="file" accept="image/*" /> -->
 
-          <input class="input" id="pImgUrl" placeholder="Image URL (https://...jpg/png/webp)" />
+          <!-- <input class="input" id="pImgUrl" placeholder="Image URL (https://...jpg/png/webp)" /> -->
+           <!-- Image upload (camera / gallery) -->
+          <label class="muted small">Product image</label>
+
+          <input
+            class="input"
+            id="pImage"
+            type="file"
+            accept="image/*"
+            capture="environment"
+          />
+
+          <img id="imgPreview" class="admin-preview hidden" alt="preview" />
+
           
           <button class="btn primary" id="saveBtn" type="button">Save Product</button>
           <button class="btn ghost" id="clearFormBtn" type="button">Clear Form</button>
