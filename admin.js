@@ -68,15 +68,13 @@ function clearForm(){
   $("pRestricted").checked = false;
   $("pInStock").checked = true;
 
-  // URL + file input
-  const urlEl = $("pImgUrl");
-  if (urlEl) urlEl.value = "";
-  const fileEl = $("pImageFile");
-  if (fileEl) fileEl.value = "";
+  if ($("pImgUrl")) $("pImgUrl").value = "";
+  if ($("pImageFile")) $("pImageFile").value = "";
 
   setMsg($("formMsg"), "");
   setMsg($("imgMsg"), "");
 }
+
 
 async function resizeImage(file, maxWidth = 1200, quality = 0.7) {
   return new Promise((resolve) => {
@@ -155,41 +153,11 @@ async function handleUploadButton(){
     alert("Image upload failed:\n" + e.message);
   }
 }
-// async function resizeImage(file, maxWidth = 1200, quality = 0.7) {
-//   return new Promise((resolve) => {
-//     const img = new Image();
-//     const reader = new FileReader();
-
-//     reader.onload = e => img.src = e.target.result;
-
-//     img.onload = () => {
-//       const canvas = document.createElement("canvas");
-//       const scale = maxWidth / img.width;
-//       const width = img.width > maxWidth ? maxWidth : img.width;
-//       const height = img.width > maxWidth ? img.height * scale : img.height;
-
-//       canvas.width = width;
-//       canvas.height = height;
-
-//       const ctx = canvas.getContext("2d");
-//       ctx.drawImage(img, 0, 0, width, height);
-
-//       canvas.toBlob(
-//         (blob) => resolve(blob),
-//         "image/jpeg",
-//         quality
-//       );
-//     };
-
-//     reader.readAsDataURL(file);
-//   });
-// }
 
 async function saveProduct(){
   const user = auth.currentUser;
   if (!user) return setMsg($("formMsg"), "Not logged in", true);
-  if (user.email !== OWNER_EMAIL)
-    return setMsg($("formMsg"), "Not owner email", true);
+  if (user.email !== OWNER_EMAIL) return setMsg($("formMsg"), "Not owner email", true);
 
   const name = $("pName").value.trim();
   const price = Number($("pPrice").value);
@@ -202,38 +170,29 @@ async function saveProduct(){
     return setMsg($("formMsg"), "Price must be a number", true);
 
   try {
-    setMsg($("formMsg"), "Uploading image...");
+    setMsg($("formMsg"), "Preparing image...");
 
-    let imgUrl = PLACEHOLDER_IMG;
+    // 1) Start with existing URL field or placeholder
+    let imgUrl = ($("pImgUrl")?.value || "").trim() || PLACEHOLDER_IMG;
 
-    const file = $("pImage").files[0];
-
+    // 2) If admin selected a new file -> compress + upload to Cloudinary -> override imgUrl
+    const file = $("pImageFile")?.files?.[0];
     if (file) {
-      const compressedBlob = await resizeImage(file);
+      setMsg($("formMsg"), "Compressing image...");
+      const compressedBlob = await resizeImage(file, 1200, 0.7);
 
-      const formData = new FormData();
-      formData.append("file", compressedBlob);
-      formData.append("upload_preset", "YOUR_UPLOAD_PRESET");
+      setMsg($("formMsg"), "Uploading image...");
+      imgUrl = await uploadToCloudinary(compressedBlob);
 
-      const res = await fetch(
-        "https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload",
-        {
-          method: "POST",
-          body: formData
-        }
-      );
-
-      const data = await res.json();
-
-      if (!data.secure_url)
-        throw new Error("Image upload failed");
-
-      imgUrl = data.secure_url;
+      // fill the URL input so admin can see it
+      if ($("pImgUrl")) $("pImgUrl").value = imgUrl;
+      setMsg($("imgMsg"), "✅ Uploaded!", false);
     }
 
     setMsg($("formMsg"), "Saving product...");
 
     if (!editingId) {
+      // CREATE
       await addDoc(collection(db, "products"), {
         name,
         price,
@@ -247,8 +206,8 @@ async function saveProduct(){
 
       setMsg($("formMsg"), "✅ Product Added");
       clearForm();
-
     } else {
+      // UPDATE
       await updateDoc(doc(db, "products", editingId), {
         name,
         price,
@@ -264,9 +223,9 @@ async function saveProduct(){
 
   } catch (e) {
     setMsg($("formMsg"), e.message, true);
+    alert("Save failed:\n" + e.message);
   }
 }
-
 
 async function editProduct(id){
   const snap = await getDoc(doc(db, "products", id));
