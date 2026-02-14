@@ -1,21 +1,27 @@
+// app.js (SHOP)
+
+// ======== FIREBASE ========
+import { db } from "./firebase-config.js";
+import {
+  collection,
+  onSnapshot,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
 // ======== CONFIG: change these ========
 const STORE_NAME = "Red Store";
-// const STORE_WHATSAPP = "9725XXXXXXXX"; // no +, example: 972501234567
 const STORE_WHATSAPP = "972532415523";
-// const INSTAGRAM_URL = "https://instagram.com/YOUR_PROFILE"; // change
 const INSTAGRAM_URL = "https://www.instagram.com/red_store_ramah/";
-// const WAZE_URL = "https://waze.com/ul?q=Red%20Store";        // change
 const WAZE_URL =
   "https://ul.waze.com/ul?place=ChIJXbDQDq4xHBURMSYTp0TbYQ4&ll=32.93647600%2C35.36472470&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location";
 
-// ======== KEYS ========
-// ✅ Age gate in sessionStorage => shows again when browser/tab is reopened
-const AGE_KEY = "redstore_age_ok_session_v1";
+const PLACEHOLDER_IMG = "assets/products/placeholder.jpg";
 
+// ======== KEYS ========
+const AGE_KEY = "redstore_age_ok_session_v1"; // sessionStorage
 const CART_KEY = "redstore_cart_v3";
 const LANG_KEY = "redstore_lang_v1";
-const productEls = new Map(); // id -> element
-
 
 // ======== DATA ========
 const categories = [
@@ -26,151 +32,87 @@ const categories = [
   { id: "coffee", icon: "☕", restricted: false },
 ];
 
-// const products = [
-//   { id: "c1", name: "Marlboro Red", price: 35, category: "cigarettes", restricted: true },
-//   { id: "c2", name: "LM Blue", price: 33, category: "cigarettes", restricted: true },
-//   { id: "a1", name: "Vodka 700ml", price: 90, category: "alcohol", restricted: true },
-//   { id: "a2", name: "Whisky 700ml", price: 150, category: "alcohol", restricted: true },
-//   { id: "s1", name: "Chips", price: 8, category: "snacks", restricted: false },
-//   { id: "s2", name: "Chocolate Bar", price: 6, category: "snacks", restricted: false },
-//   { id: "k1", name: "Handmade Coffee (Cup)", price: 12, category: "coffee", restricted: false },
-//   { id: "k2", name: "Iced Coffee", price: 15, category: "coffee", restricted: false },
-// ];
-const products = [
-  { id: "c1", name: "Marlboro Red", price: 35, category: "cigarettes", restricted: true,  img: "assets/logo.jpg" },
-  { id: "c2", name: "LM Blue",      price: 33, category: "cigarettes", restricted: true,  img: "assets/logo.jpg" },
-  { id: "a1", name: "Vodka 700ml",  price: 90, category: "alcohol",    restricted: true,  img: "assets/logo.jpg" },
-  { id: "a2", name: "Whisky 700ml", price: 150,category: "alcohol",    restricted: true,  img: "assets/logo.jpg" },
-  { id: "s1", name: "Chips",        price: 8,  category: "snacks",     restricted: false, img: "assets/logo.jpg" },
-  { id: "s2", name: "Chocolate Bar",price: 6,  category: "snacks",     restricted: false, img: "assets/logo.jpg" },
-  { id: "k1", name: "Handmade Coffee (Cup)", price: 12, category: "coffee", restricted: false, img: "assets/logo.jpg" },
-  { id: "k2", name: "Iced Coffee",  price: 15, category: "coffee",     restricted: false, img: "assets/logo.jpg" },
-]
+// Products now come from Firestore:
+let products = []; // [{id,name,price,category,restricted,imgUrl,inStock}]
 
-
-// ======== TRANSLATIONS (yours) ========
-const i18n = {
-  en: {
-    dir: "ltr",
-    storeTitle: "Red Store",
-    storeSubtitle: "Cigarettes • Alcohol • Snacks • Handmade Coffee",
-    cart: "Cart",
-    heroTitle: "Order fast with WhatsApp",
-    heroText: "Choose products, add to cart, then send your order with one tap.",
-    shopNow: "Shop now",
-    categories: "Categories",
-    catHint: "Swipe on phone • Scroll on desktop",
-    shop: "Shop",
-    searchPH: "Search products…",
-    cartTitle: "Your Cart",
-    total: "Total",
-    checkout: "Send order via WhatsApp",
-    clear: "Clear cart",
-    legal: "Restricted items require legal age. By continuing you confirm you are of legal age.",
-    ageTitle: "Age Verification",
-    ageText: "This store sells alcohol and tobacco. You must confirm you are of legal age to enter.",
-    ageYes: "Yes, I’m 18+",
-    ageNo: "No",
-    ageHint: "If you are underage, you will be redirected out of the website.",
-    namePH: "Name (required)",
-    phonePH: "Phone (required)",
-    addressPH: "Address (optional)",
-    notesPH: "Notes (optional)",
-    addToCart: "Add to cart",
-    emptyCart: "Cart is empty.",
-    namePhoneReq: "Name and phone required",
-    cartEmptyAlert: "Cart is empty",
-    cats: {
-      all: { name: "All", tag: "Everything" },
-      cigarettes: { name: "Cigarettes", tag: "Restricted" },
-      alcohol: { name: "Alcohol", tag: "Restricted" },
-      snacks: { name: "Snacks", tag: "Chips & sweets" },
-      coffee: { name: "Handmade Coffee", tag: "Fresh cups" },
-    }
-  },
-  he: {
-    dir: "rtl",
-    storeTitle: "רד סטור",
-    storeSubtitle: "סיגריות • אלכוהול • חטיפים • קפה בעבודת יד",
-    cart: "עגלה",
-    heroTitle: "מזמינים מהר בוואטסאפ",
-    heroText: "בוחרים מוצרים, מוסיפים לעגלה ושולחים הזמנה בלחיצה אחת.",
-    shopNow: "לחנות",
-    categories: "קטגוריות",
-    catHint: "החלקה בנייד • גלילה במחשב",
-    shop: "חנות",
-    searchPH: "חיפוש מוצרים…",
-    cartTitle: "העגלה שלי",
-    total: "סה״כ",
-    checkout: "שליחת הזמנה בוואטסאפ",
-    clear: "נקה עגלה",
-    legal: "מוצרים מוגבלים דורשים גיל חוקי. בהמשך את/ה מאשר/ת גיל חוקי.",
-    ageTitle: "אימות גיל",
-    ageText: "החנות מוכרת אלכוהול וטבק. חייבים לאשר גיל חוקי כדי להיכנס.",
-    ageYes: "כן, אני 18+",
-    ageNo: "לא",
-    ageHint: "אם את/ה מתחת לגיל — תועבר/י החוצה מהאתר.",
-    namePH: "שם (חובה)",
-    phonePH: "טלפון (חובה)",
-    addressPH: "כתובת (לא חובה)",
-    notesPH: "הערות (לא חובה)",
-    addToCart: "הוסף לעגלה",
-    emptyCart: "העגלה ריקה.",
-    namePhoneReq: "שם וטלפון חובה",
-    cartEmptyAlert: "העגלה ריקה",
-    cats: {
-      all: { name: "הכל", tag: "כל המוצרים" },
-      cigarettes: { name: "סיגריות", tag: "מוגבל" },
-      alcohol: { name: "אלכוהול", tag: "מוגבל" },
-      snacks: { name: "חטיפים", tag: "מתוקים/מלוחים" },
-      coffee: { name: "קפה בעבודת יד", tag: "חם/קר" },
-    }
-  },
-  ar: {
-    dir: "rtl",
-    storeTitle: "ريد ستور",
-    storeSubtitle: "سجائر • كحول • سناكس • قهوة يدوية",
-    cart: "السلة",
-    heroTitle: "اطلب بسرعة عبر واتساب",
-    heroText: "اختر المنتجات، أضف للسلة، ثم أرسل الطلب بضغطة واحدة.",
-    shopNow: "تسوق الآن",
-    categories: "الأقسام",
-    catHint: "اسحب على الهاتف • مرر على الكمبيوتر",
-    shop: "المتجر",
-    searchPH: "ابحث عن منتج…",
-    cartTitle: "سلتك",
-    total: "المجموع",
-    checkout: "إرسال الطلب عبر واتساب",
-    clear: "تفريغ السلة",
-    legal: "المنتجات المقيّدة تتطلب العمر القانوني. بالمتابعة أنت تؤكد أنك بالعمر القانوني.",
-    ageTitle: "تأكيد العمر",
-    ageText: "المتجر يبيع الكحول والتبغ. يجب تأكيد العمر القانوني للدخول.",
-    ageYes: "نعم، أنا +18",
-    ageNo: "لا",
-    ageHint: "إذا كنت دون السن القانوني سيتم إخراجك من الموقع.",
-    namePH: "الاسم (مطلوب)",
-    phonePH: "الهاتف (مطلوب)",
-    addressPH: "العنوان (اختياري)",
-    notesPH: "ملاحظات (اختياري)",
-    addToCart: "أضف للسلة",
-    emptyCart: "السلة فارغة.",
-    namePhoneReq: "الاسم والهاتف مطلوبان",
-    cartEmptyAlert: "السلة فارغة",
-    cats: {
-      all: { name: "الكل", tag: "كل المنتجات" },
-      cigarettes: { name: "سجائر", tag: "مقيّد" },
-      alcohol: { name: "كحول", tag: "مقيّد" },
-      snacks: { name: "سناكس", tag: "حلويات/مقرمشات" },
-      coffee: { name: "قهوة يدوية", tag: "ساخن/بارد" },
-    }
-  },
-};
+// ======== TRANSLATIONS (your i18n) ========
+const i18n = window.i18n || (function () {
+  // If you keep i18n inside this file, paste yours here.
+  // For now: minimal fallback so code runs.
+  return {
+    en: {
+      dir: "ltr",
+      storeTitle: "Red Store",
+      storeSubtitle: "Cigarettes • Alcohol • Snacks • Handmade Coffee",
+      cart: "Cart",
+      heroTitle: "Order fast with WhatsApp",
+      heroText: "Choose products, add to cart, then send your order with one tap.",
+      shopNow: "Shop now",
+      categories: "Categories",
+      catHint: "Swipe on phone • Scroll on desktop",
+      shop: "Shop",
+      searchPH: "Search products…",
+      cartTitle: "Your Cart",
+      total: "Total",
+      checkout: "Send order via WhatsApp",
+      clear: "Clear cart",
+      legal: "Restricted items require legal age. By continuing you confirm you are of legal age.",
+      ageTitle: "Age Verification",
+      ageText: "This store sells alcohol and tobacco. You must confirm you are of legal age to enter.",
+      ageYes: "Yes, I’m 18+",
+      ageNo: "No",
+      ageHint: "If you are underage, you will be redirected out of the website.",
+      namePH: "Name (required)",
+      phonePH: "Phone (required)",
+      addressPH: "Address (optional)",
+      notesPH: "Notes (optional)",
+      addToCart: "Add to cart",
+      emptyCart: "Cart is empty.",
+      namePhoneReq: "Name and phone required",
+      cartEmptyAlert: "Cart is empty",
+      outOfStock: "Out of stock",
+      cats: {
+        all: { name: "All", tag: "Everything" },
+        cigarettes: { name: "Cigarettes", tag: "Restricted" },
+        alcohol: { name: "Alcohol", tag: "Restricted" },
+        snacks: { name: "Snacks", tag: "Chips & sweets" },
+        coffee: { name: "Handmade Coffee", tag: "Fresh cups" },
+      }
+    },
+    he: { dir: "rtl", storeTitle: "רד סטור", storeSubtitle: "סיגריות • אלכוהול • חטיפים • קפה בעבודת יד",
+      cart:"עגלה", heroTitle:"מזמינים מהר בוואטסאפ", heroText:"בוחרים מוצרים, מוסיפים לעגלה ושולחים הזמנה בלחיצה אחת.",
+      shopNow:"לחנות", categories:"קטגוריות", catHint:"החלקה בנייד • גלילה במחשב", shop:"חנות", searchPH:"חיפוש מוצרים…",
+      cartTitle:"העגלה שלי", total:"סה״כ", checkout:"שליחת הזמנה בוואטסאפ", clear:"נקה עגלה",
+      legal:"מוצרים מוגבלים דורשים גיל חוקי. בהמשך את/ה מאשר/ת גיל חוקי.",
+      ageTitle:"אימות גיל", ageText:"החנות מוכרת אלכוהול וטבק. חייבים לאשר גיל חוקי כדי להיכנס.",
+      ageYes:"כן, אני 18+", ageNo:"לא", ageHint:"אם את/ה מתחת לגיל — תועבר/י החוצה מהאתר.",
+      namePH:"שם (חובה)", phonePH:"טלפון (חובה)", addressPH:"כתובת (לא חובה)", notesPH:"הערות (לא חובה)",
+      addToCart:"הוסף לעגלה", emptyCart:"העגלה ריקה.", namePhoneReq:"שם וטלפון חובה", cartEmptyAlert:"העגלה ריקה",
+      outOfStock:"לא במלאי",
+      cats:{ all:{name:"הכל",tag:"כל המוצרים"}, cigarettes:{name:"סיגריות",tag:"מוגבל"}, alcohol:{name:"אלכוהול",tag:"מוגבל"},
+        snacks:{name:"חטיפים",tag:"מתוקים/מלוחים"}, coffee:{name:"קפה בעבודת יד",tag:"חם/קר"} } },
+    ar: { dir: "rtl", storeTitle: "ريد ستور", storeSubtitle: "سجائر • كحول • سناكس • قهوة يدوية",
+      cart:"السلة", heroTitle:"اطلب بسرعة عبر واتساب", heroText:"اختر المنتجات، أضف للسلة، ثم أرسل الطلب بضغطة واحدة.",
+      shopNow:"تسوق الآن", categories:"الأقسام", catHint:"اسحب على الهاتف • مرر على الكمبيوتر", shop:"المتجر", searchPH:"ابحث عن منتج…",
+      cartTitle:"سلتك", total:"المجموع", checkout:"إرسال الطلب عبر واتساب", clear:"تفريغ السلة",
+      legal:"المنتجات المقيّدة تتطلب العمر القانوني. بالمتابعة أنت تؤكد أنك بالعمر القانوني.",
+      ageTitle:"تأكيد العمر", ageText:"المتجر يبيع الكحول والتبغ. يجب تأكيد العمر القانوني للدخول.",
+      ageYes:"نعم، أنا +18", ageNo:"لا", ageHint:"إذا كنت دون السن القانوني سيتم إخراجك من الموقع.",
+      namePH:"الاسم (مطلوب)", phonePH:"الهاتف (مطلوب)", addressPH:"العنوان (اختياري)", notesPH:"ملاحظات (اختياري)",
+      addToCart:"أضف للسلة", emptyCart:"السلة فارغة.", namePhoneReq:"الاسم والهاتف مطلوبان", cartEmptyAlert:"السلة فارغة",
+      outOfStock:"غير متوفر",
+      cats:{ all:{name:"الكل",tag:"كل المنتجات"}, cigarettes:{name:"سجائر",tag:"مقيّد"}, alcohol:{name:"كحول",tag:"مقيّد"},
+        snacks:{name:"سناكس",tag:"حلويات/مقرمشات"}, coffee:{name:"قهوة يدوية",tag:"ساخن/بارد"} } }
+  };
+})();
 
 // ======== STATE ========
 let cart = loadCart();
 let currentCategory = "all";
 let searchTerm = "";
 let lang = detectLanguage();
+
+const productEls = new Map(); // productId -> element
 
 // ======== DOM ========
 const $ = (id) => document.getElementById(id);
@@ -182,7 +124,6 @@ function loadCart() {
 }
 function saveCart() { localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
 
-// ✅ Age gate: session only
 function isAgeOk() { return sessionStorage.getItem(AGE_KEY) === "true"; }
 function setAgeOk(val) { sessionStorage.setItem(AGE_KEY, val ? "true" : "false"); }
 
@@ -190,7 +131,6 @@ function setAgeOk(val) { sessionStorage.setItem(AGE_KEY, val ? "true" : "false")
 function detectLanguage(){
   const saved = localStorage.getItem(LANG_KEY);
   if (saved && i18n[saved]) return saved;
-
   const nav = (navigator.language || "en").toLowerCase();
   if (nav.startsWith("he")) return "he";
   if (nav.startsWith("ar")) return "ar";
@@ -202,13 +142,14 @@ function setLanguage(newLang){
   localStorage.setItem(LANG_KEY, newLang);
   applyLanguage();
   renderCategories();
-  filterProductsView()
+  updateProductTextsOnly();
+  filterProductsView();
   renderCart();
 }
 
 // ======== FORMAT ========
 function formatILS(n){
-  const v = Math.round(n * 100) / 100;
+  const v = Math.round(Number(n || 0) * 100) / 100;
   return String(v);
 }
 function cartCount(){ return cart.reduce((s,i)=>s+i.qty,0); }
@@ -219,8 +160,7 @@ function waLink(message){
   return `https://api.whatsapp.com/send?phone=${STORE_WHATSAPP}&text=${encodeURIComponent(message)}`;
 }
 
-
-// ======== AGE GATE (show every time site opens) ========
+// ======== AGE GATE ========
 function showAgeGate(){
   $("ageGate").classList.remove("hidden");
   document.body.style.overflow = "hidden";
@@ -230,12 +170,10 @@ function hideAgeGate(){
   document.body.style.overflow = "";
 }
 function enforceEntryAgeGate(){
-  // Always show on page open until accepted in THIS SESSION
   if (isAgeOk()) hideAgeGate();
   else showAgeGate();
 }
 function exitWebsite(){
-  // If possible go back, otherwise go to google
   if (history.length > 1) history.back();
   else window.location.href = "https://google.com";
 }
@@ -249,7 +187,6 @@ function applyLanguage(){
 
   $("storeTitle").textContent = t.storeTitle;
   $("storeSubtitle").textContent = t.storeSubtitle;
-
   $("cartLabel").textContent = t.cart;
 
   $("heroTitle").textContent = t.heroTitle;
@@ -281,17 +218,6 @@ function applyLanguage(){
 
   $("langSelect").value = lang;
 }
-function setLanguage(newLang){
-  if (!i18n[newLang]) newLang = "en";
-  lang = newLang;
-  localStorage.setItem(LANG_KEY, newLang);
-
-  applyLanguage();
-  renderCategories();
-  updateProductCategoryLabels(); // ✅ updates text without recreating images
-  filterProductsView();
-  renderCart();
-}
 
 // ======== RENDER: CATEGORIES ========
 function renderCategories(){
@@ -314,13 +240,8 @@ function renderCategories(){
   }).join("");
 }
 
-// ======== RENDER: PRODUCTS ========
-function productMatches(p){
-  const catOk = currentCategory==="all" || p.category===currentCategory;
-  const s = searchTerm.trim().toLowerCase();
-  const searchOk = !s || p.name.toLowerCase().includes(s);
-  return catOk && searchOk;
-}
+// ======== PRODUCTS VIEW (stable images, no reload) ========
+
 function buildProductsOnce(){
   const list = $("productList");
   list.innerHTML = "";
@@ -333,14 +254,20 @@ function buildProductsOnce(){
     el.dataset.pid = p.id;
     el.dataset.category = p.category;
 
+    const img = (p.imgUrl && String(p.imgUrl).trim())
+      ? p.imgUrl
+      : "assets/products/placeholder.jpg";
+
     el.innerHTML = `
       <div class="pimg">
         <img
-          src="${p.img || "assets/products/placeholder.jpg"}"
+          src="${img}"
           alt="${p.name}"
           loading="lazy"
           decoding="async"
           draggable="false"
+          referrerpolicy="no-referrer"
+          onerror="this.onerror=null;this.src='assets/products/placeholder.jpg';"
         />
         ${p.restricted ? `<span class="badge badge-top">18+</span>` : ``}
       </div>
@@ -359,19 +286,30 @@ function buildProductsOnce(){
   updateProductCategoryLabels();
 }
 
-function updateProductCategoryLabels(){
+
+function updateProductTextsOnly(){
   const t = i18n[lang] || i18n.en;
+
   productEls.forEach((el, id)=>{
     const p = products.find(x=>x.id===id);
     if (!p) return;
-    const catLabel = t.cats[p.category]?.name || p.category;
-    const labelEl = el.querySelector("[data-catlabel]");
-    if (labelEl) labelEl.textContent = catLabel;
-  });
 
-  // also update button text for language
-  document.querySelectorAll("[data-add]").forEach(btn=>{
-    btn.textContent = (i18n[lang] || i18n.en).addToCart;
+    const nameEl = el.querySelector("[data-pname]");
+    const catEl = el.querySelector("[data-catlabel]");
+    const priceEl = el.querySelector("[data-price]");
+    const btn = el.querySelector("[data-add]");
+    const oos = el.querySelector("[data-oos]");
+
+    if (nameEl) nameEl.textContent = p.name || "";
+    if (catEl) catEl.textContent = (t.cats[p.category]?.name || p.category || "");
+    if (priceEl) priceEl.textContent = `₪${formatILS(p.price)}`;
+
+    if (btn) {
+      btn.textContent = t.addToCart;
+      btn.disabled = !p.inStock;
+      btn.classList.toggle("btn-disabled", !p.inStock);
+    }
+    if (oos) oos.textContent = t.outOfStock;
   });
 }
 
@@ -383,38 +321,10 @@ function filterProductsView(){
     if (!p) return;
 
     const catOk = currentCategory==="all" || p.category===currentCategory;
-    const searchOk = !s || p.name.toLowerCase().includes(s);
+    const searchOk = !s || (p.name || "").toLowerCase().includes(s);
 
     el.classList.toggle("hidden", !(catOk && searchOk));
   });
-}
-function renderProducts(){
-  const t = i18n[lang] || i18n.en;
-  const filtered = products.filter(productMatches);
-
-  $("productList").innerHTML = filtered.map(p=>{
-    const catLabel = t.cats[p.category]?.name || p.category;
-
-    return `
-      <div class="product">
-        <div class="pimg">
-          <img
-            src="${p.img || "assets/products/placeholder.jpg"}"
-            alt="${p.name}"
-            loading="lazy"
-            onerror="this.src='assets/products/placeholder.jpg'"
-          />
-          ${p.restricted ? `<span class="badge badge-top">18+</span>` : ``}
-        </div>
-
-        <div class="pname">${p.name}</div>
-        <div class="muted small">${catLabel}</div>
-
-        <div class="price">₪${formatILS(p.price)}</div>
-        <button class="btn primary full" data-add="${p.id}" type="button">${t.addToCart}</button>
-      </div>
-    `;
-  }).join("");
 }
 
 // ======== CART ========
@@ -500,7 +410,7 @@ function renderCart(){
   );
 }
 
-// ======== CHECKOUT (WhatsApp) ========
+// ======== CHECKOUT ========
 function buildOrderText(){
   const name = $("name").value.trim();
   const phone = $("phone").value.trim();
@@ -526,14 +436,25 @@ function checkoutWhatsApp(){
   const t = i18n[lang] || i18n.en;
 
   if (!cart.length) return alert(t.cartEmptyAlert);
-
-  // If user somehow reaches checkout without age ok
   if (!isAgeOk()) { showAgeGate(); return; }
 
   const { text, name, phone } = buildOrderText();
   if (!name || !phone) return alert(t.namePhoneReq);
 
-window.open(waLink(text), "_blank");
+  window.open(waLink(text), "_blank");
+}
+
+// ======== FIRESTORE LISTENER ========
+function listenProducts(){
+  const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+
+  onSnapshot(q, (snap)=>{
+    products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    // Build DOM once, then only update text / filtering
+    buildProductsOnce();
+    filterProductsView();
+  });
 }
 
 // ======== EVENTS ========
@@ -544,7 +465,7 @@ function initEvents(){
   $("langSelect").addEventListener("change", (e)=> setLanguage(e.target.value));
 
   $("ageYes").addEventListener("click", ()=>{
-    setAgeOk(true);   // session only
+    setAgeOk(true);
     hideAgeGate();
   });
   $("ageNo").addEventListener("click", ()=>{
@@ -556,11 +477,7 @@ function initEvents(){
   $("closeCartBtn").addEventListener("click", closeCart);
   $("cartBackdrop").addEventListener("click", closeCart);
 
-  // $("waQuickBtn").href =
-  //   `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent("Hi! I want to order from Red Store.")}`;
-  $("waQuickBtn").href =
-  `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent("Hi! I want to order from Red Store.")}`;
-
+  $("waQuickBtn").href = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent("Hi! I want to order from Red Store.")}`;
 
   $("searchInput").addEventListener("input", (e)=>{
     searchTerm = e.target.value || "";
@@ -600,14 +517,18 @@ function initEvents(){
     renderCart();
   });
 
-  // Add-to-cart
+  // Add-to-cart (event delegation)
   document.addEventListener("click", (e)=>{
     const btn = e.target.closest("[data-add]");
     if (!btn) return;
+
     const id = btn.getAttribute("data-add");
     const p = products.find(x=>x.id===id);
     if (!p) return;
+
+    if (!p.inStock) return; // safety
     if (!isAgeOk()) { showAgeGate(); return; }
+
     addToCart(p);
   });
 }
@@ -616,10 +537,10 @@ function initEvents(){
 function boot(){
   applyLanguage();
   renderCategories();
-  buildProductsOnce();      // ✅ create DOM once (images won’t reload)
-  filterProductsView();     // ✅ just hide/show
   renderCart();
   initEvents();
   enforceEntryAgeGate();
+  listenProducts();
 }
+
 document.addEventListener("DOMContentLoaded", boot);

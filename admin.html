@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="assets/logo.jpg" />
+  <title>Red Store Admin</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo"><img src="assets/logo.jpg" alt="Red Store logo" /></div>
+      <div class="brand-text">
+        <div class="title">Admin Panel</div>
+        <div class="subtitle">Manage products (Firestore)</div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <a class="btn ghost" href="index.html">Back to Shop</a>
+      <button class="btn" id="logoutBtn" type="button">Logout</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- LOGIN -->
+    <section class="card" id="loginCard">
+      <h2>Owner Login</h2>
+      <p class="muted small">Only the owner email can edit products.</p>
+
+      <div class="grid" style="margin-top:10px;">
+        <input class="input" id="email" placeholder="Owner email" />
+        <input class="input" id="password" placeholder="Password" type="password" />
+        <button class="btn primary" id="loginBtn" type="button">Login</button>
+        <div class="muted small" id="loginMsg"></div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section class="card hidden" id="dashCard">
+      <div class="admin-head">
+        <h2>Products</h2>
+        <div class="muted small" id="userInfo"></div>
+      </div>
+
+      <div class="card" style="margin-top:10px;">
+        <h3 style="margin:0 0 10px 0;">Add / Update Product</h3>
+
+        <div class="grid admin-form">
+          <input class="input" id="pName" placeholder="Name" />
+          <input class="input" id="pPrice" placeholder="Price (number)" type="number" />
+          <select class="input" id="pCategory">
+            <option value="cigarettes">cigarettes</option>
+            <option value="alcohol">alcohol</option>
+            <option value="snacks">snacks</option>
+            <option value="coffee">coffee</option>
+          </select>
+
+          <label class="row gap">
+            <input type="checkbox" id="pRestricted" />
+            <span>Restricted (18+)</span>
+          </label>
+
+          <label class="row gap">
+            <input type="checkbox" id="pInStock" checked />
+            <span>In Stock</span>
+          </label>
+
+          <!-- <input class="input" id="pImage" type="file" accept="image/*" /> -->
+
+          <input class="input" id="pImgUrl" placeholder="Image URL (https://...jpg/png/webp)" />
+          
+          <button class="btn primary" id="saveBtn" type="button">Save Product</button>
+          <button class="btn ghost" id="clearFormBtn" type="button">Clear Form</button>
+
+          <div class="muted small" id="formMsg"></div>
+        </div>
+      </div>
+
+      <div class="admin-list" id="productAdminList" style="margin-top:12px;"></div>
+    </section>
+
+  </main>
+
+    <!-- POPUP MODAL -->
+  <div id="popup" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h2 id="popupTitle">Error</h2>
+      <p class="muted" id="popupText"></p>
+      <div class="row gap" style="justify-content:flex-end;margin-top:10px;">
+        <button class="btn primary" id="popupOkBtn" type="button">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
