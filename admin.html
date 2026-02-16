@@ -1,109 +1,225 @@
-<!doctype html>
-<html lang="en" dir="ltr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="icon" href="assets/logo.jpg" />
-  <title>Red Store Admin</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="admin.css" />
-</head>
-<body>
+import {
+  auth, db, OWNER_EMAIL,
+  CLOUDINARY_CLOUD_NAME, CLOUDINARY_UNSIGNED_PRESET
+} from "./firebase-config.js";
 
-  <header class="header">
-    <div class="brand">
-      <div class="logo"><img src="assets/logo.jpg" alt="Red Store logo" /></div>
-      <div class="brand-text">
-        <div class="title">Admin Panel</div>
-        <div class="subtitle">Manage products (Firestore)</div>
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  getDoc,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const PLACEHOLDER_IMG = "assets/logo.jpg";
+const $ = (id) => document.getElementById(id);
+let editingId = null;
+
+/* =============================
+   SUB CATEGORY MAP
+============================= */
+const SUB_CATEGORY_MAP = {
+  alcohol: ["beer", "vodka", "whisky", "arak", "wine"],
+  tobacco: ["cigarettes", "vapes", "cigars", "hookah", "rolling"],
+  snacks: ["chips", "chocolate", "nuts", "drinks"],
+  coffee: ["hot", "cold", "beans"]
+};
+
+/* =============================
+   HELPERS
+============================= */
+function setMsg(el, msg, err=false){
+  if (!el) return;
+  el.textContent = msg || "";
+  el.style.color = err ? "#ff7a7a" : "";
+}
+
+/* =============================
+   AUTH
+============================= */
+async function login(){
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  if (!email || !password) return alert("Missing email/password");
+
+  try { await signInWithEmailAndPassword(auth, email, password); }
+  catch (e) { alert(e.message); }
+}
+
+async function logout(){ await signOut(auth); }
+
+/* =============================
+   CATEGORY LOGIC
+============================= */
+function updateSubCategories(){
+  const main = $("pMainCategory").value;
+  const subSelect = $("pSubCategory");
+  subSelect.innerHTML = "";
+
+  (SUB_CATEGORY_MAP[main] || []).forEach(sub=>{
+    const opt = document.createElement("option");
+    opt.value = sub;
+    opt.textContent = sub;
+    subSelect.appendChild(opt);
+  });
+}
+
+/* =============================
+   IMAGE UPLOAD
+============================= */
+async function uploadToCloudinary(file){
+  const form = new FormData();
+  form.append("file", file);
+  form.append("upload_preset", CLOUDINARY_UNSIGNED_PRESET);
+
+  const endpoint =
+    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
+  const res = await fetch(endpoint, { method:"POST", body:form });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error?.message || "Upload failed");
+  return data.secure_url;
+}
+
+/* =============================
+   SAVE PRODUCT
+============================= */
+async function saveProduct(){
+  const user = auth.currentUser;
+  if (!user || user.email !== OWNER_EMAIL)
+    return alert("Not allowed");
+
+  const name = $("pName").value.trim();
+  const price = Number($("pPrice").value);
+  const mainCategory = $("pMainCategory").value;
+  const subCategory = $("pSubCategory").value;
+  const restricted = $("pRestricted").checked;
+  const inStock = $("pInStock").checked;
+
+  if (!name) return alert("Name required");
+
+  let imgUrl = $("pImgUrl").value || PLACEHOLDER_IMG;
+  const file = $("pImageFile")?.files?.[0];
+  if (file) imgUrl = await uploadToCloudinary(file);
+
+  const data = {
+    name,
+    price,
+    mainCategory,
+    subCategory,
+    restricted,
+    inStock,
+    imgUrl,
+    updatedAt: serverTimestamp()
+  };
+
+  if (!editingId){
+    await addDoc(collection(db,"products"),{
+      ...data,
+      createdAt: serverTimestamp()
+    });
+    alert("Product Added");
+  } else {
+    await updateDoc(doc(db,"products",editingId), data);
+    alert("Product Updated");
+  }
+
+  clearForm();
+}
+
+function clearForm(){
+  editingId = null;
+  $("pName").value="";
+  $("pPrice").value="";
+  $("pImgUrl").value="";
+  $("pImageFile").value="";
+}
+
+/* =============================
+   LIST
+============================= */
+function renderAdminList(items){
+  const box = $("productAdminList");
+  box.innerHTML = "";
+
+  items.forEach(p=>{
+    const el = document.createElement("div");
+    el.className = "admin-item";
+    el.innerHTML = `
+      <img src="${p.imgUrl || PLACEHOLDER_IMG}" width="70">
+      <div>
+        <strong>${p.name}</strong><br>
+        ₪${p.price} • ${p.mainCategory} → ${p.subCategory}
       </div>
-    </div>
+      <button data-edit="${p.id}">Edit</button>
+      <button data-del="${p.id}">Delete</button>
+    `;
+    box.appendChild(el);
+  });
 
-    <div class="header-actions">
-      <a class="btn ghost" href="index.html">Back to Shop</a>
-      <button class="btn" id="logoutBtn" type="button">Logout</button>
-    </div>
-  </header>
+  box.querySelectorAll("[data-edit]").forEach(b=>{
+    b.onclick = ()=> editProduct(b.dataset.edit);
+  });
+  box.querySelectorAll("[data-del]").forEach(b=>{
+    b.onclick = ()=> deleteDoc(doc(db,"products",b.dataset.del));
+  });
+}
 
-  <main class="container">
+async function editProduct(id){
+  const snap = await getDoc(doc(db,"products",id));
+  if (!snap.exists()) return;
 
-    <!-- LOGIN -->
-    <section class="card" id="loginCard">
-      <h2>Owner Login</h2>
-      <p class="muted small">Only the owner email can edit products.</p>
+  const p = snap.data();
+  editingId = id;
 
-      <div class="grid" style="margin-top:10px;">
-        <input class="input" id="email" placeholder="Owner email" />
-        <input class="input" id="password" placeholder="Password" type="password" />
-        <button class="btn primary" id="loginBtn" type="button">Login</button>
-        <div class="muted small" id="loginMsg"></div>
-      </div>
-    </section>
+  $("pName").value = p.name;
+  $("pPrice").value = p.price;
+  $("pMainCategory").value = p.mainCategory;
+  updateSubCategories();
+  $("pSubCategory").value = p.subCategory;
+  $("pImgUrl").value = p.imgUrl;
+}
 
-    <!-- DASHBOARD -->
-    <section class="card hidden" id="dashCard">
-      <div class="admin-head">
-        <h2>Products</h2>
-        <div class="muted small" id="userInfo"></div>
-      </div>
+/* =============================
+   INIT
+============================= */
+function init(){
+  $("loginBtn").onclick = login;
+  $("logoutBtn").onclick = logout;
+  $("saveBtn").onclick = saveProduct;
+  $("clearFormBtn").onclick = clearForm;
+  $("pMainCategory").onchange = updateSubCategories;
 
-      <div class="card" style="margin-top:10px;">
-        <h3 style="margin:0 0 10px 0;">Add / Update Product</h3>
+  updateSubCategories();
 
-        <div class="grid admin-form">
-          <input class="input" id="pName" placeholder="Name" />
-          <input class="input" id="pPrice" placeholder="Price (number)" type="number" />
-          <select class="input" id="pCategory">
-            <option value="cigarettes">cigarettes</option>
-            <option value="alcohol">alcohol</option>
-            <option value="snacks">snacks</option>
-            <option value="coffee">coffee</option>
-          </select>
+  onAuthStateChanged(auth,user=>{
+    if (!user || user.email!==OWNER_EMAIL){
+      $("loginCard").classList.remove("hidden");
+      $("dashCard").classList.add("hidden");
+      return;
+    }
 
-          <label class="row gap">
-            <input type="checkbox" id="pRestricted" />
-            <span>Restricted (18+)</span>
-          </label>
+    $("loginCard").classList.add("hidden");
+    $("dashCard").classList.remove("hidden");
+    $("userInfo").textContent = user.email;
 
-          <label class="row gap">
-            <input type="checkbox" id="pInStock" checked />
-            <span>In Stock</span>
-          </label>
+    const q = query(collection(db,"products"), orderBy("createdAt","desc"));
+    onSnapshot(q,snap=>{
+      const items = snap.docs.map(d=>({id:d.id,...d.data()}));
+      renderAdminList(items);
+    });
+  });
+}
 
-          <!-- <input class="input" id="pImage" type="file" accept="image/*" /> -->
-
-          <!-- <input class="input" id="pImgUrl" placeholder="Image URL (https://...jpg/png/webp)" /> -->
-           <!-- Image upload (camera / gallery) -->
-          <label class="muted small">Product image</label>
-
-          <input class="input" id="pImageFile" type="file" accept="image/*">
-          <div class="muted small" id="imgMsg"></div>
-          <input class="input" id="pImgUrl" placeholder="Image URL">
-          <button class="btn ghost" id="uploadImgBtn" type="button">Upload Image</button>
-                    
-            <button class="btn primary" id="saveBtn" type="button">Save Product</button>
-            <button class="btn ghost" id="clearFormBtn" type="button">Clear Form</button>
-
-          <div class="muted small" id="formMsg"></div>
-        </div>
-      </div>
-
-      <div class="admin-list" id="productAdminList" style="margin-top:12px;"></div>
-    </section>
-
-  </main>
-
-    <!-- POPUP MODAL -->
-  <div id="popup" class="overlay hidden" role="dialog" aria-modal="true">
-    <div class="modal">
-      <h2 id="popupTitle">Error</h2>
-      <p class="muted" id="popupText"></p>
-      <div class="row gap" style="justify-content:flex-end;margin-top:10px;">
-        <button class="btn primary" id="popupOkBtn" type="button">OK</button>
-      </div>
-    </div>
-  </div>
-
-  <script type="module" src="admin.js"></script>
-</body>
-</html>
+document.addEventListener("DOMContentLoaded", init);
