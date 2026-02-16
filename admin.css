@@ -1,4 +1,4 @@
-/* admin.css — Neon Night Market */
+/* admin.css — Night Market / Warm Lantern */
 
 .admin-head{
   display:flex;
@@ -21,7 +21,6 @@
   }
 }
 
-/* Admin list */
 .admin-list{
   display:grid;
   gap:12px;
@@ -38,8 +37,8 @@
 }
 .admin-item:hover{
   transform: translateY(-2px);
-  border-color: rgba(34,211,238,.25);
-  box-shadow: 0 0 0 2px rgba(34,211,238,.10) inset, var(--shadow);
+  border-color: rgba(255,176,32,.22);
+  box-shadow: 0 0 0 2px rgba(255,176,32,.08) inset, var(--shadow);
 }
 
 .admin-item-top{
@@ -62,9 +61,9 @@
   border-radius: 16px;
   overflow:hidden;
   border:1px solid rgba(255,255,255,.12);
-  background: rgba(15,15,30,.6);
+  background: rgba(14,10,18,.62);
   flex:0 0 auto;
-  box-shadow: 0 0 18px rgba(124,58,237,.18);
+  box-shadow: 0 0 22px rgba(255,176,32,.12);
 }
 
 .admin-thumb img{
@@ -74,15 +73,14 @@
   display:block;
 }
 
-/* Nice helper text / messages */
-#loginMsg, #formMsg{
-  line-height:1.35;
+/* Make the Add/Update card feel “special” */
+#dashCard > .card{
+  border:1px solid rgba(255,176,32,.14);
+  box-shadow: 0 0 0 2px rgba(255,176,32,.06) inset, var(--shadow);
 }
 
-/* Make admin cards feel special */
-#dashCard > .card{
-  border:1px solid rgba(34,211,238,.14);
-  box-shadow: 0 0 0 2px rgba(34,211,238,.06) inset, var(--shadow);
+#loginMsg, #formMsg{
+  line-height:1.35;
 }
 
 /* RTL polish */
