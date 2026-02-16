@@ -1,4 +1,5 @@
-/* admin.css */
+/* admin.css — Neon Night Market */
+
 .admin-head{
   display:flex;
   justify-content:space-between;
@@ -20,18 +21,25 @@
   }
 }
 
+/* Admin list */
 .admin-list{
   display:grid;
-  gap:10px;
+  gap:12px;
 }
 
 .admin-item{
-  border:1px solid var(--border);
-  border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius: 18px;
   padding:12px;
-  background: rgba(255,255,255,.02);
+  background: rgba(255,255,255,.03);
   display:grid;
   gap:10px;
+  transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.admin-item:hover{
+  transform: translateY(-2px);
+  border-color: rgba(34,211,238,.25);
+  box-shadow: 0 0 0 2px rgba(34,211,238,.10) inset, var(--shadow);
 }
 
 .admin-item-top{
@@ -49,13 +57,14 @@
 }
 
 .admin-thumb{
-  width:90px;
-  height:70px;
-  border-radius:14px;
+  width:96px;
+  height:76px;
+  border-radius: 16px;
   overflow:hidden;
-  border:1px solid var(--border);
-  background:#0f0f12;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(15,15,30,.6);
   flex:0 0 auto;
+  box-shadow: 0 0 18px rgba(124,58,237,.18);
 }
 
 .admin-thumb img{
@@ -65,13 +74,21 @@
   display:block;
 }
 
-.admin-preview{
-  width: 100%;
-  max-width: 260px;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: #0f0f12;
+/* Nice helper text / messages */
+#loginMsg, #formMsg{
+  line-height:1.35;
 }
-.admin-preview.hidden{ display:none; }
+
+/* Make admin cards feel special */
+#dashCard > .card{
+  border:1px solid rgba(34,211,238,.14);
+  box-shadow: 0 0 0 2px rgba(34,211,238,.06) inset, var(--shadow);
+}
+
+/* RTL polish */
+[dir="rtl"] .admin-item-top{
+  flex-direction: row-reverse;
+}
+[dir="rtl"] .admin-actions{
+  justify-content:flex-start;
+}
