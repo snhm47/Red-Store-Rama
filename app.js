@@ -26,9 +26,10 @@ const CART_KEY = "redstore_cart_v3";
 const LANG_KEY = "redstore_lang_v1";
 
 // ======== CATEGORY + SUBCATEGORY MODEL ========
+// ✅ main category is "tobacco" not "cigarettes"
 const MAIN_CATEGORIES = [
   { id: "all", icon: "🛒", restricted: false },
-  { id: "cigarettes", icon: "🚬", restricted: true },
+  { id: "tobacco", icon: "🚬", restricted: true },
   { id: "alcohol", icon: "🥃", restricted: true },
   { id: "snacks", icon: "🍫", restricted: false },
   { id: "coffee", icon: "☕", restricted: false },
@@ -37,11 +38,11 @@ const MAIN_CATEGORIES = [
 const SUBCATS = {
   all: [{ id: "all" }],
 
-  cigarettes: [
+  tobacco: [
     { id: "all" },
-    { id: "cigarettes" },        // regular cigarettes
+    { id: "cigarettes" },
     { id: "cigars" },
-    { id: "hookah_tobacco" },    // mu'assel
+    { id: "hookah_tobacco" },
     { id: "vapes_pods" },
     { id: "rolling_tobacco" },
     { id: "other" },
@@ -80,7 +81,7 @@ const i18n = window.i18n || {
   en: {
     dir: "ltr",
     storeTitle: "Red Store",
-    storeSubtitle: "Cigarettes • Alcohol • Snacks • Handmade Coffee",
+    storeSubtitle: "Tobacco • Alcohol • Snacks • Coffee",
     cart: "Cart",
     heroTitle: "Order fast with WhatsApp",
     heroText: "Choose products, add to cart, then send your order with one tap.",
@@ -109,15 +110,9 @@ const i18n = window.i18n || {
     cartEmptyAlert: "Cart is empty",
     outOfStock: "Out of stock",
 
-    filters: {
-      mainCat: "Category",
-      subCat: "Type",
-      allTypes: "All types",
-    },
-
     cats: {
       all: { name: "All", tag: "Everything" },
-      cigarettes: { name: "Tobacco", tag: "Restricted" },
+      tobacco: { name: "Tobacco", tag: "Restricted" },
       alcohol: { name: "Alcohol", tag: "Restricted" },
       snacks: { name: "Snacks", tag: "Chips & sweets" },
       coffee: { name: "Coffee", tag: "Fresh cups" },
@@ -125,39 +120,30 @@ const i18n = window.i18n || {
 
     subcats: {
       all: "All types",
-
-      // cigarettes group
       cigarettes: "Cigarettes",
       cigars: "Cigars",
-      hookah_tobacco: "Hookah tobacco (Mu’assel)",
+      hookah_tobacco: "Hookah tobacco",
       vapes_pods: "Vapes / Pods",
       rolling_tobacco: "Rolling tobacco",
-      // alcohol group
       beer: "Beer",
       vodka: "Vodka",
       whisky: "Whisky",
       arak: "Arak",
       wine: "Wine",
-
-      // snacks
       chips: "Chips",
       chocolate: "Chocolate",
       candy: "Candy",
       nuts: "Nuts",
-
-      // coffee
       hot: "Hot coffee",
       iced: "Iced coffee",
       beans: "Beans / Ground",
-
       other: "Other",
     }
   },
-
   he: {
     dir: "rtl",
     storeTitle: "רד סטור",
-    storeSubtitle: "סיגריות • אלכוהול • חטיפים • קפה בעבודת יד",
+    storeSubtitle: "טבק • אלכוהול • חטיפים • קפה",
     cart: "עגלה",
     heroTitle: "מזמינים מהר בוואטסאפ",
     heroText: "בוחרים מוצרים, מוסיפים לעגלה ושולחים הזמנה בלחיצה אחת.",
@@ -186,11 +172,9 @@ const i18n = window.i18n || {
     cartEmptyAlert: "העגלה ריקה",
     outOfStock: "לא במלאי",
 
-    filters: { mainCat: "קטגוריה", subCat: "סוג", allTypes: "כל הסוגים" },
-
     cats: {
       all: { name: "הכל", tag: "כל המוצרים" },
-      cigarettes: { name: "טבק", tag: "מוגבל" },
+      tobacco: { name: "טבק", tag: "מוגבל" },
       alcohol: { name: "אלכוהול", tag: "מוגבל" },
       snacks: { name: "חטיפים", tag: "מתוקים/מלוחים" },
       coffee: { name: "קפה", tag: "חם/קר" },
@@ -203,30 +187,25 @@ const i18n = window.i18n || {
       hookah_tobacco: "טבק לנרגילה",
       vapes_pods: "וייפ/פודים",
       rolling_tobacco: "טבק לגלגול",
-
       beer: "בירה",
       vodka: "וודקה",
       whisky: "וויסקי",
       arak: "ערק",
       wine: "יין",
-
       chips: "צ׳יפס",
       chocolate: "שוקולד",
       candy: "ממתקים",
       nuts: "אגוזים",
-
       hot: "קפה חם",
       iced: "קפה קר",
       beans: "פולים/טחינה",
-
       other: "אחר",
     }
   },
-
   ar: {
     dir: "rtl",
     storeTitle: "ريد ستور",
-    storeSubtitle: "سجائر • كحول • سناكس • قهوة يدوية",
+    storeSubtitle: "تبغ • كحول • سناكس • قهوة",
     cart: "السلة",
     heroTitle: "اطلب بسرعة عبر واتساب",
     heroText: "اختر المنتجات، أضف للسلة، ثم أرسل الطلب بضغطة واحدة.",
@@ -255,11 +234,9 @@ const i18n = window.i18n || {
     cartEmptyAlert: "السلة فارغة",
     outOfStock: "غير متوفر",
 
-    filters: { mainCat: "القسم", subCat: "النوع", allTypes: "كل الأنواع" },
-
     cats: {
       all: { name: "الكل", tag: "كل المنتجات" },
-      cigarettes: { name: "تبغ", tag: "مقيّد" },
+      tobacco: { name: "تبغ", tag: "مقيّد" },
       alcohol: { name: "كحول", tag: "مقيّد" },
       snacks: { name: "سناكس", tag: "حلويات/مقرمشات" },
       coffee: { name: "قهوة", tag: "ساخن/بارد" },
@@ -272,22 +249,18 @@ const i18n = window.i18n || {
       hookah_tobacco: "تبغ أرجيلة",
       vapes_pods: "فيب/بود",
       rolling_tobacco: "تبغ لف",
-
       beer: "بيرة",
       vodka: "فودكا",
       whisky: "ويسكي",
       arak: "عرق",
       wine: "نبيذ",
-
       chips: "شيبس",
       chocolate: "شوكولاتة",
       candy: "حلويات",
       nuts: "مكسرات",
-
       hot: "قهوة ساخنة",
       iced: "قهوة باردة",
       beans: "حبوب/مطحون",
-
       other: "أخرى",
     }
   }
@@ -300,11 +273,9 @@ let currentSubCategory = "all";
 let searchTerm = "";
 let lang = detectLanguage();
 
-// products come from seed + Firestore merged
-let products = [];
+let products = [];         // final merged + normalized
 const productEls = new Map();
 
-// ======== DOM ========
 const $ = (id) => document.getElementById(id);
 
 // ======== STORAGE ========
@@ -351,56 +322,58 @@ function waLink(message){
   return `https://api.whatsapp.com/send?phone=${STORE_WHATSAPP}&text=${encodeURIComponent(message)}`;
 }
 
-// name translation (supports: name_i18n OR name_he/name_ar OR fallback name)
+// ======== PRODUCT NAME TRANSLATION ========
 function productName(p){
   if (!p) return "";
+
+  // seed style: i18nName
+  if (p.i18nName && typeof p.i18nName === "object"){
+    return p.i18nName[lang] || p.i18nName.en || p.name || "";
+  }
+
+  // db style: name_i18n
   if (p.name_i18n && typeof p.name_i18n === "object"){
     return p.name_i18n[lang] || p.name_i18n.en || p.name || "";
   }
+
   if (lang === "he" && p.name_he) return p.name_he;
   if (lang === "ar" && p.name_ar) return p.name_ar;
+
   return p.name || "";
 }
 
-// normalize fields (for seed + db)
-function normalizeProduct(p){
-  const mainCategory = p.mainCategory || p.category || "snacks";
-  const subCategory =
-    p.subCategory ||
-    p.subcat ||
-    "all";
+// ======== NORMALIZE (ONE VERSION ONLY) ========
+function normalizeProduct(raw){
+  const mainCategory = raw.mainCategory || raw.category || "snacks";
+  const subCategory = raw.subCategory || "all";
 
-  const restricted = (typeof p.restricted === "boolean")
-    ? p.restricted
-    : (mainCategory === "alcohol" || mainCategory === "cigarettes");
+  const restricted =
+    (typeof raw.restricted === "boolean")
+      ? raw.restricted
+      : (mainCategory === "alcohol" || mainCategory === "tobacco");
 
   return {
-    id: p.id,
-    name: p.name || "",
-    name_he: p.name_he,
-    name_ar: p.name_ar,
-    name_i18n: p.name_i18n,
-    price: Number(p.price || 0),
+    ...raw,
+    id: raw.id,
     mainCategory,
     subCategory,
     restricted,
-    inStock: (p.inStock !== false),
-    imgUrl: (p.imgUrl && String(p.imgUrl).trim()) ? p.imgUrl : (p.img || PLACEHOLDER_IMG),
-    source: p.source || "seed",
+    inStock: raw.inStock !== false,
+    price: Number(raw.price || 0),
+    imgUrl: (raw.imgUrl && String(raw.imgUrl).trim()) ? raw.imgUrl : PLACEHOLDER_IMG
   };
 }
 
-// Firestore -> array: dbProducts
+// ======== MERGE SEED + DB ========
 function mergeProducts(seed, dbProducts){
   const map = new Map();
 
-  seed.forEach(p => {
+  seed.forEach(p=>{
     const np = normalizeProduct({ ...p, source:"seed" });
     map.set(np.id, np);
   });
 
-  dbProducts.forEach(p => {
-    // db product id might override seed id, if same
+  dbProducts.forEach(p=>{
     const np = normalizeProduct({ ...p, source:"db" });
     const prev = map.get(np.id);
     map.set(np.id, { ...(prev || {}), ...np });
@@ -468,13 +441,13 @@ function applyLanguage(){
   $("langSelect").value = lang;
 }
 
-// ======== MAIN CATEGORIES (slider + select) ========
+// ======== MAIN CATEGORIES ========
 function renderMainCategories(){
   const t = i18n[lang] || i18n.en;
 
   $("categorySlider").innerHTML = MAIN_CATEGORIES.map(c=>{
-    const label = t.cats[c.id]?.name || c.id;
-    const tag = t.cats[c.id]?.tag || "";
+    const label = t.cats?.[c.id]?.name || c.id;
+    const tag = t.cats?.[c.id]?.tag || "";
     return `
       <div class="cat ${c.id===currentCategory?"active":""}" data-cat="${c.id}">
         <div class="name">${c.icon} ${label}</div>
@@ -484,43 +457,26 @@ function renderMainCategories(){
   }).join("");
 
   $("categorySelect").innerHTML = MAIN_CATEGORIES.map(c=>{
-    const label = t.cats[c.id]?.name || c.id;
+    const label = t.cats?.[c.id]?.name || c.id;
     return `<option value="${c.id}" ${c.id===currentCategory?"selected":""}>${label}</option>`;
   }).join("");
 }
 
-// ======== SUBCATEGORY SELECT ========
-function ensureSubCategorySelect(){
-  let el = $("subCategorySelect");
-  if (el) return el;
-
-  // auto-create if not in HTML
-  const controls = document.querySelector(".controls");
-  if (!controls) return null;
-
-  el = document.createElement("select");
-  el.id = "subCategorySelect";
-  el.className = "input";
-  controls.appendChild(el);
-  return el;
-}
-
+// ======== SUB CATEGORIES ========
 function renderSubCategories(){
   const t = i18n[lang] || i18n.en;
-  const subSelect = ensureSubCategorySelect();
-  if (!subSelect) return;
-
   const list = SUBCATS[currentCategory] || [{ id:"all" }];
-  // if currentSubCategory not in list -> reset
+
+  // reset invalid selection
   if (!list.some(x => x.id === currentSubCategory)) currentSubCategory = "all";
 
-  subSelect.innerHTML = list.map(sc=>{
+  $("subCategorySelect").innerHTML = list.map(sc=>{
     const label = (t.subcats && t.subcats[sc.id]) ? t.subcats[sc.id] : sc.id;
     return `<option value="${sc.id}" ${sc.id===currentSubCategory?"selected":""}>${label}</option>`;
   }).join("");
 }
 
-// ======== PRODUCTS VIEW (stable images, no reload) ========
+// ======== PRODUCTS VIEW ========
 function buildProductsOnce(){
   const list = $("productList");
   list.innerHTML = "";
@@ -535,9 +491,7 @@ function buildProductsOnce(){
     el.dataset.category = p.mainCategory;
     el.dataset.subcategory = p.subCategory || "all";
 
-    const img = (p.imgUrl && String(p.imgUrl).trim())
-      ? p.imgUrl
-      : PLACEHOLDER_IMG;
+    const img = p.imgUrl || PLACEHOLDER_IMG;
 
     el.innerHTML = `
       <div class="pimg">
@@ -558,7 +512,6 @@ function buildProductsOnce(){
       <div class="muted small" data-subcatlabel></div>
 
       <div class="price" data-price></div>
-
       <div class="muted small" data-oos style="display:${p.inStock ? "none":"block"}">${t.outOfStock}</div>
 
       <button class="btn primary full" data-add="${p.id}" type="button">${t.addToCart}</button>
@@ -586,11 +539,9 @@ function updateProductTextsOnly(){
     const oos = el.querySelector("[data-oos]");
 
     if (nameEl) nameEl.textContent = productName(p);
+    if (catEl) catEl.textContent = t.cats?.[p.mainCategory]?.name || p.mainCategory;
 
-    const catLabel = t.cats?.[p.mainCategory]?.name || p.mainCategory;
-    if (catEl) catEl.textContent = catLabel;
-
-    const subLabel = (t.subcats && t.subcats[p.subCategory]) ? t.subcats[p.subCategory] : (p.subCategory || "");
+    const subLabel = t.subcats?.[p.subCategory] || p.subCategory || "";
     if (subEl) subEl.textContent = (p.subCategory && p.subCategory !== "all") ? subLabel : "";
 
     if (priceEl) priceEl.textContent = `₪${formatILS(p.price)}`;
@@ -610,7 +561,10 @@ function updateProductTextsOnly(){
 
 function productMatches(p){
   const catOk = currentCategory==="all" || p.mainCategory===currentCategory;
-  const subOk = currentCategory==="all" || currentSubCategory==="all" || (p.subCategory===currentSubCategory);
+  const subOk =
+    currentCategory==="all" ||
+    currentSubCategory==="all" ||
+    p.subCategory===currentSubCategory;
 
   const s = searchTerm.trim().toLowerCase();
   const name = productName(p).toLowerCase();
@@ -630,6 +584,7 @@ function filterProductsView(){
 // ======== CART ========
 function addToCart(p){
   const displayName = productName(p);
+
   const found = cart.find(x=>x.id===p.id);
   if (found) found.qty += 1;
   else cart.push({ id:p.id, name:displayName, price:p.price, qty:1, restricted: !!p.restricted });
@@ -731,6 +686,7 @@ function buildOrderText(){
   cart.forEach(i => lines.push(`- ${i.name} x${i.qty} = ₪${formatILS(i.price*i.qty)}`));
   lines.push("");
   lines.push(`Total: ₪${formatILS(cartTotal())}`);
+
   return { text: lines.join("\n"), name, phone };
 }
 
@@ -746,21 +702,16 @@ function checkoutWhatsApp(){
   window.open(waLink(text), "_blank");
 }
 
-// ======== FIRESTORE LISTENER (seed + db merge) ========
+// ======== FIRESTORE LISTENER ========
 function listenProducts(){
-  // show seed immediately (cache-like)
-  products = mergeProducts(SEED_PRODUCTS, []);
-  buildProductsOnce();
-  filterProductsView();
-
   const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+
   onSnapshot(q, (snap)=>{
-    const dbProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const dbProductsRaw = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    products = mergeProducts(SEED_PRODUCTS, dbProductsRaw);
 
-    products = mergeProducts(SEED_PRODUCTS, dbProducts);
-
-    // rebuild cards (safe + simple)
     buildProductsOnce();
+    renderSubCategories();
     filterProductsView();
   });
 }
@@ -800,13 +751,10 @@ function initEvents(){
     filterProductsView();
   });
 
-  const subSel = ensureSubCategorySelect();
-  if (subSel){
-    subSel.addEventListener("change", (e)=>{
-      currentSubCategory = e.target.value;
-      filterProductsView();
-    });
-  }
+  $("subCategorySelect").addEventListener("change", (e)=>{
+    currentSubCategory = e.target.value;
+    filterProductsView();
+  });
 
   $("categorySlider").addEventListener("click", (e)=>{
     const cat = e.target.closest("[data-cat]")?.getAttribute("data-cat");
