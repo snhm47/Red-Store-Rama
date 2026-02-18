@@ -402,12 +402,31 @@ h1,h2{ margin:0 0 10px 0; }
 }
 
 /* PRODUCTS GRID */
-.products{
+/* .products{
   margin-top:12px;
   display:grid;
   gap:12px;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+} */
+
+/* Products grid */
+.products{
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* ✅ 2 on phone */
 }
+
+/* Optional: bigger screens -> 3/4 columns */
+@media (min-width: 700px){
+  .products{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px){
+  .products{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* Make sure product cards shrink nicely */
+.product{ min-width: 0; }
+.pname{ word-break: break-word; }
 
 /* PRODUCT CARD */
 .product{

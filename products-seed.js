@@ -141,7 +141,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 329,
-  imgUrl: "assets/products/logo.jpg",
+  imgUrl: "assets/products/jw_18.jpg",
   name_i18n: {
     en: "Johnnie Walker 18 Years",
     he: "ג'וני ווקר 18 שנה",
