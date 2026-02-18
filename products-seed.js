@@ -81,7 +81,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 95,
-  imgUrl: "assets/products/logo.jpg",
+  imgUrl: "assets/products/jw_red.png",
   name_i18n: {
     en: "Johnnie Walker Red Label 700ml",
     he: "ג'וני ווקר רד לייבל 700 מ״ל",
@@ -96,7 +96,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 129,
-  imgUrl: "assets/products/logo.jpg",
+  imgUrl: "assets/products/jw_black.png",
   name_i18n: {
     en: "Johnnie Walker Black Label 700ml",
     he: "ג'וני ווקר בלאק לייבל 700 מ״ל",
@@ -111,7 +111,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 189,
-  imgUrl: "assets/products/logo.jpg",
+  imgUrl: "assets/products/jw_green.png",
   name_i18n: {
     en: "Johnnie Walker Green Label",
     he: "ג'וני ווקר גרין לייבל",
@@ -126,26 +126,11 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 199,
-  imgUrl: "assets/products/logo.jpg",
+  imgUrl: "assets/products/jw_gold.png",
   name_i18n: {
     en: "Johnnie Walker Gold Label Reserve",
     he: "ג'וני ווקר גולד לייבל",
     ar: "جوني ووكر غولد ليبل"
-  }
-},
-
-{
-  id: "jw_18_year",
-  mainCategory: "alcohol",
-  subCategory: "whisky",
-  restricted: true,
-  inStock: true,
-  price: 329,
-  imgUrl: "assets/products/jw_18.jpg",
-  name_i18n: {
-    en: "Johnnie Walker 18 Years",
-    he: "ג'וני ווקר 18 שנה",
-    ar: "جوني ووكر 18 سنة"
   }
 },
 
@@ -156,7 +141,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 899,
-  imgUrl: "assets/products/jw_blue.jpg",
+  imgUrl: "assets/products/jw_blue.png",
   name_i18n: {
     en: "Johnnie Walker Blue Label",
     he: "ג'וני ווקר בלו לייבל",
