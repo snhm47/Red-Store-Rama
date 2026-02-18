@@ -156,7 +156,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 899,
-  imgUrl: "assets/products/logo.jpg",
+  imgUrl: "assets/products/jw_blue.jpg",
   name_i18n: {
     en: "Johnnie Walker Blue Label",
     he: "ג'וני ווקר בלו לייבל",

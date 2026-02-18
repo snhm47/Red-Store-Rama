@@ -385,10 +385,12 @@ function mergeProducts(seed, dbProducts){
 // ======== AGE GATE ========
 function showAgeGate(){
   $("ageGate").classList.remove("hidden");
+  document.documentElement.style.overflow = "hidden";
   document.body.style.overflow = "hidden";
 }
 function hideAgeGate(){
   $("ageGate").classList.add("hidden");
+  document.documentElement.style.overflow = "";
   document.body.style.overflow = "";
 }
 function enforceEntryAgeGate(){
