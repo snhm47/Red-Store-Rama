@@ -70,4 +70,97 @@ export const SEED_PRODUCTS = [
     }
   },
 
+// =========================
+// JOHNNIE WALKER (Scotch Whisky)
+// =========================
+
+{
+  id: "jw_red_label_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 95,
+  imgUrl: "assets/products/jw_red.webp",
+  name_i18n: {
+    en: "Johnnie Walker Red Label 700ml",
+    he: "ג'וני ווקר רד לייבל 700 מ״ל",
+    ar: "جوني ووكر ريد ليبل 700 مل"
+  }
+},
+
+{
+  id: "jw_black_label_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 129,
+  imgUrl: "assets/products/jw_black.webp",
+  name_i18n: {
+    en: "Johnnie Walker Black Label 700ml",
+    he: "ג'וני ווקר בלאק לייבל 700 מ״ל",
+    ar: "جوني ووكر بلاك ليبل 700 مل"
+  }
+},
+
+{
+  id: "jw_green_label",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 189,
+  imgUrl: "assets/products/jw_green.webp",
+  name_i18n: {
+    en: "Johnnie Walker Green Label",
+    he: "ג'וני ווקר גרין לייבל",
+    ar: "جوني ووكر جرين ليبل"
+  }
+},
+
+{
+  id: "jw_gold_label",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 199,
+  imgUrl: "assets/products/jw_gold.jfif",
+  name_i18n: {
+    en: "Johnnie Walker Gold Label Reserve",
+    he: "ג'וני ווקר גולד לייבל",
+    ar: "جوني ووكر غولد ليبل"
+  }
+},
+
+{
+  id: "jw_18_year",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 329,
+  imgUrl: "assets/products/jw_18.jfif",
+  name_i18n: {
+    en: "Johnnie Walker 18 Years",
+    he: "ג'וני ווקר 18 שנה",
+    ar: "جوني ووكر 18 سنة"
+  }
+},
+
+{
+  id: "jw_blue_label",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 899,
+  imgUrl: "assets/products/jw_blue.jfif",
+  name_i18n: {
+    en: "Johnnie Walker Blue Label",
+    he: "ג'וני ווקר בלו לייבל",
+    ar: "جوني ووكر بلو ليبل"
+  }
+},
 ];
