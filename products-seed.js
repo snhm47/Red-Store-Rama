@@ -451,7 +451,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 129,
-  imgUrl: "assets/products/imperial.png",
+  imgUrl: "assets/products/Imperial.png",
   name_i18n: { en: "Imperial 1L", he: "אמפריאל ליטר", ar: "إمبريال 1 لتر" }
 },
 
