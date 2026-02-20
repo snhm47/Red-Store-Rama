@@ -248,7 +248,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 129,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/stoli.png",
   name_i18n: { en: "Stoli Vodka 1L", he: "סטולי ליטר", ar: "ستولي 1 لتر" }
 },
 {
@@ -258,7 +258,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 85,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/stoli.png",
   name_i18n: { en: "Stoli Vodka 700ml", he: "סטולי 700 מ״ל", ar: "ستولي 700 مل" }
 },
 
@@ -378,7 +378,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 189,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/hoku.png",
   name_i18n: { en: "Haku Japanese Vodka 700ml", he: "האקו וודקה יפנית 700 מ״ל", ar: "هاكو 700 مل" }
 },
 
@@ -392,7 +392,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 109,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/laplandia.png",
   name_i18n: { en: "Laplandia 1L", he: "לפלנדייה ליטר", ar: "لابالانديا 1 لتر" }
 },
 
@@ -406,7 +406,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 99,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/roski.png",
   name_i18n: { en: "Russki Santander", he: "רוסקי סנטאנדר", ar: "روسي سانتاندر" }
 },
 
@@ -420,7 +420,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 129,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/imperial.png",
   name_i18n: { en: "Imperial 1L", he: "אמפריאל ליטר", ar: "إمبريال 1 لتر" }
 },
 
@@ -434,7 +434,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 129,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/kremlin.png",
   name_i18n: { en: "Kremlin 1L", he: "קרימלין ליטר", ar: "كريملين 1 لتر" }
 },
 {
@@ -444,12 +444,12 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 99,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/kremlin.png",
   name_i18n: { en: "Kremlin 700ml", he: "קרימלין 700 מ״ל", ar: "كريملين 700 مل" }
 },
 
 // =========================
-// BRAWADA
+// pravada
 // =========================
 {
   id: "brawada_1l",
@@ -458,7 +458,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 139,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/parvada.png",
   name_i18n: { en: "Brawada 1L", he: "בראוודה ליטר", ar: "براوادا 1 لتر" }
 },
 {
@@ -468,7 +468,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 119,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/parvada.png",
   name_i18n: { en: "Brawada 700ml", he: "בראוודה 700 מ״ל", ar: "براوادا 700 مل" }
 },
 
