@@ -199,6 +199,37 @@ export const SEED_PRODUCTS = [
   imgUrl: "assets/products/vangogh.png",
   name_i18n: { en: "Van Gogh Vodka 1L", he: "וואן גוך ליטר", ar: "فان غوخ 1 لتر" }
 },
+// =========================
+// ROBERTO CAVALLI
+// =========================
+{
+  id: "roberto_cavalli_700",
+  mainCategory: "alcohol",
+  subCategory: "vodka",
+  restricted: true,
+  inStock: true,
+  price: 129,
+  imgUrl: "assets/products/cavali.png",
+  name_i18n: { 
+    en: "Roberto Cavalli Vodka 700ml", 
+    he: "רוברטו קוואלי 700 מ״ל רגיל", 
+    ar: "روبرتو كافالي 700 مل عادي" 
+  }
+},
+{
+  id: "roberto_cavalli_1l",
+  mainCategory: "alcohol",
+  subCategory: "vodka",
+  restricted: true,
+  inStock: true,
+  price: 149,
+  imgUrl: "assets/products/roberto.png",
+  name_i18n: { 
+    en: "Roberto Cavalli Vodka 1L (Regular / Flavours)", 
+    he: "רוברטו קוואלי 1ל רגיל/טעמים", 
+    ar: "روبرتو كافالي 1ل (عادي / نكهات)" 
+  }
+},
 
 // =========================
 // GLOBI
