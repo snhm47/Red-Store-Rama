@@ -34,7 +34,6 @@
   <!-- HEADER -->
   <header class="header">
     <div class="brand">
-      <!-- <div class="logo" >RED</div> -->
       <div class="logo">
         <img src="assets/logo.jpg" alt="Red Store logo" />
       </div>
@@ -74,45 +73,45 @@
 
   <main class="container">
 
-    <!-- PREMIUM SHOWCASE SLIDER -->
-<section class="premium-slider">
-  <div class="slider-track">
+    <!-- PREMIUM SHOWCASE SLIDER (i18n via JS) -->
+    <section class="premium-slider" aria-label="Featured collections">
+      <div class="slider-track">
 
-    <div class="slide active">
-      <img src="assets/products/slider1.png" alt="Johnnie Walker Collection">
-      <div class="slide-content">
-        <h2>Johnnie Walker Collection</h2>
-        <p>Red • Black • Gold • Green • Blue</p>
-        <a href="#shop" class="btn primary">Shop Whisky</a>
+        <div class="slide active" data-slide-id="whisky">
+          <img src="assets/products/slider1.png" alt="Johnnie Walker Collection">
+          <div class="slide-content">
+            <h2 data-i18n="sliderWhiskyTitle">Johnnie Walker Collection</h2>
+            <p data-i18n="sliderWhiskyText">Red • Black • Gold • Green • Blue</p>
+            <a href="#shop" class="btn primary js-shop-link" data-shop-cat="alcohol" data-shop-sub="whisky" data-i18n="sliderShopWhisky">Shop Whisky</a>
+          </div>
+        </div>
+
+        <div class="slide" data-slide-id="vodka">
+          <img src="assets/products/slider2.png" alt="Vodka Selection">
+          <div class="slide-content">
+            <h2 data-i18n="sliderVodkaTitle">Premium Vodka</h2>
+            <p data-i18n="sliderVodkaText">Grey Goose • Absolut • Finlandia</p>
+            <a href="#shop" class="btn primary js-shop-link" data-shop-cat="alcohol" data-shop-sub="vodka" data-i18n="sliderShopVodka">Shop Vodka</a>
+          </div>
+        </div>
+
+        <div class="slide" data-slide-id="beer">
+          <img src="assets/products/slider3.png" alt="Beer Selection">
+          <div class="slide-content">
+            <h2 data-i18n="sliderBeerTitle">Cold Beer</h2>
+            <p data-i18n="sliderBeerText">Heineken • Carlsberg • Corona</p>
+            <a href="#shop" class="btn primary js-shop-link" data-shop-cat="alcohol" data-shop-sub="beer" data-i18n="sliderShopBeer">Shop Beer</a>
+          </div>
+        </div>
+
       </div>
-    </div>
 
-    <div class="slide">
-      <img src="assets/products/slider2.png" alt="Vodka Selection">
-      <div class="slide-content">
-        <h2>Premium Vodka</h2>
-        <p>Grey Goose • Absolut • Finlandia</p>
-        <a href="#shop" class="btn primary">Shop Vodka</a>
+      <div class="slider-dots" aria-label="Slider navigation">
+        <span class="dot active" data-slide="0"></span>
+        <span class="dot" data-slide="1"></span>
+        <span class="dot" data-slide="2"></span>
       </div>
-    </div>
-
-    <div class="slide">
-      <img src="assets/products/slider3.png" alt="Beer Selection">
-      <div class="slide-content">
-        <h2>Cold Beer</h2>
-        <p>Heineken • Carlsberg • Corona</p>
-        <a href="#shop" class="btn primary">Shop Beer</a>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="slider-dots">
-    <span class="dot active" data-slide="0"></span>
-    <span class="dot" data-slide="1"></span>
-    <span class="dot" data-slide="2"></span>
-  </div>
-</section>
+    </section>
 
     <!-- HERO -->
     <section class="hero card">
@@ -199,8 +198,6 @@
     </div>
   </aside>
 
-  <!-- replace: <script src="app.js"></script> -->
-<script type="module" src="app.js"></script>
-
+  <script type="module" src="app.js"></script>
 </body>
 </html>

@@ -1,5 +1,8 @@
 // app.js (SHOP)
 
+// ======== DOM HELPER (MUST BE FIRST) ========
+const $ = (id) => document.getElementById(id);
+
 // ======== FIREBASE ========
 import { db } from "./firebase-config.js";
 import { SEED_PRODUCTS } from "./products-seed.js";
@@ -26,7 +29,6 @@ const CART_KEY = "redstore_cart_v3";
 const LANG_KEY = "redstore_lang_v1";
 
 // ======== CATEGORY + SUBCATEGORY MODEL ========
-// ✅ main category is "tobacco" not "cigarettes"
 const MAIN_CATEGORIES = [
   { id: "all", icon: "🛒", restricted: false },
   { id: "tobacco", icon: "🚬", restricted: true },
@@ -110,6 +112,19 @@ const i18n = window.i18n || {
     cartEmptyAlert: "Cart is empty",
     outOfStock: "Out of stock",
 
+    // ✅ Slider i18n
+    sliderWhiskyTitle: "Johnnie Walker Collection",
+    sliderWhiskyText: "Red • Black • Gold • Green • Blue",
+    sliderShopWhisky: "Shop Whisky",
+
+    sliderVodkaTitle: "Premium Vodka",
+    sliderVodkaText: "Grey Goose • Absolut • Finlandia",
+    sliderShopVodka: "Shop Vodka",
+
+    sliderBeerTitle: "Cold Beer",
+    sliderBeerText: "Heineken • Carlsberg • Corona",
+    sliderShopBeer: "Shop Beer",
+
     cats: {
       all: { name: "All", tag: "Everything" },
       tobacco: { name: "Tobacco", tag: "Restricted" },
@@ -140,6 +155,7 @@ const i18n = window.i18n || {
       other: "Other",
     }
   },
+
   he: {
     dir: "rtl",
     storeTitle: "רד סטור",
@@ -172,6 +188,19 @@ const i18n = window.i18n || {
     cartEmptyAlert: "העגלה ריקה",
     outOfStock: "לא במלאי",
 
+    // ✅ Slider i18n
+    sliderWhiskyTitle: "קולקציית ג׳וני ווקר",
+    sliderWhiskyText: "רד • בלאק • גולד • גרין • בלו",
+    sliderShopWhisky: "לקניית וויסקי",
+
+    sliderVodkaTitle: "וודקה פרימיום",
+    sliderVodkaText: "גרייגוס • אבסולוט • פינלנדיה",
+    sliderShopVodka: "לקניית וודקה",
+
+    sliderBeerTitle: "בירה קרה",
+    sliderBeerText: "הייניקן • קרלסברג • קורונה",
+    sliderShopBeer: "לקניית בירה",
+
     cats: {
       all: { name: "הכל", tag: "כל המוצרים" },
       tobacco: { name: "טבק", tag: "מוגבל" },
@@ -202,6 +231,7 @@ const i18n = window.i18n || {
       other: "אחר",
     }
   },
+
   ar: {
     dir: "rtl",
     storeTitle: "ريد ستور",
@@ -233,6 +263,19 @@ const i18n = window.i18n || {
     namePhoneReq: "الاسم والهاتف مطلوبان",
     cartEmptyAlert: "السلة فارغة",
     outOfStock: "غير متوفر",
+
+    // ✅ Slider i18n
+    sliderWhiskyTitle: "مجموعة جوني ووكر",
+    sliderWhiskyText: "ريد • بلاك • غولد • جرين • بلو",
+    sliderShopWhisky: "تسوق الويسكي",
+
+    sliderVodkaTitle: "فودكا بريميوم",
+    sliderVodkaText: "غري غوس • أبسولوت • فنلنديا",
+    sliderShopVodka: "تسوق الفودكا",
+
+    sliderBeerTitle: "بيرة باردة",
+    sliderBeerText: "هاينكن • كارلسبرغ • كورونا",
+    sliderShopBeer: "تسوق البيرة",
 
     cats: {
       all: { name: "الكل", tag: "كل المنتجات" },
@@ -273,10 +316,8 @@ let currentSubCategory = "all";
 let searchTerm = "";
 let lang = detectLanguage();
 
-let products = [];         // final merged + normalized
+let products = [];
 const productEls = new Map();
-
-const $ = (id) => document.getElementById(id);
 
 // ======== STORAGE ========
 function loadCart() {
@@ -297,6 +338,7 @@ function detectLanguage(){
   if (nav.startsWith("ar")) return "ar";
   return "en";
 }
+
 function setLanguage(newLang){
   if (!i18n[newLang]) newLang = "en";
   lang = newLang;
@@ -308,6 +350,7 @@ function setLanguage(newLang){
   updateProductTextsOnly();
   filterProductsView();
   renderCart();
+  applySliderI18n(); // ✅ update slider language
 }
 
 // ======== HELPERS ========
@@ -322,16 +365,50 @@ function waLink(message){
   return `https://api.whatsapp.com/send?phone=${STORE_WHATSAPP}&text=${encodeURIComponent(message)}`;
 }
 
+// ======== SLIDER I18N ========
+function applySliderI18n(){
+  const t = i18n[lang] || i18n.en;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const key = el.getAttribute("data-i18n");
+    if (!key) return;
+    const value = t[key];
+    if (typeof value === "string") el.textContent = value;
+  });
+}
+
+// ======== QUICK FILTER FROM SLIDER ========
+function setShopFilter(mainCat, subCat){
+  if (!mainCat) return;
+
+  currentCategory = mainCat;
+  currentSubCategory = subCat || "all";
+
+  // update dropdowns + slider categories
+  renderMainCategories();
+  renderSubCategories();
+
+  // set selects values (important)
+  if ($("categorySelect")) $("categorySelect").value = currentCategory;
+  if ($("subCategorySelect")) $("subCategorySelect").value = currentSubCategory;
+
+  // clear search
+  searchTerm = "";
+  if ($("searchInput")) $("searchInput").value = "";
+
+  filterProductsView();
+
+  // go to shop section
+  location.hash = "#shop";
+}
+
 // ======== PRODUCT NAME TRANSLATION ========
 function productName(p){
   if (!p) return "";
 
-  // seed style: i18nName
   if (p.i18nName && typeof p.i18nName === "object"){
     return p.i18nName[lang] || p.i18nName.en || p.name || "";
   }
 
-  // db style: name_i18n
   if (p.name_i18n && typeof p.name_i18n === "object"){
     return p.name_i18n[lang] || p.name_i18n.en || p.name || "";
   }
@@ -342,7 +419,7 @@ function productName(p){
   return p.name || "";
 }
 
-// ======== NORMALIZE (ONE VERSION ONLY) ========
+// ======== NORMALIZE ========
 function normalizeProduct(raw){
   const mainCategory = raw.mainCategory || raw.category || "snacks";
   const subCategory = raw.subCategory || "all";
@@ -384,12 +461,12 @@ function mergeProducts(seed, dbProducts){
 
 // ======== AGE GATE ========
 function showAgeGate(){
-  $("ageGate").classList.remove("hidden");
+  $("ageGate")?.classList.remove("hidden");
   document.documentElement.style.overflow = "hidden";
   document.body.style.overflow = "hidden";
 }
 function hideAgeGate(){
-  $("ageGate").classList.add("hidden");
+  $("ageGate")?.classList.add("hidden");
   document.documentElement.style.overflow = "";
   document.body.style.overflow = "";
 }
@@ -462,6 +539,9 @@ function renderMainCategories(){
     const label = t.cats?.[c.id]?.name || c.id;
     return `<option value="${c.id}" ${c.id===currentCategory?"selected":""}>${label}</option>`;
   }).join("");
+
+  // ensure correct selection
+  $("categorySelect").value = currentCategory;
 }
 
 // ======== SUB CATEGORIES ========
@@ -469,13 +549,14 @@ function renderSubCategories(){
   const t = i18n[lang] || i18n.en;
   const list = SUBCATS[currentCategory] || [{ id:"all" }];
 
-  // reset invalid selection
   if (!list.some(x => x.id === currentSubCategory)) currentSubCategory = "all";
 
   $("subCategorySelect").innerHTML = list.map(sc=>{
-    const label = (t.subcats && t.subcats[sc.id]) ? t.subcats[sc.id] : sc.id;
+    const label = t.subcats?.[sc.id] || sc.id;
     return `<option value="${sc.id}" ${sc.id===currentSubCategory?"selected":""}>${label}</option>`;
   }).join("");
+
+  $("subCategorySelect").value = currentSubCategory;
 }
 
 // ======== PRODUCTS VIEW ========
@@ -490,8 +571,6 @@ function buildProductsOnce(){
     const el = document.createElement("div");
     el.className = "product";
     el.dataset.pid = p.id;
-    el.dataset.category = p.mainCategory;
-    el.dataset.subcategory = p.subCategory || "all";
 
     const img = p.imgUrl || PLACEHOLDER_IMG;
 
@@ -533,28 +612,25 @@ function updateProductTextsOnly(){
     const p = products.find(x=>x.id===id);
     if (!p) return;
 
-    const nameEl = el.querySelector("[data-pname]");
-    const catEl = el.querySelector("[data-catlabel]");
-    const subEl = el.querySelector("[data-subcatlabel]");
-    const priceEl = el.querySelector("[data-price]");
-    const btn = el.querySelector("[data-add]");
-    const oos = el.querySelector("[data-oos]");
-
-    if (nameEl) nameEl.textContent = productName(p);
-    if (catEl) catEl.textContent = t.cats?.[p.mainCategory]?.name || p.mainCategory;
+    el.querySelector("[data-pname]")?.replaceChildren(document.createTextNode(productName(p)));
+    el.querySelector("[data-catlabel]")?.replaceChildren(document.createTextNode(t.cats?.[p.mainCategory]?.name || p.mainCategory));
 
     const subLabel = t.subcats?.[p.subCategory] || p.subCategory || "";
-    if (subEl) subEl.textContent = (p.subCategory && p.subCategory !== "all") ? subLabel : "";
+    const subText = (p.subCategory && p.subCategory !== "all") ? subLabel : "";
+    el.querySelector("[data-subcatlabel]")?.replaceChildren(document.createTextNode(subText));
 
+    const priceEl = el.querySelector("[data-price]");
     if (priceEl) priceEl.textContent = `₪${formatILS(p.price)}`;
 
-    if (btn) {
+    const btn = el.querySelector("[data-add]");
+    if (btn){
       btn.textContent = t.addToCart;
       btn.disabled = !p.inStock;
       btn.classList.toggle("btn-disabled", !p.inStock);
     }
 
-    if (oos) {
+    const oos = el.querySelector("[data-oos]");
+    if (oos){
       oos.textContent = t.outOfStock;
       oos.style.display = p.inStock ? "none" : "block";
     }
@@ -563,10 +639,7 @@ function updateProductTextsOnly(){
 
 function productMatches(p){
   const catOk = currentCategory==="all" || p.mainCategory===currentCategory;
-  const subOk =
-    currentCategory==="all" ||
-    currentSubCategory==="all" ||
-    p.subCategory===currentSubCategory;
+  const subOk = currentCategory==="all" || currentSubCategory==="all" || p.subCategory===currentSubCategory;
 
   const s = searchTerm.trim().toLowerCase();
   const name = productName(p).toLowerCase();
@@ -718,6 +791,34 @@ function listenProducts(){
   });
 }
 
+// ======== SLIDER ========
+function initSlider(){
+  const slides = document.querySelectorAll(".slide");
+  const dots = document.querySelectorAll(".dot");
+  if (!slides.length || !dots.length) return;
+
+  let current = 0;
+
+  function showSlide(index){
+    slides.forEach(s=>s.classList.remove("active"));
+    dots.forEach(d=>d.classList.remove("active"));
+    slides[index].classList.add("active");
+    dots[index].classList.add("active");
+    current = index;
+  }
+
+  dots.forEach(dot=>{
+    dot.addEventListener("click", ()=>{
+      showSlide(Number(dot.dataset.slide));
+    });
+  });
+
+  setInterval(()=>{
+    const next = (current + 1) % slides.length;
+    showSlide(next);
+  }, 3000);
+}
+
 // ======== EVENTS ========
 function initEvents(){
   $("instagramBtn").href = INSTAGRAM_URL;
@@ -787,6 +888,16 @@ function initEvents(){
     renderCart();
   });
 
+  // ✅ Slider "Shop Beer/Vodka/Whisky" -> filter the shop
+  document.querySelectorAll(".js-shop-link").forEach(a=>{
+    a.addEventListener("click", (e)=>{
+      e.preventDefault();
+      const main = a.getAttribute("data-shop-cat") || "all";
+      const sub = a.getAttribute("data-shop-sub") || "all";
+      setShopFilter(main, sub);
+    });
+  });
+
   // Add-to-cart (event delegation)
   document.addEventListener("click", (e)=>{
     const btn = e.target.closest("[data-add]");
@@ -803,34 +914,10 @@ function initEvents(){
   });
 }
 
-function initSlider(){
-  const slides = document.querySelectorAll(".slide");
-  const dots = document.querySelectorAll(".dot");
-  let current = 0;
-
-  function showSlide(index){
-    slides.forEach(s=>s.classList.remove("active"));
-    dots.forEach(d=>d.classList.remove("active"));
-    slides[index].classList.add("active");
-    dots[index].classList.add("active");
-    current = index;
-  }
-
-  dots.forEach(dot=>{
-    dot.addEventListener("click", ()=>{
-      showSlide(Number(dot.dataset.slide));
-    });
-  });
-
-  setInterval(()=>{
-    let next = (current + 1) % slides.length;
-    showSlide(next);
-  }, 3000);
-}
-
 // ======== BOOT ========
 function boot(){
   applyLanguage();
+  applySliderI18n(); // ✅ slider language
   renderMainCategories();
   renderSubCategories();
   renderCart();
