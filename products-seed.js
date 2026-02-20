@@ -196,7 +196,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 165,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/vangogh.png",
   name_i18n: { en: "Van Gogh Vodka 1L", he: "וואן גוך ליטר", ar: "فان غوخ 1 لتر" }
 },
 
@@ -272,7 +272,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 109,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/smirnoff.png",
   name_i18n: { en: "Smirnoff 1L", he: "סמירנוף ליטר", ar: "سميرنوف 1 لتر" }
 },
 {
@@ -282,7 +282,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 85,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/smirnoff.png",
   name_i18n: { en: "Smirnoff 700ml", he: "סמירנוף 700 מ״ל", ar: "سميرنوف 700 مل" }
 },
 
@@ -296,7 +296,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 159,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/BEVADER.png",
   name_i18n: { en: "Belvedere 1L", he: "בלוודיר ליטר", ar: "بيلفيدير 1 لتر" }
 },
 {
@@ -306,7 +306,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 139,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/BEVADER.png",
   name_i18n: { en: "Belvedere 700ml", he: "בלוודיר 700 מ״ל", ar: "بيلفيدير 700 مل" }
 },
 {
@@ -316,7 +316,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 109,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/BEVADER.png",
   name_i18n: { en: "Belvedere 500ml", he: "בלוודיר 500 מ״ל", ar: "بيلفيدير 500 مل" }
 },
 {
@@ -326,7 +326,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 55,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/BEVADER.png",
   name_i18n: { en: "Belvedere 200ml", he: "בלוודיר 200 מ״ל", ar: "بيلفيدير 200 مل" }
 },
 
@@ -340,7 +340,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 139,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/moulin.png",
   name_i18n: { en: "Moulin Vodka 1L", he: "מולין ליטר", ar: "مولان 1 لتر" }
 },
 {
@@ -350,7 +350,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 199,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/moulin.png",
   name_i18n: { en: "Moulin Magnum 1.7L", he: "מולין מאגנום 1.7 ליטר", ar: "مولان ماجنوم 1.7 لتر" }
 },
 
@@ -364,7 +364,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 99,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/ignet.png",
   name_i18n: { en: "I Gnet Vodka 700ml", he: "וודקה I Gnet 700 מ״ל", ar: "آي جنيت 700 مل" }
 },
 
@@ -485,7 +485,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 95,
-  imgUrl: "assets/products/jw_red.png",
+  imgUrl: "assets/products/red_label.png",
   name_i18n: {
     en: "Johnnie Walker Red Label 700ml",
     he: "ג'וני ווקר רד לייבל 700 מ״ל",
@@ -500,26 +500,11 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 129,
-  imgUrl: "assets/products/jw_black.png",
+  imgUrl: "assets/products/black_label.png",
   name_i18n: {
     en: "Johnnie Walker Black Label 700ml",
     he: "ג'וני ווקר בלאק לייבל 700 מ״ל",
     ar: "جوني ووكر بلاك ليبل 700 مل"
-  }
-},
-
-{
-  id: "jw_green_label",
-  mainCategory: "alcohol",
-  subCategory: "whisky",
-  restricted: true,
-  inStock: true,
-  price: 189,
-  imgUrl: "assets/products/jw_green.png",
-  name_i18n: {
-    en: "Johnnie Walker Green Label",
-    he: "ג'וני ווקר גרין לייבל",
-    ar: "جوني ووكر جرين ليبل"
   }
 },
 
@@ -530,11 +515,27 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 199,
-  imgUrl: "assets/products/jw_gold.png",
+  imgUrl: "assets/products/gold_label.png",
   name_i18n: {
     en: "Johnnie Walker Gold Label Reserve",
     he: "ג'וני ווקר גולד לייבל",
     ar: "جوني ووكر غولد ليبل"
+  }
+},
+
+
+{
+  id: "jw_green_label",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 189,
+  imgUrl: "assets/products/green_label.png",
+  name_i18n: {
+    en: "Johnnie Walker Green Label",
+    he: "ג'וני ווקר גרין לייבל",
+    ar: "جوني ووكر جرين ليبل"
   }
 },
 
@@ -545,7 +546,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 899,
-  imgUrl: "assets/products/jw_blue.png",
+  imgUrl: "assets/products/blue_label.png",
   name_i18n: {
     en: "Johnnie Walker Blue Label",
     he: "ג'וני ווקר בלו לייבל",
