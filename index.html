@@ -114,81 +114,86 @@
     </section>
 
     <!-- HERO -->
-    <!-- <section class="hero card">
-      <div class="hero-left">
-        <h1 id="heroTitle">Order fast with WhatsApp</h1>
-        <p class="muted" id="heroText">
-          Choose products, add to cart, then send your order with one tap.
+    <!-- HERO (NEW PREMIUM) -->
+    <section class="hero hero-v2 card" aria-label="Red Store hero">
+      <div class="hero-v2-bg" aria-hidden="true"></div>
+
+      <div class="hero-v2-left">
+        <div class="hero-pill" id="heroKicker">Red Store • Rameh</div>
+
+        <h1 class="hero-v2-title" id="heroTitle">
+          Premium Alcohol & Cold Beer — Fast WhatsApp Order
+        </h1>
+
+        <p class="hero-v2-sub" id="heroText">
+          Choose whisky, vodka, beer and more. Add to cart, then send your order in one tap.
         </p>
-        <div class="row gap wrap">
-          <a class="btn primary" href="#shop" id="shopNowBtn">Shop now</a>
-          <a class="btn ghost" id="waQuickBtn" href="#" target="_blank" rel="noreferrer">WhatsApp</a>
+
+        <div class="hero-v2-actions">
+          <a class="btn primary" href="#shop" id="shopNowBtn">Browse shop</a>
+          <a class="btn ghost hero-wa" id="waQuickBtn" href="#" target="_blank" rel="noreferrer">
+            <span class="wa-dot" aria-hidden="true"></span>
+            <span id="waOrderText">Order on WhatsApp</span>
+          </a>
+        </div>
+
+        <div class="hero-v2-trust">
+          <span class="trust" id="heroNote">18+ only • Responsible drinking</span>
+          <span class="trust">•</span>
+          <span class="trust" id="heroFast">Fast pickup / delivery</span>
+        </div>
+
+        <div class="hero-v2-mini" role="group" aria-label="Quick filters">
+          <button class="mini-chip js-hero-filter" data-shop-cat="alcohol" data-shop-sub="whisky" type="button">🥃 <span id="chipWhisky">Whisky</span></button>
+          <button class="mini-chip js-hero-filter" data-shop-cat="alcohol" data-shop-sub="vodka" type="button">🍸 <span id="chipVodka">Vodka</span></button>
+          <button class="mini-chip js-hero-filter" data-shop-cat="alcohol" data-shop-sub="beer" type="button">🍺 <span id="chipBeer">Beer</span></button>
         </div>
       </div>
 
-      <div class="hero-right">
-        <div class="hero-badge">
-          <div class="hero-badge-title" id="badge1Title">Pickup / Delivery</div>
-          <div class="muted small" id="badge1Text">Payment later (cash / in store)</div>
+      <div class="hero-v2-right">
+        <div class="hero-showcase">
+          <div class="showcase-top">
+            <div>
+              <div class="showcase-title" id="heroCardTitle">Tonight’s picks</div>
+              <div class="showcase-sub muted small" id="heroCardText">Whisky • Vodka • Beer • Mixers</div>
+            </div>
+            <div class="showcase-badge">OPEN</div>
+          </div>
+
+          <div class="hero-features">
+            <div class="feature">
+              <div class="feature-ico">🚚</div>
+              <div>
+                <div class="feature-title" id="badge1Title">Pickup / Delivery</div>
+                <div class="muted small" id="badge1Text">Pay in cash or in store</div>
+              </div>
+            </div>
+
+            <div class="feature">
+              <div class="feature-ico">❄️</div>
+              <div>
+                <div class="feature-title" id="badge3Title">Cold & Ready</div>
+                <div class="muted small" id="badge3Text">Beer and mixers chilled</div>
+              </div>
+            </div>
+
+            <div class="feature">
+              <div class="feature-ico">🔞</div>
+              <div>
+                <div class="feature-title" id="badge2Title">Age restricted</div>
+                <div class="muted small" id="badge2Text">18+ confirmation required</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-bottle" aria-hidden="true">
+            <div class="bottle-glow"></div>
+            <div class="bottle-shape"></div>
+            <div class="bottle-label">RED<br/>STORE</div>
+          </div>
         </div>
-        <div class="hero-badge">
-          <div class="hero-badge-title" id="badge2Title">Restricted items</div>
-          <div class="muted small" id="badge2Text">Age confirmation required</div>
-        </div>
       </div>
-    </section> -->
-    <section class="hero card hero-premium" aria-label="Red Store hero">
-  <div class="hero-left">
-    <div class="hero-kicker" id="heroKicker">Red Store • Rameh</div>
-
-    <h1 class="hero-title" id="heroTitle">
-      Premium Alcohol & Cold Beer — Fast WhatsApp Order
-    </h1>
-
-    <p class="hero-sub" id="heroText">
-      Choose whisky, vodka, beer and more. Add to cart, then send your order in one tap.
-    </p>
-
-    <div class="hero-actions">
-      <a class="btn primary" href="#shop" id="shopNowBtn">Browse shop</a>
-      <a class="btn ghost" id="waQuickBtn" href="#" target="_blank" rel="noreferrer">Order on WhatsApp</a>
-    </div>
-
-    <div class="hero-note muted small" id="heroNote">
-      18+ only • Responsible drinking
-    </div>
-  </div>
-
-  <div class="hero-right">
-    <div class="hero-badges">
-      <div class="hero-badge">
-        <div class="hero-badge-title" id="badge1Title">Pickup / Delivery</div>
-        <div class="muted small" id="badge1Text">Pay in cash or in store</div>
-      </div>
-
-      <div class="hero-badge">
-        <div class="hero-badge-title" id="badge3Title">Cold & Ready</div>
-        <div class="muted small" id="badge3Text">Beer and mixers chilled</div>
-      </div>
-
-      <div class="hero-badge">
-        <div class="hero-badge-title" id="badge2Title">Age restricted</div>
-        <div class="muted small" id="badge2Text">18+ confirmation required</div>
-      </div>
-    </div>
-
-    <!-- <div class="hero-glass">
-      <div class="hero-glass-title" id="heroCardTitle">Tonight’s picks</div>
-      <div class="muted small" id="heroCardText">Whisky • Vodka • Beer • Mixers</div>
-
-      <div class="hero-chips" aria-label="Quick filters">
-        <button class="chip js-hero-filter" data-shop-cat="alcohol" data-shop-sub="whisky" type="button">🥃 Whisky</button>
-        <button class="chip js-hero-filter" data-shop-cat="alcohol" data-shop-sub="vodka" type="button">🍸 Vodka</button>
-        <button class="chip js-hero-filter" data-shop-cat="alcohol" data-shop-sub="beer" type="button">🍺 Beer</button>
-      </div>
-    </div> -->
-  </div>
-</section>
+    </section>
 
     <!-- CATEGORIES -->
     <section class="card">

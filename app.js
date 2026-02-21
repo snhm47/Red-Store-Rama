@@ -428,27 +428,36 @@ function applySliderI18n(){
 }
 
 // ======== QUICK FILTER FROM SLIDER ========
-function setShopFilter(mainCat, subCat){
-  if (!mainCat) return;
+// function setShopFilter(mainCat, subCat){
+//   if (!mainCat) return;
 
-  currentCategory = mainCat;
-  currentSubCategory = subCat || "all";
+//   currentCategory = mainCat;
+//   currentSubCategory = subCat || "all";
 
-  // update dropdowns + slider categories
+//   // update dropdowns + slider categories
+//   renderMainCategories();
+//   renderSubCategories();
+
+//   // set selects values (important)
+//   if ($("categorySelect")) $("categorySelect").value = currentCategory;
+//   if ($("subCategorySelect")) $("subCategorySelect").value = currentSubCategory;
+
+//   // clear search
+//   searchTerm = "";
+//   if ($("searchInput")) $("searchInput").value = "";
+
+//   filterProductsView();
+
+//   // go to shop section
+//   location.hash = "#shop";
+// }
+
+function setShopFilter(main, sub){
+  currentCategory = main || "all";
+  currentSubCategory = sub || "all";
   renderMainCategories();
   renderSubCategories();
-
-  // set selects values (important)
-  if ($("categorySelect")) $("categorySelect").value = currentCategory;
-  if ($("subCategorySelect")) $("subCategorySelect").value = currentSubCategory;
-
-  // clear search
-  searchTerm = "";
-  if ($("searchInput")) $("searchInput").value = "";
-
   filterProductsView();
-
-  // go to shop section
   location.hash = "#shop";
 }
 
@@ -899,6 +908,12 @@ function initEvents(){
     setAgeOk(false);
     exitWebsite();
   });
+
+  document.querySelectorAll(".js-hero-filter").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    setShopFilter(btn.dataset.shopCat, btn.dataset.shopSub);
+  });
+});
 
   $("openCartBtn").addEventListener("click", openCart);
   $("closeCartBtn").addEventListener("click", closeCart);
