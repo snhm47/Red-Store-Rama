@@ -125,6 +125,23 @@ const i18n = window.i18n || {
     sliderBeerText: "Heineken • Carlsberg • Corona",
     sliderShopBeer: "Shop Beer",
 
+    heroKicker: "Red Store • Rameh",
+    heroTitle: "Premium Alcohol & Cold Beer — Fast WhatsApp Order",
+    heroText: "Choose whisky, vodka, beer and more. Add to cart, then send your order in one tap.",
+    shopNow: "Browse shop",
+    waOrder: "Order on WhatsApp",
+    heroNote: "18+ only • Responsible drinking",
+
+    badge1Title: "Pickup / Delivery",
+    badge1Text: "Pay in cash or in store",
+    badge2Title: "Age restricted",
+    badge2Text: "18+ confirmation required",
+    badge3Title: "Cold & Ready",
+    badge3Text: "Beer and mixers chilled",
+
+    heroCardTitle: "Tonight’s picks",
+    heroCardText: "Whisky • Vodka • Beer • Mixers",
+
     cats: {
       all: { name: "All", tag: "Everything" },
       tobacco: { name: "Tobacco", tag: "Restricted" },
@@ -200,6 +217,23 @@ const i18n = window.i18n || {
     sliderBeerTitle: "בירה קרה",
     sliderBeerText: "הייניקן • קרלסברג • קורונה",
     sliderShopBeer: "לקניית בירה",
+    
+    heroKicker: "רד סטור • רמה",
+    heroTitle: "אלכוהול פרימיום ובירה קרה — הזמנה מהירה בוואטסאפ",
+    heroText: "בוחרים וויסקי, וודקה, בירה ועוד. מוסיפים לעגלה ושולחים הזמנה בלחיצה אחת.",
+    shopNow: "לצפייה במוצרים",
+    waOrder: "הזמנה בוואטסאפ",
+    heroNote: "18+ בלבד • שתייה באחריות",
+
+    badge1Title: "איסוף / משלוח",
+    badge1Text: "תשלום במזומן או בחנות",
+    badge2Title: "מוגבל גיל",
+    badge2Text: "נדרש אישור 18+",
+    badge3Title: "קר ומוכן",
+    badge3Text: "בירה ומיקסרים בקירור",
+
+    heroCardTitle: "מומלץ להערב",
+    heroCardText: "וויסקי • וודקה • בירה • מיקסרים",
 
     cats: {
       all: { name: "הכל", tag: "כל המוצרים" },
@@ -276,6 +310,23 @@ const i18n = window.i18n || {
     sliderBeerTitle: "بيرة باردة",
     sliderBeerText: "هاينكن • كارلسبرغ • كورونا",
     sliderShopBeer: "تسوق البيرة",
+
+    heroKicker: "ريد ستور • الرامة",
+    heroTitle: "كحول بريميوم وبيرة باردة — طلب سريع عبر واتساب",
+    heroText: "اختر ويسكي، فودكا، بيرة وأكثر. أضف للسلة ثم أرسل طلبك بضغطة واحدة.",
+    shopNow: "تصفح المنتجات",
+    waOrder: "اطلب عبر واتساب",
+    heroNote: "+18 فقط • الشرب بمسؤولية",
+
+    badge1Title: "استلام / توصيل",
+    badge1Text: "الدفع نقداً أو في المتجر",
+    badge2Title: "مقيّد بالعمر",
+    badge2Text: "يتطلب تأكيد +18",
+    badge3Title: "بارد وجاهز",
+    badge3Text: "البيرة والمشروبات مبردة",
+
+    heroCardTitle: "اختيارات الليلة",
+    heroCardText: "ويسكي • فودكا • بيرة • مكسّرات",
 
     cats: {
       all: { name: "الكل", tag: "كل المنتجات" },
@@ -493,6 +544,20 @@ function applyLanguage(){
   $("heroTitle").textContent = t.heroTitle;
   $("heroText").textContent = t.heroText;
   $("shopNowBtn").textContent = t.shopNow;
+
+  $("heroKicker") && ($("heroKicker").textContent = t.heroKicker || "Red Store");
+  $("heroTitle").textContent = t.heroTitle;
+  $("heroText").textContent = t.heroText;
+
+  $("shopNowBtn").textContent = t.shopNow;
+  $("waQuickBtn").textContent = t.waOrder || "WhatsApp";
+
+  $("heroNote") && ($("heroNote").textContent = t.heroNote || "");
+  $("badge3Title") && ($("badge3Title").textContent = t.badge3Title || "");
+  $("badge3Text") && ($("badge3Text").textContent = t.badge3Text || "");
+
+  $("heroCardTitle") && ($("heroCardTitle").textContent = t.heroCardTitle || "");
+  $("heroCardText") && ($("heroCardText").textContent = t.heroCardText || "");
 
   $("catTitle").textContent = t.categories;
   $("catHint").textContent = t.catHint;
@@ -880,6 +945,14 @@ function initEvents(){
       e.preventDefault();
     }
   }, { passive:false });
+
+  document.querySelectorAll(".js-hero-filter").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const main = btn.getAttribute("data-shop-cat") || "all";
+    const sub = btn.getAttribute("data-shop-sub") || "all";
+    setShopFilter(main, sub);
+  });
+});
 
   $("checkoutWaBtn").addEventListener("click", checkoutWhatsApp);
   $("clearCartBtn").addEventListener("click", ()=>{
