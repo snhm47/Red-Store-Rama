@@ -232,7 +232,7 @@ export const SEED_PRODUCTS = [
 },
 
 // =========================
-// GLOBI
+// GLOBE
 // =========================
 {
   id: "globi_700",
@@ -241,8 +241,8 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 75,
-  imgUrl: "assets/products/placeholder.jpg",
-  name_i18n: { en: "Globi Vodka 700ml", he: "וודקה גלוב 700 מ״ל", ar: "غلوب 700 مل" }
+  imgUrl: "assets/products/globe.png",
+  name_i18n: { en: "Globe Vodka 700ml", he: "וודקה גלוב 700 מ״ל", ar: "غلوب 700 مل" }
 },
 {
   id: "globi_1l",
@@ -251,8 +251,8 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 99,
-  imgUrl: "assets/products/placeholder.jpg",
-  name_i18n: { en: "Globi Vodka 1L", he: "וודקה גלוב ליטר", ar: "غلوب 1 لتر" }
+  imgUrl: "assets/products/globe.png",
+  name_i18n: { en: "Globe Vodka 1L", he: "וודקה גלוב ליטר", ar: "غلوب 1 لتر" }
 },
 
 // =========================
@@ -265,7 +265,7 @@ export const SEED_PRODUCTS = [
   restricted: true,
   inStock: true,
   price: 145,
-  imgUrl: "assets/products/placeholder.jpg",
+  imgUrl: "assets/products/ryan.png",
   name_i18n: { en: "Ryan Vodka 1L", he: "וודקה ראיין ליטר", ar: "رايان 1 لتر" }
 },
 
