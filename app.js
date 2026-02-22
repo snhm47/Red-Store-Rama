@@ -85,34 +85,44 @@ const i18n = window.i18n || {
     storeTitle: "Red Store",
     storeSubtitle: "Tobacco • Alcohol • Snacks • Coffee",
     cart: "Cart",
-    heroTitle: "Order fast with WhatsApp",
-    heroText: "Choose products, add to cart, then send your order with one tap.",
-    shopNow: "Shop now",
+
+    // Hero v2
+    heroKicker: "Red Store • Rameh",
+    heroTitle: "Premium Alcohol & Cold Beer — Fast WhatsApp Order",
+    heroText: "Choose whisky, vodka, beer and more. Add to cart, then send your order in one tap.",
+    shopNow: "Browse shop",
+    waOrder: "Order on WhatsApp",
+    heroNote: "18+ only • Responsible drinking",
+
     categories: "Categories",
     catHint: "Swipe on phone • Scroll on desktop",
     shop: "Shop",
     searchPH: "Search products…",
+
     cartTitle: "Your Cart",
     total: "Total",
     checkout: "Send order via WhatsApp",
     clear: "Clear cart",
     legal: "Restricted items require legal age. By continuing you confirm you are of legal age.",
+
     ageTitle: "Age Verification",
     ageText: "This store sells alcohol and tobacco. You must confirm you are of legal age to enter.",
     ageYes: "Yes, I’m 18+",
     ageNo: "No",
     ageHint: "If you are underage, you will be redirected out of the website.",
+
     namePH: "Name (required)",
     phonePH: "Phone (required)",
     addressPH: "Address (optional)",
     notesPH: "Notes (optional)",
+
     addToCart: "Add to cart",
     emptyCart: "Cart is empty.",
     namePhoneReq: "Name and phone required",
     cartEmptyAlert: "Cart is empty",
     outOfStock: "Out of stock",
 
-    // ✅ Slider i18n
+    // Slider i18n
     sliderWhiskyTitle: "Johnnie Walker Collection",
     sliderWhiskyText: "Red • Black • Gold • Green • Blue",
     sliderShopWhisky: "Shop Whisky",
@@ -124,13 +134,6 @@ const i18n = window.i18n || {
     sliderBeerTitle: "Cold Beer",
     sliderBeerText: "Heineken • Carlsberg • Corona",
     sliderShopBeer: "Shop Beer",
-
-    heroKicker: "Red Store • Rameh",
-    heroTitle: "Premium Alcohol & Cold Beer — Fast WhatsApp Order",
-    heroText: "Choose whisky, vodka, beer and more. Add to cart, then send your order in one tap.",
-    shopNow: "Browse shop",
-    waOrder: "Order on WhatsApp",
-    heroNote: "18+ only • Responsible drinking",
 
     badge1Title: "Pickup / Delivery",
     badge1Text: "Pay in cash or in store",
@@ -178,34 +181,42 @@ const i18n = window.i18n || {
     storeTitle: "רד סטור",
     storeSubtitle: "טבק • אלכוהול • חטיפים • קפה",
     cart: "עגלה",
-    heroTitle: "מזמינים מהר בוואטסאפ",
-    heroText: "בוחרים מוצרים, מוסיפים לעגלה ושולחים הזמנה בלחיצה אחת.",
-    shopNow: "לחנות",
+
+    heroKicker: "רד סטור • רמה",
+    heroTitle: "אלכוהול פרימיום ובירה קרה — הזמנה מהירה בוואטסאפ",
+    heroText: "בוחרים וויסקי, וודקה, בירה ועוד. מוסיפים לעגלה ושולחים הזמנה בלחיצה אחת.",
+    shopNow: "לצפייה במוצרים",
+    waOrder: "הזמנה בוואטסאפ",
+    heroNote: "18+ בלבד • שתייה באחריות",
+
     categories: "קטגוריות",
     catHint: "החלקה בנייד • גלילה במחשב",
     shop: "חנות",
     searchPH: "חיפוש מוצרים…",
+
     cartTitle: "העגלה שלי",
     total: "סה״כ",
     checkout: "שליחת הזמנה בוואטסאפ",
     clear: "נקה עגלה",
     legal: "מוצרים מוגבלים דורשים גיל חוקי. בהמשך את/ה מאשר/ת גיל חוקי.",
+
     ageTitle: "אימות גיל",
     ageText: "החנות מוכרת אלכוהול וטבק. חייבים לאשר גיל חוקי כדי להיכנס.",
     ageYes: "כן, אני 18+",
     ageNo: "לא",
     ageHint: "אם את/ה מתחת לגיל — תועבר/י החוצה מהאתר.",
+
     namePH: "שם (חובה)",
     phonePH: "טלפון (חובה)",
     addressPH: "כתובת (לא חובה)",
     notesPH: "הערות (לא חובה)",
+
     addToCart: "הוסף לעגלה",
     emptyCart: "העגלה ריקה.",
     namePhoneReq: "שם וטלפון חובה",
     cartEmptyAlert: "העגלה ריקה",
     outOfStock: "לא במלאי",
 
-    // ✅ Slider i18n
     sliderWhiskyTitle: "קולקציית ג׳וני ווקר",
     sliderWhiskyText: "רד • בלאק • גולד • גרין • בלו",
     sliderShopWhisky: "לקניית וויסקי",
@@ -217,13 +228,6 @@ const i18n = window.i18n || {
     sliderBeerTitle: "בירה קרה",
     sliderBeerText: "הייניקן • קרלסברג • קורונה",
     sliderShopBeer: "לקניית בירה",
-    
-    heroKicker: "רד סטור • רמה",
-    heroTitle: "אלכוהול פרימיום ובירה קרה — הזמנה מהירה בוואטסאפ",
-    heroText: "בוחרים וויסקי, וודקה, בירה ועוד. מוסיפים לעגלה ושולחים הזמנה בלחיצה אחת.",
-    shopNow: "לצפייה במוצרים",
-    waOrder: "הזמנה בוואטסאפ",
-    heroNote: "18+ בלבד • שתייה באחריות",
 
     badge1Title: "איסוף / משלוח",
     badge1Text: "תשלום במזומן או בחנות",
@@ -271,34 +275,42 @@ const i18n = window.i18n || {
     storeTitle: "ريد ستور",
     storeSubtitle: "تبغ • كحول • سناكس • قهوة",
     cart: "السلة",
-    heroTitle: "اطلب بسرعة عبر واتساب",
-    heroText: "اختر المنتجات، أضف للسلة، ثم أرسل الطلب بضغطة واحدة.",
-    shopNow: "تسوق الآن",
+
+    heroKicker: "ريد ستور • الرامة",
+    heroTitle: "كحول بريميوم وبيرة باردة — طلب سريع عبر واتساب",
+    heroText: "اختر ويسكي، فودكا، بيرة وأكثر. أضف للسلة ثم أرسل طلبك بضغطة واحدة.",
+    shopNow: "تصفح المنتجات",
+    waOrder: "اطلب عبر واتساب",
+    heroNote: "+18 فقط • الشرب بمسؤولية",
+
     categories: "الأقسام",
     catHint: "اسحب على الهاتف • مرر على الكمبيوتر",
     shop: "المتجر",
     searchPH: "ابحث عن منتج…",
+
     cartTitle: "سلتك",
     total: "المجموع",
     checkout: "إرسال الطلب عبر واتساب",
     clear: "تفريغ السلة",
     legal: "المنتجات المقيّدة تتطلب العمر القانوني. بالمتابعة أنت تؤكد أنك بالعمر القانوني.",
+
     ageTitle: "تأكيد العمر",
     ageText: "المتجر يبيع الكحول والتبغ. يجب تأكيد العمر القانوني للدخول.",
     ageYes: "نعم، أنا +18",
     ageNo: "لا",
     ageHint: "إذا كنت دون السن القانوني سيتم إخراجك من الموقع.",
+
     namePH: "الاسم (مطلوب)",
     phonePH: "الهاتف (مطلوب)",
     addressPH: "العنوان (اختياري)",
     notesPH: "ملاحظات (اختياري)",
+
     addToCart: "أضف للسلة",
     emptyCart: "السلة فارغة.",
     namePhoneReq: "الاسم والهاتف مطلوبان",
     cartEmptyAlert: "السلة فارغة",
     outOfStock: "غير متوفر",
 
-    // ✅ Slider i18n
     sliderWhiskyTitle: "مجموعة جوني ووكر",
     sliderWhiskyText: "ريد • بلاك • غولد • جرين • بلو",
     sliderShopWhisky: "تسوق الويسكي",
@@ -310,13 +322,6 @@ const i18n = window.i18n || {
     sliderBeerTitle: "بيرة باردة",
     sliderBeerText: "هاينكن • كارلسبرغ • كورونا",
     sliderShopBeer: "تسوق البيرة",
-
-    heroKicker: "ريد ستور • الرامة",
-    heroTitle: "كحول بريميوم وبيرة باردة — طلب سريع عبر واتساب",
-    heroText: "اختر ويسكي، فودكا، بيرة وأكثر. أضف للسلة ثم أرسل طلبك بضغطة واحدة.",
-    shopNow: "تصفح المنتجات",
-    waOrder: "اطلب عبر واتساب",
-    heroNote: "+18 فقط • الشرب بمسؤولية",
 
     badge1Title: "استلام / توصيل",
     badge1Text: "الدفع نقداً أو في المتجر",
@@ -384,6 +389,7 @@ function setAgeOk(val) { sessionStorage.setItem(AGE_KEY, val ? "true" : "false")
 function detectLanguage(){
   const saved = localStorage.getItem(LANG_KEY);
   if (saved && i18n[saved]) return saved;
+
   const nav = (navigator.language || "en").toLowerCase();
   if (nav.startsWith("he")) return "he";
   if (nav.startsWith("ar")) return "ar";
@@ -396,12 +402,32 @@ function setLanguage(newLang){
   localStorage.setItem(LANG_KEY, newLang);
 
   applyLanguage();
+  applySliderI18n();
   renderMainCategories();
   renderSubCategories();
   updateProductTextsOnly();
   filterProductsView();
   renderCart();
-  applySliderI18n(); // ✅ update slider language
+
+  // keep selects synced (desktop + mobile)
+  const ls = $("langSelect");
+  if (ls) ls.value = lang;
+  const lsm = $("langSelectMobile");
+  if (lsm) lsm.value = lang;
+}
+
+// ======== SAFE DOM SETTERS ========
+function setText(id, value){
+  const el = $(id);
+  if (el) el.textContent = String(value ?? "");
+}
+function setPH(id, value){
+  const el = $(id);
+  if (el) el.placeholder = String(value ?? "");
+}
+function setValue(id, value){
+  const el = $(id);
+  if (el) el.value = String(value ?? "");
 }
 
 // ======== HELPERS ========
@@ -428,35 +454,25 @@ function applySliderI18n(){
 }
 
 // ======== QUICK FILTER FROM SLIDER ========
-// function setShopFilter(mainCat, subCat){
-//   if (!mainCat) return;
-
-//   currentCategory = mainCat;
-//   currentSubCategory = subCat || "all";
-
-//   // update dropdowns + slider categories
-//   renderMainCategories();
-//   renderSubCategories();
-
-//   // set selects values (important)
-//   if ($("categorySelect")) $("categorySelect").value = currentCategory;
-//   if ($("subCategorySelect")) $("subCategorySelect").value = currentSubCategory;
-
-//   // clear search
-//   searchTerm = "";
-//   if ($("searchInput")) $("searchInput").value = "";
-
-//   filterProductsView();
-
-//   // go to shop section
-//   location.hash = "#shop";
-// }
-
 function setShopFilter(main, sub){
   currentCategory = main || "all";
   currentSubCategory = sub || "all";
+
+  // sync selects too
+  const cs = $("categorySelect");
+  if (cs) cs.value = currentCategory;
+
   renderMainCategories();
   renderSubCategories();
+
+  const sc = $("subCategorySelect");
+  if (sc) sc.value = currentSubCategory;
+
+  // clear search when jumping from hero/slider (optional)
+  searchTerm = "";
+  const si = $("searchInput");
+  if (si) si.value = "";
+
   filterProductsView();
   location.hash = "#shop";
 }
@@ -539,83 +555,105 @@ function exitWebsite(){
   else window.location.href = "https://google.com";
 }
 
-// ======== APPLY LANGUAGE ========
+// ======== APPLY LANGUAGE (FIXED) ========
+// IMPORTANT:
+// - sets <html dir="rtl"> for HE/AR (so CSS [dir="rtl"] works)
+// - no duplicate/conflicting assignments
+// - safe DOM updates (no null crash)
 function applyLanguage(){
   const t = i18n[lang] || i18n.en;
 
-  document.documentElement.lang = lang;
-  document.documentElement.dir = t.dir;
+  // ✅ This is the ONLY place we set lang/dir
+  document.documentElement.setAttribute("lang", lang);
+  document.documentElement.setAttribute("dir", t.dir || ((lang === "he" || lang === "ar") ? "rtl" : "ltr"));
 
-  $("storeTitle").textContent = t.storeTitle;
-  $("storeSubtitle").textContent = t.storeSubtitle;
-  $("cartLabel").textContent = t.cart;
+  // Header
+  setText("storeTitle", t.storeTitle);
+  setText("storeSubtitle", t.storeSubtitle);
+  setText("cartLabel", t.cart);
 
-  $("heroTitle").textContent = t.heroTitle;
-  $("heroText").textContent = t.heroText;
-  $("shopNowBtn").textContent = t.shopNow;
+  // Hero (v2)
+  setText("heroKicker", t.heroKicker || STORE_NAME);
+  setText("heroTitle", t.heroTitle);
+  setText("heroText", t.heroText);
+  setText("heroNote", t.heroNote || "");
 
-  $("heroKicker") && ($("heroKicker").textContent = t.heroKicker || "Red Store");
-  $("heroTitle").textContent = t.heroTitle;
-  $("heroText").textContent = t.heroText;
+  setText("shopNowBtn", t.shopNow);
+  setText("waQuickBtn", t.waOrder || "WhatsApp");
 
-  $("shopNowBtn").textContent = t.shopNow;
-  $("waQuickBtn").textContent = t.waOrder || "WhatsApp";
+  // Badges (optional elements)
+  setText("badge1Title", t.badge1Title || "");
+  setText("badge1Text", t.badge1Text || "");
+  setText("badge2Title", t.badge2Title || "");
+  setText("badge2Text", t.badge2Text || "");
+  setText("badge3Title", t.badge3Title || "");
+  setText("badge3Text", t.badge3Text || "");
 
-  $("heroNote") && ($("heroNote").textContent = t.heroNote || "");
-  $("badge3Title") && ($("badge3Title").textContent = t.badge3Title || "");
-  $("badge3Text") && ($("badge3Text").textContent = t.badge3Text || "");
+  // Hero card (optional)
+  setText("heroCardTitle", t.heroCardTitle || "");
+  setText("heroCardText", t.heroCardText || "");
 
-  $("heroCardTitle") && ($("heroCardTitle").textContent = t.heroCardTitle || "");
-  $("heroCardText") && ($("heroCardText").textContent = t.heroCardText || "");
+  // Sections
+  setText("catTitle", t.categories);
+  setText("catHint", t.catHint);
+  setText("shopTitle", t.shop);
+  setPH("searchInput", t.searchPH);
 
-  $("catTitle").textContent = t.categories;
-  $("catHint").textContent = t.catHint;
+  // Cart
+  setText("cartTitle", t.cartTitle);
+  setText("totalLabel", t.total);
+  setText("checkoutWaBtn", t.checkout);
+  setText("clearCartBtn", t.clear);
+  setText("legalText", t.legal);
 
-  $("shopTitle").textContent = t.shop;
-  $("searchInput").placeholder = t.searchPH;
+  // Form placeholders
+  setPH("name", t.namePH);
+  setPH("phone", t.phonePH);
+  setPH("address", t.addressPH);
+  setPH("notes", t.notesPH);
 
-  $("cartTitle").textContent = t.cartTitle;
-  $("totalLabel").textContent = t.total;
-  $("checkoutWaBtn").textContent = t.checkout;
-  $("clearCartBtn").textContent = t.clear;
-  $("legalText").textContent = t.legal;
+  // Age gate
+  setText("ageTitle", t.ageTitle);
+  setText("ageText", t.ageText);
+  setText("ageYes", t.ageYes);
+  setText("ageNo", t.ageNo);
+  setText("ageHint", t.ageHint);
 
-  $("name").placeholder = t.namePH;
-  $("phone").placeholder = t.phonePH;
-  $("address").placeholder = t.addressPH;
-  $("notes").placeholder = t.notesPH;
+  // Language selects (desktop + mobile)
+  setValue("langSelect", lang);
+  setValue("langSelectMobile", lang);
 
-  $("ageTitle").textContent = t.ageTitle;
-  $("ageText").textContent = t.ageText;
-  $("ageYes").textContent = t.ageYes;
-  $("ageNo").textContent = t.ageNo;
-  $("ageHint").textContent = t.ageHint;
-
-  $("langSelect").value = lang;
+  // Optional: mirror mobile header title/subtitle if you have these IDs
+  setText("storeTitleMobile", t.storeTitle);
+  setText("storeSubtitleMobile", t.storeSubtitle);
 }
 
 // ======== MAIN CATEGORIES ========
 function renderMainCategories(){
   const t = i18n[lang] || i18n.en;
 
-  $("categorySlider").innerHTML = MAIN_CATEGORIES.map(c=>{
-    const label = t.cats?.[c.id]?.name || c.id;
-    const tag = t.cats?.[c.id]?.tag || "";
-    return `
-      <div class="cat ${c.id===currentCategory?"active":""}" data-cat="${c.id}">
-        <div class="name">${c.icon} ${label}</div>
-        <div class="tag">${tag}</div>
-      </div>
-    `;
-  }).join("");
+  const slider = $("categorySlider");
+  if (slider){
+    slider.innerHTML = MAIN_CATEGORIES.map(c=>{
+      const label = t.cats?.[c.id]?.name || c.id;
+      const tag = t.cats?.[c.id]?.tag || "";
+      return `
+        <div class="cat ${c.id===currentCategory?"active":""}" data-cat="${c.id}">
+          <div class="name">${c.icon} ${label}</div>
+          <div class="tag">${tag}</div>
+        </div>
+      `;
+    }).join("");
+  }
 
-  $("categorySelect").innerHTML = MAIN_CATEGORIES.map(c=>{
-    const label = t.cats?.[c.id]?.name || c.id;
-    return `<option value="${c.id}" ${c.id===currentCategory?"selected":""}>${label}</option>`;
-  }).join("");
-
-  // ensure correct selection
-  $("categorySelect").value = currentCategory;
+  const select = $("categorySelect");
+  if (select){
+    select.innerHTML = MAIN_CATEGORIES.map(c=>{
+      const label = t.cats?.[c.id]?.name || c.id;
+      return `<option value="${c.id}" ${c.id===currentCategory?"selected":""}>${label}</option>`;
+    }).join("");
+    select.value = currentCategory;
+  }
 }
 
 // ======== SUB CATEGORIES ========
@@ -625,17 +663,22 @@ function renderSubCategories(){
 
   if (!list.some(x => x.id === currentSubCategory)) currentSubCategory = "all";
 
-  $("subCategorySelect").innerHTML = list.map(sc=>{
+  const select = $("subCategorySelect");
+  if (!select) return;
+
+  select.innerHTML = list.map(sc=>{
     const label = t.subcats?.[sc.id] || sc.id;
     return `<option value="${sc.id}" ${sc.id===currentSubCategory?"selected":""}>${label}</option>`;
   }).join("");
 
-  $("subCategorySelect").value = currentSubCategory;
+  select.value = currentSubCategory;
 }
 
 // ======== PRODUCTS VIEW ========
 function buildProductsOnce(){
   const list = $("productList");
+  if (!list) return;
+
   list.innerHTML = "";
   productEls.clear();
 
@@ -759,23 +802,27 @@ function setQty(id, qty){
 
 // ======== CART UI ========
 function openCart(){
-  $("cartDrawer").classList.remove("hidden");
-  $("cartBackdrop").classList.remove("hidden");
+  $("cartDrawer")?.classList.remove("hidden");
+  $("cartBackdrop")?.classList.remove("hidden");
 }
 function closeCart(){
-  $("cartDrawer").classList.add("hidden");
-  $("cartBackdrop").classList.add("hidden");
+  $("cartDrawer")?.classList.add("hidden");
+  $("cartBackdrop")?.classList.add("hidden");
 }
 
 function renderCart(){
   const t = i18n[lang] || i18n.en;
 
-  $("cartCount").textContent = String(cartCount());
-  $("cartTotal").textContent = formatILS(cartTotal());
+  setText("cartCount", String(cartCount()));
+  setText("cartTotal", formatILS(cartTotal()));
 
   const box = $("cartItems");
+  if (!box) return;
+
   if (!cart.length){
     box.innerHTML = `<div class="muted">${t.emptyCart}</div>`;
+    const cm0 = $("cartCountMobile");
+    if (cm0) cm0.textContent = String(cartCount());
     return;
   }
 
@@ -815,16 +862,17 @@ function renderCart(){
       setQty(id, qty-1);
     })
   );
-  const cm = document.getElementById("cartCountMobile");
+
+  const cm = $("cartCountMobile");
   if (cm) cm.textContent = String(cartCount());
 }
 
 // ======== CHECKOUT ========
 function buildOrderText(){
-  const name = $("name").value.trim();
-  const phone = $("phone").value.trim();
-  const address = $("address").value.trim();
-  const notes = $("notes").value.trim();
+  const name = ($("name")?.value || "").trim();
+  const phone = ($("phone")?.value || "").trim();
+  const address = ($("address")?.value || "").trim();
+  const notes = ($("notes")?.value || "").trim();
 
   const lines = [];
   lines.push(`${STORE_NAME} - New Order`);
@@ -897,84 +945,79 @@ function initSlider(){
 
 // ======== EVENTS ========
 function initEvents(){
-  // --- mirror mobile header controls (optional but recommended) ---
-const igM = document.getElementById("instagramBtnMobile");
-const wzM = document.getElementById("wazeBtnMobile");
-const langM = document.getElementById("langSelectMobile");
-const cartM = document.getElementById("openCartBtnMobile");
+  // Desktop header buttons (if exist)
+  const ig = $("instagramBtn");
+  if (ig) ig.href = INSTAGRAM_URL;
 
-if (igM) igM.href = INSTAGRAM_URL;
-if (wzM) wzM.href = WAZE_URL;
+  const wz = $("wazeBtn");
+  if (wz) wz.href = WAZE_URL;
 
-if (langM){
-  langM.value = lang;
-  langM.addEventListener("change", (e)=> setLanguage(e.target.value));
-}
+  // Mobile header buttons (if exist)
+  const igM = $("instagramBtnMobile");
+  if (igM) igM.href = INSTAGRAM_URL;
 
-// open cart from mobile
-if (cartM) cartM.addEventListener("click", openCart);
+  const wzM = $("wazeBtnMobile");
+  if (wzM) wzM.href = WAZE_URL;
 
-// keep counts synced
-const syncCartBadges = () => {
-  const c = String(cartCount());
-  const cm = document.getElementById("cartCountMobile");
-  if (cm) cm.textContent = c;
-};
-syncCartBadges();
+  // Language selects
+  const langSelect = $("langSelect");
+  if (langSelect){
+    langSelect.value = lang;
+    langSelect.addEventListener("change", (e)=> setLanguage(e.target.value));
+  }
+  const langSelectM = $("langSelectMobile");
+  if (langSelectM){
+    langSelectM.value = lang;
+    langSelectM.addEventListener("change", (e)=> setLanguage(e.target.value));
+  }
 
-// keep titles/subtitles synced (if you want same text)
-const stM = document.getElementById("storeTitleMobile");
-const ssM = document.getElementById("storeSubtitleMobile");
-if (stM) stM.textContent = document.getElementById("storeTitle")?.textContent || "Red Store";
-if (ssM) ssM.textContent = document.getElementById("storeSubtitle")?.textContent || "";
-
-// sync top search with main searchInput (optional)
-const topSearch = document.getElementById("searchInputTop");
-const topSearchM = document.getElementById("searchInputTopMobile");
-const mainSearch = document.getElementById("searchInput");
-
-function bindSearchMirror(src){
-  if (!src || !mainSearch) return;
-  src.addEventListener("input", (e)=>{
-    mainSearch.value = e.target.value;
-    searchTerm = e.target.value || "";
-    filterProductsView();
-  });
-}
-bindSearchMirror(topSearch);
-bindSearchMirror(topSearchM);
-  $("instagramBtn").href = INSTAGRAM_URL;
-  $("wazeBtn").href = WAZE_URL;
-
-  $("langSelect").addEventListener("change", (e)=> setLanguage(e.target.value));
-
-  $("ageYes").addEventListener("click", ()=>{
+  // Age gate
+  $("ageYes")?.addEventListener("click", ()=>{
     setAgeOk(true);
     hideAgeGate();
   });
-  $("ageNo").addEventListener("click", ()=>{
+  $("ageNo")?.addEventListener("click", ()=>{
     setAgeOk(false);
     exitWebsite();
   });
 
-  document.querySelectorAll(".js-hero-filter").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    setShopFilter(btn.dataset.shopCat, btn.dataset.shopSub);
-  });
-});
+  // Cart open/close
+  $("openCartBtn")?.addEventListener("click", openCart);
+  $("openCartBtnMobile")?.addEventListener("click", openCart);
 
-  $("openCartBtn").addEventListener("click", openCart);
-  $("closeCartBtn").addEventListener("click", closeCart);
-  $("cartBackdrop").addEventListener("click", closeCart);
+  $("closeCartBtn")?.addEventListener("click", closeCart);
+  $("cartBackdrop")?.addEventListener("click", closeCart);
 
-  $("waQuickBtn").href = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent("Hi! I want to order from Red Store.")}`;
+  // WhatsApp quick button
+  const waq = $("waQuickBtn");
+  if (waq){
+    waq.href = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent("Hi! I want to order from Red Store.")}`;
+  }
 
-  $("searchInput").addEventListener("input", (e)=>{
+  // Search
+  $("searchInput")?.addEventListener("input", (e)=>{
     searchTerm = e.target.value || "";
     filterProductsView();
   });
 
-  $("categorySelect").addEventListener("change", (e)=>{
+  // Optional mirrored top search inputs (if exist)
+  const mainSearch = $("searchInput");
+  const topSearch = $("searchInputTop");
+  const topSearchM = $("searchInputTopMobile");
+
+  function bindSearchMirror(src){
+    if (!src || !mainSearch) return;
+    src.addEventListener("input", (e)=>{
+      mainSearch.value = e.target.value;
+      searchTerm = e.target.value || "";
+      filterProductsView();
+    });
+  }
+  bindSearchMirror(topSearch);
+  bindSearchMirror(topSearchM);
+
+  // Category selects
+  $("categorySelect")?.addEventListener("change", (e)=>{
     currentCategory = e.target.value;
     currentSubCategory = "all";
     renderMainCategories();
@@ -982,12 +1025,13 @@ bindSearchMirror(topSearchM);
     filterProductsView();
   });
 
-  $("subCategorySelect").addEventListener("change", (e)=>{
+  $("subCategorySelect")?.addEventListener("change", (e)=>{
     currentSubCategory = e.target.value;
     filterProductsView();
   });
 
-  $("categorySlider").addEventListener("click", (e)=>{
+  // Category slider click
+  $("categorySlider")?.addEventListener("click", (e)=>{
     const cat = e.target.closest("[data-cat]")?.getAttribute("data-cat");
     if (!cat) return;
     currentCategory = cat;
@@ -998,33 +1042,32 @@ bindSearchMirror(topSearchM);
     location.hash = "#shop";
   });
 
+  // Category slider arrows
   const slider = $("categorySlider");
-  $("catLeft").addEventListener("click", ()=> slider.scrollBy({ left: -260, behavior:"smooth" }));
-  $("catRight").addEventListener("click", ()=> slider.scrollBy({ left: 260, behavior:"smooth" }));
+  const left = $("catLeft");
+  const right = $("catRight");
+  if (slider && left && right){
+    left.addEventListener("click", ()=> slider.scrollBy({ left: -260, behavior:"smooth" }));
+    right.addEventListener("click", ()=> slider.scrollBy({ left: 260, behavior:"smooth" }));
 
-  slider.addEventListener("wheel", (e)=>{
-    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-      slider.scrollLeft += e.deltaY;
-      e.preventDefault();
-    }
-  }, { passive:false });
+    slider.addEventListener("wheel", (e)=>{
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        slider.scrollLeft += e.deltaY;
+        e.preventDefault();
+      }
+    }, { passive:false });
+  }
 
+  // Hero chips / buttons filter
   document.querySelectorAll(".js-hero-filter").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    const main = btn.getAttribute("data-shop-cat") || "all";
-    const sub = btn.getAttribute("data-shop-sub") || "all";
-    setShopFilter(main, sub);
-  });
-});
-
-  $("checkoutWaBtn").addEventListener("click", checkoutWhatsApp);
-  $("clearCartBtn").addEventListener("click", ()=>{
-    cart = [];
-    saveCart();
-    renderCart();
+    btn.addEventListener("click", ()=>{
+      const main = btn.getAttribute("data-shop-cat") || btn.dataset.shopCat || "all";
+      const sub = btn.getAttribute("data-shop-sub") || btn.dataset.shopSub || "all";
+      setShopFilter(main, sub);
+    });
   });
 
-  // ✅ Slider "Shop Beer/Vodka/Whisky" -> filter the shop
+  // Slider "Shop" links -> filter shop
   document.querySelectorAll(".js-shop-link").forEach(a=>{
     a.addEventListener("click", (e)=>{
       e.preventDefault();
@@ -1032,6 +1075,14 @@ bindSearchMirror(topSearchM);
       const sub = a.getAttribute("data-shop-sub") || "all";
       setShopFilter(main, sub);
     });
+  });
+
+  // Checkout / clear
+  $("checkoutWaBtn")?.addEventListener("click", checkoutWhatsApp);
+  $("clearCartBtn")?.addEventListener("click", ()=>{
+    cart = [];
+    saveCart();
+    renderCart();
   });
 
   // Add-to-cart (event delegation)
@@ -1053,7 +1104,7 @@ bindSearchMirror(topSearchM);
 // ======== BOOT ========
 function boot(){
   applyLanguage();
-  applySliderI18n(); // ✅ slider language
+  applySliderI18n();
   renderMainCategories();
   renderSubCategories();
   renderCart();
