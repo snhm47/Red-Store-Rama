@@ -230,6 +230,77 @@ export const SEED_PRODUCTS = [
     ar: "روبرتو كافالي 1ل (عادي / نكهات)" 
   }
 },
+// =========================
+// CIROC
+// =========================
+{
+  id: "ciroc_750ml",
+  mainCategory: "alcohol",
+  subCategory: "vodka",
+  restricted: true,
+  inStock: true,
+  price: 145,
+  imgUrl: "assets/products/ciroc.png",
+  name_i18n: { 
+    en: "Ciroc Vodka 750ML", 
+    he: "סירוק וודקה 750 מ״ל", 
+    ar: "فودكا سيروك 750 مل" 
+  }
+},
+
+// =========================
+// DANZKA
+// =========================
+{
+  id: "danzka_1l",
+  mainCategory: "alcohol",
+  subCategory: "vodka",
+  restricted: true,
+  inStock: true,
+  price: 139,
+  imgUrl: "assets/products/danzka.png",
+  name_i18n: { 
+    en: "Danzka Vodka 1L", 
+    he: "דנזקה וודקה ליטר", 
+    ar: "فودكا دانزكا 1 لتر" 
+  }
+},
+
+// =========================
+// FINLAP
+// =========================
+{
+  id: "finlap_1l",
+  mainCategory: "alcohol",
+  subCategory: "vodka",
+  restricted: true,
+  inStock: true,
+  price: 109,
+  imgUrl: "assets/products/finlap.png",
+  name_i18n: { 
+    en: "Finlap Vodka 1L", 
+    he: "פינלאפ וודקה ליטר", 
+    ar: "فودكا فينلاب 1 لتر" 
+  }
+},
+
+// =========================
+// ELIT
+// =========================
+{
+  id: "elit_700ml",
+  mainCategory: "alcohol",
+  subCategory: "vodka",
+  restricted: true,
+  inStock: true,
+  price: 135,
+  imgUrl: "assets/products/elit.png",
+  name_i18n: { 
+    en: "Elit Vodka 700ML", 
+    he: "אליט וודקה 700 מ״ל", 
+    ar: "فودكا إيليت 700 مل" 
+  }
+},
 
 // =========================
 // GLOBE
