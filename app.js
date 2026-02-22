@@ -815,6 +815,8 @@ function renderCart(){
       setQty(id, qty-1);
     })
   );
+  const cm = document.getElementById("cartCountMobile");
+  if (cm) cm.textContent = String(cartCount());
 }
 
 // ======== CHECKOUT ========
@@ -895,6 +897,52 @@ function initSlider(){
 
 // ======== EVENTS ========
 function initEvents(){
+  // --- mirror mobile header controls (optional but recommended) ---
+const igM = document.getElementById("instagramBtnMobile");
+const wzM = document.getElementById("wazeBtnMobile");
+const langM = document.getElementById("langSelectMobile");
+const cartM = document.getElementById("openCartBtnMobile");
+
+if (igM) igM.href = INSTAGRAM_URL;
+if (wzM) wzM.href = WAZE_URL;
+
+if (langM){
+  langM.value = lang;
+  langM.addEventListener("change", (e)=> setLanguage(e.target.value));
+}
+
+// open cart from mobile
+if (cartM) cartM.addEventListener("click", openCart);
+
+// keep counts synced
+const syncCartBadges = () => {
+  const c = String(cartCount());
+  const cm = document.getElementById("cartCountMobile");
+  if (cm) cm.textContent = c;
+};
+syncCartBadges();
+
+// keep titles/subtitles synced (if you want same text)
+const stM = document.getElementById("storeTitleMobile");
+const ssM = document.getElementById("storeSubtitleMobile");
+if (stM) stM.textContent = document.getElementById("storeTitle")?.textContent || "Red Store";
+if (ssM) ssM.textContent = document.getElementById("storeSubtitle")?.textContent || "";
+
+// sync top search with main searchInput (optional)
+const topSearch = document.getElementById("searchInputTop");
+const topSearchM = document.getElementById("searchInputTopMobile");
+const mainSearch = document.getElementById("searchInput");
+
+function bindSearchMirror(src){
+  if (!src || !mainSearch) return;
+  src.addEventListener("input", (e)=>{
+    mainSearch.value = e.target.value;
+    searchTerm = e.target.value || "";
+    filterProductsView();
+  });
+}
+bindSearchMirror(topSearch);
+bindSearchMirror(topSearchM);
   $("instagramBtn").href = INSTAGRAM_URL;
   $("wazeBtn").href = WAZE_URL;
 
