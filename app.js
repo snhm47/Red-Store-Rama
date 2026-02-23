@@ -86,6 +86,9 @@ const i18n = window.i18n || {
     storeSubtitle: "Tobacco • Alcohol • Snacks • Coffee",
     cart: "Cart",
 
+    // ✅ NEW
+    backToShop: "Back to shop",
+
     // Hero v2
     heroKicker: "Red Store • Rameh",
     heroTitle: "Premium Alcohol & Cold Beer — Fast WhatsApp Order",
@@ -182,6 +185,9 @@ const i18n = window.i18n || {
     storeSubtitle: "טבק • אלכוהול • חטיפים • קפה",
     cart: "עגלה",
 
+    // ✅ NEW
+    backToShop: "חזרה לחנות",
+
     heroKicker: "רד סטור • רמה",
     heroTitle: "אלכוהול פרימיום ובירה קרה — הזמנה מהירה בוואטסאפ",
     heroText: "בוחרים וויסקי, וודקה, בירה ועוד. מוסיפים לעגלה ושולחים הזמנה בלחיצה אחת.",
@@ -275,6 +281,9 @@ const i18n = window.i18n || {
     storeTitle: "ريد ستور",
     storeSubtitle: "تبغ • كحول • سناكس • قهوة",
     cart: "السلة",
+
+    // ✅ NEW
+    backToShop: "العودة للمتجر",
 
     heroKicker: "ريد ستور • الرامة",
     heroTitle: "كحول بريميوم وبيرة باردة — طلب سريع عبر واتساب",
@@ -409,7 +418,6 @@ function setLanguage(newLang){
   filterProductsView();
   renderCart();
 
-  // keep selects synced (desktop + mobile)
   const ls = $("langSelect");
   if (ls) ls.value = lang;
   const lsm = $("langSelectMobile");
@@ -458,7 +466,6 @@ function setShopFilter(main, sub){
   currentCategory = main || "all";
   currentSubCategory = sub || "all";
 
-  // sync selects too
   const cs = $("categorySelect");
   if (cs) cs.value = currentCategory;
 
@@ -468,7 +475,6 @@ function setShopFilter(main, sub){
   const sc = $("subCategorySelect");
   if (sc) sc.value = currentSubCategory;
 
-  // clear search when jumping from hero/slider (optional)
   searchTerm = "";
   const si = $("searchInput");
   if (si) si.value = "";
@@ -555,15 +561,10 @@ function exitWebsite(){
   else window.location.href = "https://google.com";
 }
 
-// ======== APPLY LANGUAGE (FIXED) ========
-// IMPORTANT:
-// - sets <html dir="rtl"> for HE/AR (so CSS [dir="rtl"] works)
-// - no duplicate/conflicting assignments
-// - safe DOM updates (no null crash)
+// ======== APPLY LANGUAGE ========
 function applyLanguage(){
   const t = i18n[lang] || i18n.en;
 
-  // ✅ This is the ONLY place we set lang/dir
   document.documentElement.setAttribute("lang", lang);
   document.documentElement.setAttribute("dir", t.dir || ((lang === "he" || lang === "ar") ? "rtl" : "ltr"));
 
@@ -572,6 +573,9 @@ function applyLanguage(){
   setText("storeSubtitle", t.storeSubtitle);
   setText("cartLabel", t.cart);
 
+  // ✅ NEW: Back to shop text
+  setText("backToShopBtn", t.backToShop || "Back to shop");
+
   // Hero (v2)
   setText("heroKicker", t.heroKicker || STORE_NAME);
   setText("heroTitle", t.heroTitle);
@@ -579,9 +583,9 @@ function applyLanguage(){
   setText("heroNote", t.heroNote || "");
 
   setText("shopNowBtn", t.shopNow);
-  setText("waQuickBtn", t.waOrder || "WhatsApp");
+  setText("waOrderText", t.waOrder || "WhatsApp");
 
-  // Badges (optional elements)
+  // Badges
   setText("badge1Title", t.badge1Title || "");
   setText("badge1Text", t.badge1Text || "");
   setText("badge2Title", t.badge2Title || "");
@@ -589,7 +593,7 @@ function applyLanguage(){
   setText("badge3Title", t.badge3Title || "");
   setText("badge3Text", t.badge3Text || "");
 
-  // Hero card (optional)
+  // Hero card
   setText("heroCardTitle", t.heroCardTitle || "");
   setText("heroCardText", t.heroCardText || "");
 
@@ -619,11 +623,10 @@ function applyLanguage(){
   setText("ageNo", t.ageNo);
   setText("ageHint", t.ageHint);
 
-  // Language selects (desktop + mobile)
+  // Language selects
   setValue("langSelect", lang);
   setValue("langSelectMobile", lang);
 
-  // Optional: mirror mobile header title/subtitle if you have these IDs
   setText("storeTitleMobile", t.storeTitle);
   setText("storeSubtitleMobile", t.storeSubtitle);
 }
@@ -804,10 +807,16 @@ function setQty(id, qty){
 function openCart(){
   $("cartDrawer")?.classList.remove("hidden");
   $("cartBackdrop")?.classList.remove("hidden");
+
+  // ✅ stop background scroll
+  document.body.classList.add("no-scroll");
 }
 function closeCart(){
   $("cartDrawer")?.classList.add("hidden");
   $("cartBackdrop")?.classList.add("hidden");
+
+  // ✅ restore scroll
+  document.body.classList.remove("no-scroll");
 }
 
 function renderCart(){
@@ -945,7 +954,7 @@ function initSlider(){
 
 // ======== EVENTS ========
 function initEvents(){
-  // Desktop header buttons (if exist)
+  // Desktop header buttons
   const ig = $("instagramBtn");
   if (ig) ig.href = INSTAGRAM_URL;
 
@@ -988,6 +997,13 @@ function initEvents(){
   $("closeCartBtn")?.addEventListener("click", closeCart);
   $("cartBackdrop")?.addEventListener("click", closeCart);
 
+  // ✅ NEW: Back to shop
+  $("backToShopBtn")?.addEventListener("click", ()=>{
+    closeCart();
+    document.querySelector("#shop")?.scrollIntoView({ behavior:"smooth", block:"start" });
+    location.hash = "#shop";
+  });
+
   // WhatsApp quick button
   const waq = $("waQuickBtn");
   if (waq){
@@ -1000,7 +1016,7 @@ function initEvents(){
     filterProductsView();
   });
 
-  // Optional mirrored top search inputs (if exist)
+  // Optional mirrored top search inputs
   const mainSearch = $("searchInput");
   const topSearch = $("searchInputTop");
   const topSearchM = $("searchInputTopMobile");
@@ -1058,7 +1074,7 @@ function initEvents(){
     }, { passive:false });
   }
 
-  // Hero chips / buttons filter
+  // Hero chips
   document.querySelectorAll(".js-hero-filter").forEach(btn=>{
     btn.addEventListener("click", ()=>{
       const main = btn.getAttribute("data-shop-cat") || btn.dataset.shopCat || "all";
@@ -1085,7 +1101,7 @@ function initEvents(){
     renderCart();
   });
 
-  // Add-to-cart (event delegation)
+  // Add-to-cart
   document.addEventListener("click", (e)=>{
     const btn = e.target.closest("[data-add]");
     if (!btn) return;

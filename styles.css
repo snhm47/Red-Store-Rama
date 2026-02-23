@@ -82,6 +82,12 @@ h1,h2{ margin:0 0 10px 0; }
 
 .hidden{ display:none !important; }
 
+/* ✅ NEW: Lock background scrolling when cart is open */
+body.no-scroll{
+  overflow: hidden;
+  touch-action: none;
+}
+
 /* =========================
    HEADER (FIXED)
    Desktop: 1 row
@@ -106,7 +112,7 @@ h1,h2{ margin:0 0 10px 0; }
   align-items: center;
   justify-content: space-between;
 
-  flex-wrap: nowrap; /* desktop one row */
+  flex-wrap: nowrap;
 }
 
 /* brand */
@@ -237,7 +243,6 @@ h1,h2{ margin:0 0 10px 0; }
     justify-content: flex-start;
   }
 
-  /* optional: keep header clean on very small */
   @media (max-width: 420px){
     .brand .subtitle{ display:none; }
   }
@@ -937,11 +942,11 @@ h1,h2{ margin:0 0 10px 0; }
 
 /* FORCE header layout in RTL: brand+logo on the RIGHT */
 html[dir="rtl"] .header{
-  flex-direction: row-reverse;     /* brand goes to the right side */
+  flex-direction: row-reverse;
 }
 
 html[dir="rtl"] .brand{
-  flex-direction: row-reverse;     /* logo on the far right, text next to it */
+  flex-direction: row-reverse;
   justify-content: flex-start;
 }
 
@@ -949,7 +954,7 @@ html[dir="rtl"] .brand-text{
   text-align: right;
 }
 
-/* if you want actions on the LEFT in RTL (recommended) */
+/* actions on the LEFT in RTL */
 html[dir="rtl"] .header-actions{
   justify-content: flex-start;
 }

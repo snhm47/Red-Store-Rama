@@ -32,14 +32,14 @@
   </div>
 
   <!-- HEADER -->
-  <!-- <header class="header">
+  <header class="header">
     <div class="brand">
       <div class="logo">
         <img src="assets/logo.jpg" alt="Red Store logo" />
       </div>
       <div class="brand-text">
         <div class="title" id="storeTitle">Red Store</div>
-        <div class="subtitle" id="storeSubtitle">Cigarettes • Alcohol • Snacks • Handmade Coffee</div>
+        <div class="subtitle" id="storeSubtitle">Tobacco • Alcohol • Snacks • Coffee</div>
       </div>
     </div>
 
@@ -64,56 +64,18 @@
         <option value="ar">AR</option>
       </select>
 
-      <button class="btn cartbtn" id="openCartBtn" type="button">
-        <span id="cartLabel">Cart</span>
+      <button class="btn cartbtn" id="openCartBtn" type="button" aria-label="Open cart">
+        <span class="cart-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6.2 6l.3 2h12.1c.8 0 1.4.7 1.2 1.5l-1.2 6c-.1.6-.6 1-1.2 1H7.1c-.6 0-1.1-.4-1.2-1L4.2 4H2V2h3.2c.6 0 1.1.4 1.2 1L6.6 4H21v2H6.2z"/>
+          </svg>
+        </span>
+
+        <span class="cart-text" id="cartLabel">Cart</span>
         <span class="pill" id="cartCount">0</span>
       </button>
     </div>
-  </header> -->
-  <header class="header">
-  <div class="brand">
-    <div class="logo">
-      <img src="assets/logo.jpg" alt="Red Store logo" />
-    </div>
-    <div class="brand-text">
-      <div class="title" id="storeTitle">Red Store</div>
-      <div class="subtitle" id="storeSubtitle">Tobacco • Alcohol • Snacks • Coffee</div>
-    </div>
-  </div>
-
-  <div class="header-actions">
-    <a class="icon-btn" id="instagramBtn" href="#" target="_blank" rel="noreferrer" aria-label="Instagram">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4.5A3.5 3.5 0 1 1 8.5 12 3.5 3.5 0 0 1 12 8.5zm0 2A1.5 1.5 0 1 0 13.5 12 1.5 1.5 0 0 0 12 10.5zM17.75 6.25a.75.75 0 1 1-.75.75.75.75 0 0 1 .75-.75z"></path>
-      </svg>
-    </a>
-
-    <a class="icon-btn" id="wazeBtn" href="#" target="_blank" rel="noreferrer" aria-label="Waze">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 2a9 9 0 0 0-9 9c0 3.7 2.2 6.9 5.4 8.3.4.2.6.6.6 1v.4c0 .6.5 1 1 1h4c.6 0 1-.4 1-1v-.4c0-.4.2-.8.6-1A9 9 0 0 0 21 11a9 9 0 0 0-9-9zm0 16.2A7.2 7.2 0 1 1 19.2 11 7.2 7.2 0 0 1 12 18.2z"></path>
-        <path d="M9.2 11.2a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm5.6 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"></path>
-        <path d="M9.5 14.2c.8.8 4.2.8 5 0 .3-.3.3-.8 0-1.1-.3-.3-.8-.3-1.1 0-.2.2-2.6.2-2.8 0-.3-.3-.8-.3-1.1 0-.3.3-.3.8 0 1.1z"></path>
-      </svg>
-    </a>
-
-    <select id="langSelect" class="input lang" aria-label="Language">
-      <option value="en">EN</option>
-      <option value="he">HE</option>
-      <option value="ar">AR</option>
-    </select>
-
-    <button class="btn cartbtn" id="openCartBtn" type="button" aria-label="Open cart">
-      <span class="cart-ico" aria-hidden="true">
-        <svg viewBox="0 0 24 24">
-          <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6.2 6l.3 2h12.1c.8 0 1.4.7 1.2 1.5l-1.2 6c-.1.6-.6 1-1.2 1H7.1c-.6 0-1.1-.4-1.2-1L4.2 4H2V2h3.2c.6 0 1.1.4 1.2 1L6.6 4H21v2H6.2z"/>
-        </svg>
-      </span>
-
-      <span class="cart-text" id="cartLabel">Cart</span>
-      <span class="pill" id="cartCount">0</span>
-    </button>
-  </div>
-</header>
+  </header>
 
   <main class="container">
 
@@ -126,7 +88,6 @@
           <div class="slide-content">
             <h2 data-i18n="sliderWhiskyTitle">Johnnie Walker Collection</h2>
             <p data-i18n="sliderWhiskyText">Red • Black • Gold • Green • Blue</p>
-            <!-- <a href="#shop" class="btn primary js-shop-link" data-shop-cat="alcohol" data-shop-sub="whisky" data-i18n="sliderShopWhisky">Shop Whisky</a> -->
           </div>
         </div>
 
@@ -135,7 +96,6 @@
           <div class="slide-content">
             <h2 data-i18n="sliderVodkaTitle">Premium Vodka</h2>
             <p data-i18n="sliderVodkaText">Grey Goose • Absolut • Finlandia</p>
-            <!-- <a href="#shop" class="btn primary js-shop-link" data-shop-cat="alcohol" data-shop-sub="vodka" data-i18n="sliderShopVodka">Shop Vodka</a> -->
           </div>
         </div>
 
@@ -144,7 +104,6 @@
           <div class="slide-content">
             <h2 data-i18n="sliderBeerTitle">Cold Beer</h2>
             <p data-i18n="sliderBeerText">Heineken • Carlsberg • Corona</p>
-            <!-- <a href="#shop" class="btn primary js-shop-link" data-shop-cat="alcohol" data-shop-sub="beer" data-i18n="sliderShopBeer">Shop Beer</a> -->
           </div>
         </div>
 
@@ -157,7 +116,6 @@
       </div>
     </section>
 
-    <!-- HERO -->
     <!-- HERO (NEW PREMIUM) -->
     <section class="hero hero-v2 card" aria-label="Red Store hero">
       <div class="hero-v2-bg" aria-hidden="true"></div>
@@ -289,6 +247,9 @@
         <input id="address" class="input" placeholder="Address (optional)" />
         <textarea id="notes" class="input" rows="3" placeholder="Notes (optional)"></textarea>
       </div>
+
+      <!-- ✅ NEW: Back to shop -->
+      <button class="btn ghost full" id="backToShopBtn" type="button">Back to shop</button>
 
       <button class="btn primary full" id="checkoutWaBtn" type="button">Send order via WhatsApp</button>
       <button class="btn ghost full" id="clearCartBtn" type="button">Clear cart</button>
