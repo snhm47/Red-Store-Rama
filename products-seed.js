@@ -773,7 +773,7 @@ export const SEED_PRODUCTS = [
   inStock: true,
   price: 399,
   imgUrl: "assets/products/glen_ice.png",
-  name_i18n: { en: "Glenmorangie A Tale of Ice Cream 700ml", he: "גלנמורנג'י א טֵייל אוף אייס קרים 700 מ״ל", ar: "غلينمورانجي حكاية الآيس كريم 700 مل" }
+  name_i18n: { en: "Glenmorangie Ice Cream 700ml", he: "גלנמורנג'י א טֵייל אוף אייס קרים 700 מ״ל", ar: "غلينمورانجي حكاية الآيس كريم 700 مل" }
 },
 
 {
@@ -784,7 +784,7 @@ export const SEED_PRODUCTS = [
   inStock: true,
   price: 379,
   imgUrl: "assets/products/glen_tokyo.png",
-  name_i18n: { en: "Glenmorangie A Tale of Tokyo 700ml", he: "גלנמורנג'י טוקיו 700 מ״ל", ar: "غلينمورانجي حكاية طوكيو 700 مل" }
+  name_i18n: { en: "Glenmorangie Tokyo 700ml", he: "גלנמורנג'י טוקיו 700 מ״ל", ar: "غلينمورانجي حكاية طوكيو 700 مل" }
 },
 
 {
@@ -795,7 +795,7 @@ export const SEED_PRODUCTS = [
   inStock: true,
   price: 249,
   imgUrl: "assets/products/glenmor12las.png",
-  name_i18n: { en: "Glenmorangie Lasanta 12 Years 700ml", he: "גלנמורנג'י לאסנטה 12 שנה 700 מ״ל", ar: "غلينمورانجي لاسانتا 12 سنة 700 مل" }
+  name_i18n: { en: "Glenmorangie Lasanta 12 700ml", he: "גלנמורנג'י לאסנטה 12 שנה 700 מ״ל", ar: "غلينمورانجي لاسانتا 12 سنة 700 مل" }
 },
 
 {
@@ -806,7 +806,7 @@ export const SEED_PRODUCTS = [
   inStock: true,
   price: 159,
   imgUrl: "assets/products/glenmor12.png",
-  name_i18n: { en: "Glenmorangie 12 Years 700ml", he: "גלנמורנג'י 12 שנה 700 מ״ל", ar: "غلينمورانجي 12 سنة 700 مل" }
+  name_i18n: { en: "Glenmorangie 12 700ml", he: "גלנמורנג'י 12 שנה 700 מ״ל", ar: "غلينمورانجي 12 سنة 700 مل" }
 },
 
 {
@@ -817,7 +817,7 @@ export const SEED_PRODUCTS = [
   inStock: true,
   price: 350,
   imgUrl: "assets/products/glenmor14.png",
-  name_i18n: { en: "Glenmorangie 14 Years 700ml", he: "גלנמורנג'י 14 שנה 700 מ״ל", ar: "غلينمورانجي 14 سنة 700 مل" }
+  name_i18n: { en: "Glenmorangie 14 700ml", he: "גלנמורנג'י 14 שנה 700 מ״ל", ar: "غلينمورانجي 14 سنة 700 مل" }
 },
 
 {
@@ -828,6 +828,6 @@ export const SEED_PRODUCTS = [
   inStock: true,
   price: 399,
   imgUrl: "assets/products/glenmor16.png",
-  name_i18n: { en: "Glenmorangie 16 Years 700ml", he: "גלנמורנג'י 16 שנה 700 מ״ל", ar: "غلينمورانجي 16 سنة 700 مل" }
+  name_i18n: { en: "Glenmorangie 16 700ml", he: "גלנמורנג'י 16 שנה 700 מ״ל", ar: "غلينمورانجي 16 سنة 700 مل" }
 }
 ];
