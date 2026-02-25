@@ -1,7 +1,8 @@
-// app.js (SHOP) — FIXED (whisky category + no-loop guards)
+// app.js (SHOP) — MOBILE + WHISKY FIX (full file)
 
 // ======== DOM HELPER (MUST BE FIRST) ========
 const $ = (id) => document.getElementById(id);
+const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
 // ======== FIREBASE ========
 import { db } from "./firebase-config.js";
@@ -29,13 +30,9 @@ const CART_KEY = "redstore_cart_v3";
 const LANG_KEY = "redstore_lang_v1";
 
 // ======== CATEGORY + SUBCATEGORY MODEL ========
-// ✅ FIX: add "whisky" as a *virtual main category* that maps to alcohol + whisky.
-// This prevents "no products" + prevents weird states when user selects Whisky as a main category.
+// ✅ virtual category: whisky -> alcohol+whisky
 const CATEGORY_PROXY = {
   whisky: { main: "alcohol", sub: "whisky" },
-  // (optional future)
-  // vodka: { main: "alcohol", sub: "vodka" },
-  // beer:  { main: "alcohol", sub: "beer" },
 };
 
 const MAIN_CATEGORIES = [
@@ -43,7 +40,7 @@ const MAIN_CATEGORIES = [
   { id: "tobacco", icon: "🚬", restricted: true },
   { id: "alcohol", icon: "🥂", restricted: true },
 
-  // ✅ NEW: Whisky main category (virtual)
+  // ✅ Whisky appears as a main category
   { id: "whisky", icon: "🥃", restricted: true },
 
   { id: "snacks", icon: "🍫", restricted: false },
@@ -98,13 +95,11 @@ const i18n = window.i18n || {
     storeTitle: "Red Store",
     storeSubtitle: "Tobacco • Alcohol • Snacks • Coffee",
     cart: "Cart",
-
     backToShop: "Back to shop",
 
     heroKicker: "Red Store • Rameh",
     heroTitle: "Premium Alcohol & Cold Beer — Fast WhatsApp Order",
-    heroText:
-      "Choose whisky, vodka, beer and more. Add to cart, then send your order in one tap.",
+    heroText: "Choose whisky, vodka, beer and more. Add to cart, then send your order in one tap.",
     shopNow: "Browse shop",
     waOrder: "Order on WhatsApp",
     heroNote: "18+ only • Responsible drinking",
@@ -123,16 +118,13 @@ const i18n = window.i18n || {
     total: "Total",
     checkout: "Send order via WhatsApp",
     clear: "Clear cart",
-    legal:
-      "Restricted items require legal age. By continuing you confirm you are of legal age.",
+    legal: "Restricted items require legal age. By continuing you confirm you are of legal age.",
 
     ageTitle: "Age Verification",
-    ageText:
-      "This store sells alcohol and tobacco. You must confirm you are of legal age to enter.",
+    ageText: "This store sells alcohol and tobacco. You must confirm you are of legal age to enter.",
     ageYes: "Yes, I’m 18+",
     ageNo: "No",
-    ageHint:
-      "If you are underage, you will be redirected out of the website.",
+    ageHint: "If you are underage, you will be redirected out of the website.",
 
     namePH: "Name (required)",
     phonePH: "Phone (required)",
@@ -147,15 +139,10 @@ const i18n = window.i18n || {
 
     sliderWhiskyTitle: "Johnnie Walker Collection",
     sliderWhiskyText: "Red • Black • Gold • Green • Blue",
-    sliderShopWhisky: "Shop Whisky",
-
     sliderVodkaTitle: "Premium Vodka",
     sliderVodkaText: "Grey Goose • Absolut • Finlandia",
-    sliderShopVodka: "Shop Vodka",
-
     sliderBeerTitle: "Cold Beer",
     sliderBeerText: "Heineken • Carlsberg • Corona",
-    sliderShopBeer: "Shop Beer",
 
     badge1Title: "Pickup / Delivery",
     badge1Text: "Pay in cash or in store",
@@ -171,7 +158,7 @@ const i18n = window.i18n || {
       all: { name: "All", tag: "Everything" },
       tobacco: { name: "Tobacco", tag: "Restricted" },
       alcohol: { name: "Alcohol", tag: "Restricted" },
-      whisky: { name: "Whisky", tag: "Scotch & more" }, // ✅ NEW
+      whisky: { name: "Whisky", tag: "Scotch & more" },
       snacks: { name: "Snacks", tag: "Chips & sweets" },
       coffee: { name: "Coffee", tag: "Fresh cups" },
     },
@@ -204,13 +191,11 @@ const i18n = window.i18n || {
     storeTitle: "רד סטור",
     storeSubtitle: "טבק • אלכוהול • חטיפים • קפה",
     cart: "עגלה",
-
     backToShop: "חזרה לחנות",
 
     heroKicker: "רד סטור • רמה",
     heroTitle: "אלכוהול פרימיום ובירה קרה — הזמנה מהירה בוואטסאפ",
-    heroText:
-      "בוחרים וויסקי, וודקה, בירה ועוד. מוסיפים לעגלה ושולחים הזמנה בלחיצה אחת.",
+    heroText: "בוחרים וויסקי, וודקה, בירה ועוד. מוסיפים לעגלה ושולחים הזמנה בלחיצה אחת.",
     shopNow: "לצפייה במוצרים",
     waOrder: "הזמנה בוואטסאפ",
     heroNote: "18+ בלבד • שתייה באחריות",
@@ -229,8 +214,7 @@ const i18n = window.i18n || {
     total: "סה״כ",
     checkout: "שליחת הזמנה בוואטסאפ",
     clear: "נקה עגלה",
-    legal:
-      "מוצרים מוגבלים דורשים גיל חוקי. בהמשך את/ה מאשר/ת גיל חוקי.",
+    legal: "מוצרים מוגבלים דורשים גיל חוקי. בהמשך את/ה מאשר/ת גיל חוקי.",
 
     ageTitle: "אימות גיל",
     ageText: "החנות מוכרת אלכוהול וטבק. חייבים לאשר גיל חוקי כדי להיכנס.",
@@ -251,15 +235,10 @@ const i18n = window.i18n || {
 
     sliderWhiskyTitle: "קולקציית ג׳וני ווקר",
     sliderWhiskyText: "רד • בלאק • גולד • גרין • בלו",
-    sliderShopWhisky: "לקניית וויסקי",
-
     sliderVodkaTitle: "וודקה פרימיום",
     sliderVodkaText: "גרייגוס • אבסולוט • פינלנדיה",
-    sliderShopVodka: "לקניית וודקה",
-
     sliderBeerTitle: "בירה קרה",
     sliderBeerText: "הייניקן • קרלסברג • קורונה",
-    sliderShopBeer: "לקניית בירה",
 
     badge1Title: "איסוף / משלוח",
     badge1Text: "תשלום במזומן או בחנות",
@@ -275,7 +254,7 @@ const i18n = window.i18n || {
       all: { name: "הכל", tag: "כל המוצרים" },
       tobacco: { name: "טבק", tag: "מוגבל" },
       alcohol: { name: "אלכוהול", tag: "מוגבל" },
-      whisky: { name: "וויסקי", tag: "סקוטי ועוד" }, // ✅ NEW
+      whisky: { name: "וויסקי", tag: "סקוטי ועוד" },
       snacks: { name: "חטיפים", tag: "מתוקים/מלוחים" },
       coffee: { name: "קפה", tag: "חם/קר" },
     },
@@ -308,13 +287,11 @@ const i18n = window.i18n || {
     storeTitle: "ريد ستور",
     storeSubtitle: "تبغ • كحول • سناكس • قهوة",
     cart: "السلة",
-
     backToShop: "العودة للمتجر",
 
     heroKicker: "ريد ستور • الرامة",
     heroTitle: "كحول بريميوم وبيرة باردة — طلب سريع عبر واتساب",
-    heroText:
-      "اختر ويسكي، فودكا، بيرة وأكثر. أضف للسلة ثم أرسل طلبك بضغطة واحدة.",
+    heroText: "اختر ويسكي، فودكا، بيرة وأكثر. أضف للسلة ثم أرسل طلبك بضغطة واحدة.",
     shopNow: "تصفح المنتجات",
     waOrder: "اطلب عبر واتساب",
     heroNote: "+18 فقط • الشرب بمسؤولية",
@@ -333,8 +310,7 @@ const i18n = window.i18n || {
     total: "المجموع",
     checkout: "إرسال الطلب عبر واتساب",
     clear: "تفريغ السلة",
-    legal:
-      "المنتجات المقيّدة تتطلب العمر القانوني. بالمتابعة أنت تؤكد أنك بالعمر القانوني.",
+    legal: "المنتجات المقيّدة تتطلب العمر القانوني. بالمتابعة أنت تؤكد أنك بالعمر القانوني.",
 
     ageTitle: "تأكيد العمر",
     ageText: "المتجر يبيع الكحول والتبغ. يجب تأكيد العمر القانوني للدخول.",
@@ -355,15 +331,10 @@ const i18n = window.i18n || {
 
     sliderWhiskyTitle: "مجموعة جوني ووكر",
     sliderWhiskyText: "ريد • بلاك • غولد • جرين • بلو",
-    sliderShopWhisky: "تسوق الويسكي",
-
     sliderVodkaTitle: "فودكا بريميوم",
     sliderVodkaText: "غري غوس • أبسولوت • فنلنديا",
-    sliderShopVodka: "تسوق الفودكا",
-
     sliderBeerTitle: "بيرة باردة",
     sliderBeerText: "هاينكن • كارلسبرغ • كورونا",
-    sliderShopBeer: "تسوق البيرة",
 
     badge1Title: "استلام / توصيل",
     badge1Text: "الدفع نقداً أو في المتجر",
@@ -379,7 +350,7 @@ const i18n = window.i18n || {
       all: { name: "الكل", tag: "كل المنتجات" },
       tobacco: { name: "تبغ", tag: "مقيّد" },
       alcohol: { name: "كحول", tag: "مقيّد" },
-      whisky: { name: "ويسكي", tag: "سكوتش وأكثر" }, // ✅ NEW
+      whisky: { name: "ويسكي", tag: "سكوتش وأكثر" },
       snacks: { name: "سناكس", tag: "حلويات/مقرمشات" },
       coffee: { name: "قهوة", tag: "ساخن/بارد" },
     },
@@ -417,37 +388,26 @@ let lang = detectLanguage();
 
 let products = [];
 const productEls = new Map();
-let productsById = new Map(); // fast lookup
+let productsById = new Map();
 
-// ✅ NEW: prevent any accidental recursive UI updates
 let UI_LOCK = false;
 
 // ======== STORAGE ========
 function loadCart() {
-  try {
-    return JSON.parse(localStorage.getItem(CART_KEY) || "[]");
-  } catch {
-    return [];
-  }
+  try { return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }
+  catch { return []; }
 }
-function saveCart() {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-}
+function saveCart() { localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
 
-function isAgeOk() {
-  return sessionStorage.getItem(AGE_KEY) === "true";
-}
-function setAgeOk(val) {
-  sessionStorage.setItem(AGE_KEY, val ? "true" : "false");
-}
+function isAgeOk() { return sessionStorage.getItem(AGE_KEY) === "true"; }
+function setAgeOk(val) { sessionStorage.setItem(AGE_KEY, val ? "true" : "false"); }
 
-// ======== EFFECTIVE FILTERS (handles virtual categories) ========
+// ======== EFFECTIVE FILTERS ========
 function effectiveMainCategory() {
   return CATEGORY_PROXY[currentCategory]?.main || currentCategory;
 }
 function effectiveSubCategory() {
-  const forced = CATEGORY_PROXY[currentCategory]?.sub;
-  return forced || currentSubCategory;
+  return CATEGORY_PROXY[currentCategory]?.sub || currentSubCategory;
 }
 function isForcedSubcat() {
   return !!CATEGORY_PROXY[currentCategory]?.sub;
@@ -471,16 +431,16 @@ function setLanguage(newLang) {
 
   applyLanguage();
   applySliderI18n();
-  renderMainCategories();
-  renderSubCategories();
+
+  renderMainCategories();         // desktop + mobile
+  renderSubCategories();          // desktop + mobile
+
   updateProductTextsOnly();
   filterProductsView();
   renderCart();
 
-  const ls = $("langSelect");
-  if (ls) ls.value = lang;
-  const lsm = $("langSelectMobile");
-  if (lsm) lsm.value = lang;
+  setValue("langSelect", lang);
+  setValue("langSelectMobile", lang);
 }
 
 // ======== SAFE DOM SETTERS ========
@@ -502,58 +462,22 @@ function formatILS(n) {
   const v = Math.round(Number(n || 0) * 100) / 100;
   return String(v);
 }
-function cartCount() {
-  return cart.reduce((s, i) => s + i.qty, 0);
-}
-function cartTotal() {
-  return cart.reduce((s, i) => s + i.price * i.qty, 0);
-}
+function cartCount() { return cart.reduce((s, i) => s + i.qty, 0); }
+function cartTotal() { return cart.reduce((s, i) => s + i.price * i.qty, 0); }
 
 function waLink(message) {
-  return `https://api.whatsapp.com/send?phone=${STORE_WHATSAPP}&text=${encodeURIComponent(
-    message
-  )}`;
+  return `https://api.whatsapp.com/send?phone=${STORE_WHATSAPP}&text=${encodeURIComponent(message)}`;
 }
 
 // ======== SLIDER I18N ========
 function applySliderI18n() {
   const t = i18n[lang] || i18n.en;
-  document.querySelectorAll("[data-i18n]").forEach((el) => {
+  $$("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
     if (!key) return;
     const value = t[key];
     if (typeof value === "string") el.textContent = value;
   });
-}
-
-// ======== QUICK FILTER FROM SLIDER ========
-function setShopFilter(main, sub) {
-  UI_LOCK = true;
-
-  currentCategory = main || "all";
-  currentSubCategory = sub || "all";
-
-  // ✅ If main is virtual (like "whisky") enforce its subcat
-  const forced = CATEGORY_PROXY[currentCategory]?.sub;
-  if (forced) currentSubCategory = forced;
-
-  const cs = $("categorySelect");
-  if (cs) cs.value = currentCategory;
-
-  renderMainCategories();
-  renderSubCategories();
-
-  const sc = $("subCategorySelect");
-  if (sc) sc.value = effectiveSubCategory();
-
-  searchTerm = "";
-  const si = $("searchInput");
-  if (si) si.value = "";
-
-  UI_LOCK = false;
-
-  filterProductsView();
-  location.hash = "#shop";
 }
 
 // ======== PRODUCT NAME TRANSLATION ========
@@ -563,7 +487,6 @@ function productName(p) {
   if (p.i18nName && typeof p.i18nName === "object") {
     return p.i18nName[lang] || p.i18nName.en || p.name || "";
   }
-
   if (p.name_i18n && typeof p.name_i18n === "object") {
     return p.name_i18n[lang] || p.name_i18n.en || p.name || "";
   }
@@ -580,9 +503,9 @@ function normalizeProduct(raw) {
   const subCategory = raw.subCategory || "all";
 
   const restricted =
-    typeof raw.restricted === "boolean"
+    (typeof raw.restricted === "boolean")
       ? raw.restricted
-      : mainCategory === "alcohol" || mainCategory === "tobacco";
+      : (mainCategory === "alcohol" || mainCategory === "tobacco");
 
   return {
     ...raw,
@@ -592,8 +515,7 @@ function normalizeProduct(raw) {
     restricted,
     inStock: raw.inStock !== false,
     price: Number(raw.price || 0),
-    imgUrl:
-      raw.imgUrl && String(raw.imgUrl).trim() ? raw.imgUrl : PLACEHOLDER_IMG,
+    imgUrl: (raw.imgUrl && String(raw.imgUrl).trim()) ? raw.imgUrl : PLACEHOLDER_IMG
   };
 }
 
@@ -601,12 +523,12 @@ function normalizeProduct(raw) {
 function mergeProducts(seed, dbProducts) {
   const map = new Map();
 
-  seed.forEach((p) => {
+  seed.forEach(p => {
     const np = normalizeProduct({ ...p, source: "seed" });
     map.set(np.id, np);
   });
 
-  dbProducts.forEach((p) => {
+  dbProducts.forEach(p => {
     const np = normalizeProduct({ ...p, source: "db" });
     const prev = map.get(np.id);
     map.set(np.id, { ...(prev || {}), ...np });
@@ -642,7 +564,7 @@ function applyLanguage() {
   document.documentElement.setAttribute("lang", lang);
   document.documentElement.setAttribute(
     "dir",
-    t.dir || (lang === "he" || lang === "ar" ? "rtl" : "ltr")
+    t.dir || ((lang === "he" || lang === "ar") ? "rtl" : "ltr")
   );
 
   setText("storeTitle", t.storeTitle);
@@ -679,6 +601,10 @@ function applyLanguage() {
   setText("shopTitle", t.shop);
   setPH("searchInput", t.searchPH);
 
+  // optional mirrored searches if you have them in mobile html
+  setPH("searchInputTop", t.searchPH);
+  setPH("searchInputTopMobile", t.searchPH);
+
   setText("cartTitle", t.cartTitle);
   setText("totalLabel", t.total);
   setText("checkoutWaBtn", t.checkout);
@@ -698,18 +624,16 @@ function applyLanguage() {
 
   setValue("langSelect", lang);
   setValue("langSelectMobile", lang);
-
-  setText("storeTitleMobile", t.storeTitle);
-  setText("storeSubtitleMobile", t.storeSubtitle);
 }
 
-// ======== MAIN CATEGORIES ========
+// ======== MAIN CATEGORIES (desktop + mobile) ========
 function renderMainCategories() {
   const t = i18n[lang] || i18n.en;
 
-  const slider = $("categorySlider");
-  if (slider) {
-    slider.innerHTML = MAIN_CATEGORIES.map((c) => {
+  // sliders (desktop + possible mobile)
+  const sliders = [ $("categorySlider"), $("categorySliderMobile") ].filter(Boolean);
+  sliders.forEach(slider => {
+    slider.innerHTML = MAIN_CATEGORIES.map(c => {
       const label = t.cats?.[c.id]?.name || c.id;
       const tag = t.cats?.[c.id]?.tag || "";
       return `
@@ -719,49 +643,41 @@ function renderMainCategories() {
         </div>
       `;
     }).join("");
-  }
+  });
 
-  const select = $("categorySelect");
-  if (select) {
-    select.innerHTML = MAIN_CATEGORIES.map((c) => {
+  // selects (desktop + possible mobile)
+  const selects = [ $("categorySelect"), $("categorySelectMobile") ].filter(Boolean);
+  selects.forEach(select => {
+    select.innerHTML = MAIN_CATEGORIES.map(c => {
       const label = t.cats?.[c.id]?.name || c.id;
-      return `<option value="${c.id}" ${
-        c.id === currentCategory ? "selected" : ""
-      }>${label}</option>`;
+      return `<option value="${c.id}" ${c.id === currentCategory ? "selected" : ""}>${label}</option>`;
     }).join("");
     select.value = currentCategory;
-  }
+  });
 }
 
-// ======== SUB CATEGORIES ========
+// ======== SUB CATEGORIES (desktop + mobile) ========
 function renderSubCategories() {
   const t = i18n[lang] || i18n.en;
+
+  // if whisky virtual selected => force subcat
+  const forced = CATEGORY_PROXY[currentCategory]?.sub;
+  if (forced) currentSubCategory = forced;
 
   const effMain = effectiveMainCategory();
   const list = SUBCATS[effMain] || [{ id: "all" }];
 
-  // force subcategory if virtual category is selected
-  const forced = CATEGORY_PROXY[currentCategory]?.sub;
-  if (forced) currentSubCategory = forced;
+  if (!list.some(x => x.id === currentSubCategory)) currentSubCategory = "all";
 
-  if (!list.some((x) => x.id === currentSubCategory)) currentSubCategory = "all";
-
-  const select = $("subCategorySelect");
-  if (!select) return;
-
-  select.innerHTML = list
-    .map((sc) => {
+  const selects = [ $("subCategorySelect"), $("subCategorySelectMobile") ].filter(Boolean);
+  selects.forEach(select => {
+    select.innerHTML = list.map(sc => {
       const label = t.subcats?.[sc.id] || sc.id;
-      return `<option value="${sc.id}" ${
-        sc.id === currentSubCategory ? "selected" : ""
-      }>${label}</option>`;
-    })
-    .join("");
-
-  select.value = currentSubCategory;
-
-  // ✅ If whisky main category is selected, lock subcategory (prevents strange states)
-  select.disabled = isForcedSubcat();
+      return `<option value="${sc.id}" ${sc.id === currentSubCategory ? "selected" : ""}>${label}</option>`;
+    }).join("");
+    select.value = currentSubCategory;
+    select.disabled = isForcedSubcat();
+  });
 }
 
 // ======== PRODUCTS VIEW ========
@@ -774,7 +690,7 @@ function buildProductsOnce() {
 
   const t = i18n[lang] || i18n.en;
 
-  products.forEach((p) => {
+  products.forEach(p => {
     const el = document.createElement("div");
     el.className = "product";
     el.dataset.pid = p.id;
@@ -800,9 +716,7 @@ function buildProductsOnce() {
       <div class="muted small" data-subcatlabel></div>
 
       <div class="price" data-price></div>
-      <div class="muted small" data-oos style="display:${
-        p.inStock ? "none" : "block"
-      }">${t.outOfStock}</div>
+      <div class="muted small" data-oos style="display:${p.inStock ? "none":"block"}">${t.outOfStock}</div>
 
       <button class="btn primary full" data-add="${p.id}" type="button">${t.addToCart}</button>
     `;
@@ -821,18 +735,12 @@ function updateProductTextsOnly() {
     const p = productsById.get(id);
     if (!p) return;
 
-    el.querySelector("[data-pname]")?.replaceChildren(
-      document.createTextNode(productName(p))
-    );
-    el.querySelector("[data-catlabel]")?.replaceChildren(
-      document.createTextNode(t.cats?.[p.mainCategory]?.name || p.mainCategory)
-    );
+    el.querySelector("[data-pname]")?.replaceChildren(document.createTextNode(productName(p)));
+    el.querySelector("[data-catlabel]")?.replaceChildren(document.createTextNode(t.cats?.[p.mainCategory]?.name || p.mainCategory));
 
     const subLabel = t.subcats?.[p.subCategory] || p.subCategory || "";
-    const subText = p.subCategory && p.subCategory !== "all" ? subLabel : "";
-    el.querySelector("[data-subcatlabel]")?.replaceChildren(
-      document.createTextNode(subText)
-    );
+    const subText = (p.subCategory && p.subCategory !== "all") ? subLabel : "";
+    el.querySelector("[data-subcatlabel]")?.replaceChildren(document.createTextNode(subText));
 
     const priceEl = el.querySelector("[data-price]");
     if (priceEl) priceEl.textContent = `₪${formatILS(p.price)}`;
@@ -857,8 +765,7 @@ function productMatches(p) {
   const effSub = effectiveSubCategory();
 
   const catOk = effMain === "all" || p.mainCategory === effMain;
-  const subOk =
-    effMain === "all" || effSub === "all" || p.subCategory === effSub;
+  const subOk = effMain === "all" || effSub === "all" || p.subCategory === effSub;
 
   const s = searchTerm.trim().toLowerCase();
   const name = productName(p).toLowerCase();
@@ -879,16 +786,9 @@ function filterProductsView() {
 function addToCart(p) {
   const displayName = productName(p);
 
-  const found = cart.find((x) => x.id === p.id);
+  const found = cart.find(x => x.id === p.id);
   if (found) found.qty += 1;
-  else
-    cart.push({
-      id: p.id,
-      name: displayName,
-      price: p.price,
-      qty: 1,
-      restricted: !!p.restricted,
-    });
+  else cart.push({ id: p.id, name: displayName, price: p.price, qty: 1, restricted: !!p.restricted });
 
   saveCart();
   renderCart();
@@ -896,13 +796,13 @@ function addToCart(p) {
 }
 
 function removeFromCart(id) {
-  cart = cart.filter((x) => x.id !== id);
+  cart = cart.filter(x => x.id !== id);
   saveCart();
   renderCart();
 }
 
 function setQty(id, qty) {
-  const item = cart.find((x) => x.id === id);
+  const item = cart.find(x => x.id === id);
   if (!item) return;
   item.qty = Math.max(1, qty);
   saveCart();
@@ -924,7 +824,10 @@ function closeCart() {
 function renderCart() {
   const t = i18n[lang] || i18n.en;
 
-  setText("cartCount", String(cartCount()));
+  const count = String(cartCount());
+  setText("cartCount", count);
+  setText("cartCountMobile", count); // ✅ update if exists
+
   setText("cartTotal", formatILS(cartTotal()));
 
   const box = $("cartItems");
@@ -932,14 +835,10 @@ function renderCart() {
 
   if (!cart.length) {
     box.innerHTML = `<div class="muted">${t.emptyCart}</div>`;
-    const cm0 = $("cartCountMobile");
-    if (cm0) cm0.textContent = String(cartCount());
     return;
   }
 
-  box.innerHTML = cart
-    .map(
-      (i) => `
+  box.innerHTML = cart.map(i => `
     <div class="cart-item">
       <div class="cart-top">
         <div>
@@ -953,37 +852,28 @@ function renderCart() {
         <button data-dec="${i.id}" aria-label="decrease" type="button">−</button>
         <div class="num">${i.qty}</div>
         <button data-inc="${i.id}" aria-label="increase" type="button">+</button>
-        <div class="muted small" style="margin-left:auto;">₪${formatILS(
-          i.price * i.qty
-        )}</div>
+        <div class="muted small" style="margin-left:auto;">₪${formatILS(i.price * i.qty)}</div>
       </div>
     </div>
-  `
-    )
-    .join("");
+  `).join("");
 
-  document.querySelectorAll("[data-remove]").forEach((b) =>
-    b.addEventListener("click", () =>
-      removeFromCart(b.getAttribute("data-remove"))
-    )
+  $$("[data-remove]").forEach(b =>
+    b.addEventListener("click", () => removeFromCart(b.getAttribute("data-remove")))
   );
-  document.querySelectorAll("[data-inc]").forEach((b) =>
+  $$("[data-inc]").forEach(b =>
     b.addEventListener("click", () => {
       const id = b.getAttribute("data-inc");
-      const qty = cart.find((x) => x.id === id)?.qty || 1;
+      const qty = cart.find(x => x.id === id)?.qty || 1;
       setQty(id, qty + 1);
     })
   );
-  document.querySelectorAll("[data-dec]").forEach((b) =>
+  $$("[data-dec]").forEach(b =>
     b.addEventListener("click", () => {
       const id = b.getAttribute("data-dec");
-      const qty = cart.find((x) => x.id === id)?.qty || 1;
+      const qty = cart.find(x => x.id === id)?.qty || 1;
       setQty(id, qty - 1);
     })
   );
-
-  const cm = $("cartCountMobile");
-  if (cm) cm.textContent = String(cartCount());
 }
 
 // ======== CHECKOUT ========
@@ -1001,7 +891,7 @@ function buildOrderText() {
   if (notes) lines.push(`Notes: ${notes}`);
   lines.push("");
   lines.push("Items:");
-  cart.forEach((i) => lines.push(`- ${i.name} x${i.qty} = ₪${formatILS(i.price * i.qty)}`));
+  cart.forEach(i => lines.push(`- ${i.name} x${i.qty} = ₪${formatILS(i.price * i.qty)}`));
   lines.push("");
   lines.push(`Total: ₪${formatILS(cartTotal())}`);
 
@@ -1012,10 +902,7 @@ function checkoutWhatsApp() {
   const t = i18n[lang] || i18n.en;
 
   if (!cart.length) return alert(t.cartEmptyAlert);
-  if (!isAgeOk()) {
-    showAgeGate();
-    return;
-  }
+  if (!isAgeOk()) { showAgeGate(); return; }
 
   const { text, name, phone } = buildOrderText();
   if (!name || !phone) return alert(t.namePhoneReq);
@@ -1028,10 +915,9 @@ function listenProducts() {
   const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
 
   onSnapshot(q, (snap) => {
-    const dbProductsRaw = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    const dbProductsRaw = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     products = mergeProducts(SEED_PRODUCTS, dbProductsRaw);
-
-    productsById = new Map(products.map((p) => [p.id, p]));
+    productsById = new Map(products.map(p => [p.id, p]));
 
     buildProductsOnce();
     renderSubCategories();
@@ -1041,24 +927,22 @@ function listenProducts() {
 
 // ======== SLIDER ========
 function initSlider() {
-  const slides = document.querySelectorAll(".slide");
-  const dots = document.querySelectorAll(".dot");
+  const slides = $$(".slide");
+  const dots = $$(".dot");
   if (!slides.length || !dots.length) return;
 
   let current = 0;
 
   function showSlide(index) {
-    slides.forEach((s) => s.classList.remove("active"));
-    dots.forEach((d) => d.classList.remove("active"));
+    slides.forEach(s => s.classList.remove("active"));
+    dots.forEach(d => d.classList.remove("active"));
     slides[index].classList.add("active");
     dots[index].classList.add("active");
     current = index;
   }
 
-  dots.forEach((dot) => {
-    dot.addEventListener("click", () => {
-      showSlide(Number(dot.dataset.slide));
-    });
+  dots.forEach(dot => {
+    dot.addEventListener("click", () => showSlide(Number(dot.dataset.slide)));
   });
 
   setInterval(() => {
@@ -1067,20 +951,31 @@ function initSlider() {
   }, 3000);
 }
 
-// ======== EVENTS ========
+// ======== EVENTS (desktop + mobile bindings) ========
+function bindSelectChange(ids, handler) {
+  ids.forEach(id => {
+    const el = $(id);
+    if (!el) return;
+    el.addEventListener("change", handler);
+  });
+}
+
+function bindInput(ids, handler) {
+  ids.forEach(id => {
+    const el = $(id);
+    if (!el) return;
+    el.addEventListener("input", handler);
+  });
+}
+
 function initEvents() {
-  const ig = $("instagramBtn");
-  if (ig) ig.href = INSTAGRAM_URL;
+  // links
+  const ig = $("instagramBtn"); if (ig) ig.href = INSTAGRAM_URL;
+  const wz = $("wazeBtn"); if (wz) wz.href = WAZE_URL;
+  const igM = $("instagramBtnMobile"); if (igM) igM.href = INSTAGRAM_URL;
+  const wzM = $("wazeBtnMobile"); if (wzM) wzM.href = WAZE_URL;
 
-  const wz = $("wazeBtn");
-  if (wz) wz.href = WAZE_URL;
-
-  const igM = $("instagramBtnMobile");
-  if (igM) igM.href = INSTAGRAM_URL;
-
-  const wzM = $("wazeBtnMobile");
-  if (wzM) wzM.href = WAZE_URL;
-
+  // language selects (desktop + mobile)
   const langSelect = $("langSelect");
   if (langSelect) {
     langSelect.value = lang;
@@ -1089,52 +984,47 @@ function initEvents() {
   const langSelectM = $("langSelectMobile");
   if (langSelectM) {
     langSelectM.value = lang;
-    langSelectM.addEventListener("change", (e) =>
-      setLanguage(e.target.value)
-    );
+    langSelectM.addEventListener("change", (e) => setLanguage(e.target.value));
   }
 
-  $("ageYes")?.addEventListener("click", () => {
-    setAgeOk(true);
-    hideAgeGate();
-  });
-  $("ageNo")?.addEventListener("click", () => {
-    setAgeOk(false);
-    exitWebsite();
-  });
+  // age gate
+  $("ageYes")?.addEventListener("click", () => { setAgeOk(true); hideAgeGate(); });
+  $("ageNo")?.addEventListener("click", () => { setAgeOk(false); exitWebsite(); });
 
+  // cart open/close (desktop + mobile)
   $("openCartBtn")?.addEventListener("click", openCart);
   $("openCartBtnMobile")?.addEventListener("click", openCart);
-
   $("closeCartBtn")?.addEventListener("click", closeCart);
   $("cartBackdrop")?.addEventListener("click", closeCart);
 
   $("backToShopBtn")?.addEventListener("click", () => {
     closeCart();
-    document
-      .querySelector("#shop")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.querySelector("#shop")?.scrollIntoView({ behavior: "smooth", block: "start" });
     location.hash = "#shop";
   });
 
+  // quick WA
   const waq = $("waQuickBtn");
-  if (waq) {
-    waq.href = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(
-      "Hi! I want to order from Red Store."
-    )}`;
-  }
+  if (waq) waq.href = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent("Hi! I want to order from Red Store.")}`;
 
-  $("searchInput")?.addEventListener("input", (e) => {
-    searchTerm = e.target.value || "";
+  // search: bind ALL possible search inputs (desktop + mobile/top)
+  const onSearch = (e) => {
+    const v = e.target.value || "";
+    searchTerm = v;
+    // mirror into main search input if different
+    const main = $("searchInput");
+    if (main && e.target !== main) main.value = v;
     filterProductsView();
-  });
+  };
+  bindInput(["searchInput", "searchInputTop", "searchInputTopMobile"], onSearch);
 
-  $("categorySelect")?.addEventListener("change", (e) => {
+  // category select: bind desktop + mobile selects
+  bindSelectChange(["categorySelect", "categorySelectMobile"], (e) => {
     if (UI_LOCK) return;
 
     currentCategory = e.target.value;
-    // reset/force subcat
     currentSubCategory = "all";
+
     const forced = CATEGORY_PROXY[currentCategory]?.sub;
     if (forced) currentSubCategory = forced;
 
@@ -1143,70 +1033,64 @@ function initEvents() {
     filterProductsView();
   });
 
-  $("subCategorySelect")?.addEventListener("change", (e) => {
+  // subcategory select: bind desktop + mobile selects
+  bindSelectChange(["subCategorySelect", "subCategorySelectMobile"], (e) => {
     if (UI_LOCK) return;
-    if (isForcedSubcat()) return; // locked when virtual category selected
+    if (isForcedSubcat()) return;
     currentSubCategory = e.target.value;
     filterProductsView();
   });
 
-  $("categorySlider")?.addEventListener("click", (e) => {
-    const cat = e.target.closest("[data-cat]")?.getAttribute("data-cat");
-    if (!cat) return;
+  // category sliders: bind desktop + mobile sliders if both exist
+  const bindCatSlider = (id) => {
+    const sliderEl = $(id);
+    if (!sliderEl) return;
 
-    currentCategory = cat;
-    currentSubCategory = "all";
-    const forced = CATEGORY_PROXY[currentCategory]?.sub;
-    if (forced) currentSubCategory = forced;
+    sliderEl.addEventListener("click", (e) => {
+      const cat = e.target.closest("[data-cat]")?.getAttribute("data-cat");
+      if (!cat) return;
 
-    renderMainCategories();
-    renderSubCategories();
-    filterProductsView();
-    location.hash = "#shop";
-  });
+      currentCategory = cat;
+      currentSubCategory = "all";
 
+      const forced = CATEGORY_PROXY[currentCategory]?.sub;
+      if (forced) currentSubCategory = forced;
+
+      renderMainCategories();
+      renderSubCategories();
+      filterProductsView();
+      location.hash = "#shop";
+    });
+  };
+  bindCatSlider("categorySlider");
+  bindCatSlider("categorySliderMobile");
+
+  // arrows (desktop ids you showed)
   const slider = $("categorySlider");
   const left = $("catLeft");
   const right = $("catRight");
   if (slider && left && right) {
-    left.addEventListener("click", () =>
-      slider.scrollBy({ left: -260, behavior: "smooth" })
-    );
-    right.addEventListener("click", () =>
-      slider.scrollBy({ left: 260, behavior: "smooth" })
-    );
+    left.addEventListener("click", () => slider.scrollBy({ left: -260, behavior: "smooth" }));
+    right.addEventListener("click", () => slider.scrollBy({ left: 260, behavior: "smooth" }));
 
-    slider.addEventListener(
-      "wheel",
-      (e) => {
-        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-          slider.scrollLeft += e.deltaY;
-          e.preventDefault();
-        }
-      },
-      { passive: false }
-    );
+    slider.addEventListener("wheel", (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        slider.scrollLeft += e.deltaY;
+        e.preventDefault();
+      }
+    }, { passive: false });
   }
 
-  document.querySelectorAll(".js-hero-filter").forEach((btn) => {
+  // hero quick filters
+  $$(".js-hero-filter").forEach(btn => {
     btn.addEventListener("click", () => {
-      const main =
-        btn.getAttribute("data-shop-cat") || btn.dataset.shopCat || "all";
-      const sub =
-        btn.getAttribute("data-shop-sub") || btn.dataset.shopSub || "all";
+      const main = btn.getAttribute("data-shop-cat") || btn.dataset.shopCat || "all";
+      const sub = btn.getAttribute("data-shop-sub") || btn.dataset.shopSub || "all";
       setShopFilter(main, sub);
     });
   });
 
-  document.querySelectorAll(".js-shop-link").forEach((a) => {
-    a.addEventListener("click", (e) => {
-      e.preventDefault();
-      const main = a.getAttribute("data-shop-cat") || "all";
-      const sub = a.getAttribute("data-shop-sub") || "all";
-      setShopFilter(main, sub);
-    });
-  });
-
+  // checkout / clear
   $("checkoutWaBtn")?.addEventListener("click", checkoutWhatsApp);
   $("clearCartBtn")?.addEventListener("click", () => {
     cart = [];
@@ -1214,7 +1098,7 @@ function initEvents() {
     renderCart();
   });
 
-  // ✅ Add-to-cart (FAST)
+  // add-to-cart
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-add]");
     if (!btn) return;
@@ -1224,21 +1108,51 @@ function initEvents() {
     if (!p) return;
 
     if (!p.inStock) return;
-    if (!isAgeOk()) {
-      showAgeGate();
-      return;
-    }
+    if (!isAgeOk()) { showAgeGate(); return; }
 
     addToCart(p);
   });
+}
+
+// ======== QUICK FILTER FROM SLIDER / LINKS ========
+function setShopFilter(main, sub) {
+  UI_LOCK = true;
+
+  currentCategory = main || "all";
+  currentSubCategory = sub || "all";
+
+  const forced = CATEGORY_PROXY[currentCategory]?.sub;
+  if (forced) currentSubCategory = forced;
+
+  // update selects (both)
+  setValue("categorySelect", currentCategory);
+  setValue("categorySelectMobile", currentCategory);
+
+  renderMainCategories();
+  renderSubCategories();
+
+  setValue("subCategorySelect", currentSubCategory);
+  setValue("subCategorySelectMobile", currentSubCategory);
+
+  searchTerm = "";
+  setValue("searchInput", "");
+  setValue("searchInputTop", "");
+  setValue("searchInputTopMobile", "");
+
+  UI_LOCK = false;
+
+  filterProductsView();
+  location.hash = "#shop";
 }
 
 // ======== BOOT ========
 function boot() {
   applyLanguage();
   applySliderI18n();
+
   renderMainCategories();
   renderSubCategories();
+
   renderCart();
   initEvents();
   enforceEntryAgeGate();
