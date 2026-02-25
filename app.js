@@ -1,4 +1,4 @@
-    // app.js (SHOP)
+// app.js (SHOP) — FIXED (whisky category + no-loop guards)
 
 // ======== DOM HELPER (MUST BE FIRST) ========
 const $ = (id) => document.getElementById(id);
@@ -11,7 +11,7 @@ import {
   collection,
   onSnapshot,
   query,
-  orderBy
+  orderBy,
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 // ======== CONFIG ========
@@ -29,10 +29,23 @@ const CART_KEY = "redstore_cart_v3";
 const LANG_KEY = "redstore_lang_v1";
 
 // ======== CATEGORY + SUBCATEGORY MODEL ========
+// ✅ FIX: add "whisky" as a *virtual main category* that maps to alcohol + whisky.
+// This prevents "no products" + prevents weird states when user selects Whisky as a main category.
+const CATEGORY_PROXY = {
+  whisky: { main: "alcohol", sub: "whisky" },
+  // (optional future)
+  // vodka: { main: "alcohol", sub: "vodka" },
+  // beer:  { main: "alcohol", sub: "beer" },
+};
+
 const MAIN_CATEGORIES = [
   { id: "all", icon: "🛒", restricted: false },
   { id: "tobacco", icon: "🚬", restricted: true },
-  { id: "alcohol", icon: "🥃", restricted: true },
+  { id: "alcohol", icon: "🥂", restricted: true },
+
+  // ✅ NEW: Whisky main category (virtual)
+  { id: "whisky", icon: "🥃", restricted: true },
+
   { id: "snacks", icon: "🍫", restricted: false },
   { id: "coffee", icon: "☕", restricted: false },
 ];
@@ -90,10 +103,16 @@ const i18n = window.i18n || {
 
     heroKicker: "Red Store • Rameh",
     heroTitle: "Premium Alcohol & Cold Beer — Fast WhatsApp Order",
-    heroText: "Choose whisky, vodka, beer and more. Add to cart, then send your order in one tap.",
+    heroText:
+      "Choose whisky, vodka, beer and more. Add to cart, then send your order in one tap.",
     shopNow: "Browse shop",
     waOrder: "Order on WhatsApp",
     heroNote: "18+ only • Responsible drinking",
+    heroFast: "Fast pickup / delivery",
+
+    chipWhisky: "Whisky",
+    chipVodka: "Vodka",
+    chipBeer: "Beer",
 
     categories: "Categories",
     catHint: "Swipe on phone • Scroll on desktop",
@@ -104,13 +123,16 @@ const i18n = window.i18n || {
     total: "Total",
     checkout: "Send order via WhatsApp",
     clear: "Clear cart",
-    legal: "Restricted items require legal age. By continuing you confirm you are of legal age.",
+    legal:
+      "Restricted items require legal age. By continuing you confirm you are of legal age.",
 
     ageTitle: "Age Verification",
-    ageText: "This store sells alcohol and tobacco. You must confirm you are of legal age to enter.",
+    ageText:
+      "This store sells alcohol and tobacco. You must confirm you are of legal age to enter.",
     ageYes: "Yes, I’m 18+",
     ageNo: "No",
-    ageHint: "If you are underage, you will be redirected out of the website.",
+    ageHint:
+      "If you are underage, you will be redirected out of the website.",
 
     namePH: "Name (required)",
     phonePH: "Phone (required)",
@@ -149,6 +171,7 @@ const i18n = window.i18n || {
       all: { name: "All", tag: "Everything" },
       tobacco: { name: "Tobacco", tag: "Restricted" },
       alcohol: { name: "Alcohol", tag: "Restricted" },
+      whisky: { name: "Whisky", tag: "Scotch & more" }, // ✅ NEW
       snacks: { name: "Snacks", tag: "Chips & sweets" },
       coffee: { name: "Coffee", tag: "Fresh cups" },
     },
@@ -173,7 +196,7 @@ const i18n = window.i18n || {
       iced: "Iced coffee",
       beans: "Beans / Ground",
       other: "Other",
-    }
+    },
   },
 
   he: {
@@ -186,10 +209,16 @@ const i18n = window.i18n || {
 
     heroKicker: "רד סטור • רמה",
     heroTitle: "אלכוהול פרימיום ובירה קרה — הזמנה מהירה בוואטסאפ",
-    heroText: "בוחרים וויסקי, וודקה, בירה ועוד. מוסיפים לעגלה ושולחים הזמנה בלחיצה אחת.",
+    heroText:
+      "בוחרים וויסקי, וודקה, בירה ועוד. מוסיפים לעגלה ושולחים הזמנה בלחיצה אחת.",
     shopNow: "לצפייה במוצרים",
     waOrder: "הזמנה בוואטסאפ",
     heroNote: "18+ בלבד • שתייה באחריות",
+    heroFast: "איסוף/משלוח מהיר",
+
+    chipWhisky: "וויסקי",
+    chipVodka: "וודקה",
+    chipBeer: "בירה",
 
     categories: "קטגוריות",
     catHint: "החלקה בנייד • גלילה במחשב",
@@ -200,7 +229,8 @@ const i18n = window.i18n || {
     total: "סה״כ",
     checkout: "שליחת הזמנה בוואטסאפ",
     clear: "נקה עגלה",
-    legal: "מוצרים מוגבלים דורשים גיל חוקי. בהמשך את/ה מאשר/ת גיל חוקי.",
+    legal:
+      "מוצרים מוגבלים דורשים גיל חוקי. בהמשך את/ה מאשר/ת גיל חוקי.",
 
     ageTitle: "אימות גיל",
     ageText: "החנות מוכרת אלכוהול וטבק. חייבים לאשר גיל חוקי כדי להיכנס.",
@@ -245,6 +275,7 @@ const i18n = window.i18n || {
       all: { name: "הכל", tag: "כל המוצרים" },
       tobacco: { name: "טבק", tag: "מוגבל" },
       alcohol: { name: "אלכוהול", tag: "מוגבל" },
+      whisky: { name: "וויסקי", tag: "סקוטי ועוד" }, // ✅ NEW
       snacks: { name: "חטיפים", tag: "מתוקים/מלוחים" },
       coffee: { name: "קפה", tag: "חם/קר" },
     },
@@ -269,7 +300,7 @@ const i18n = window.i18n || {
       iced: "קפה קר",
       beans: "פולים/טחינה",
       other: "אחר",
-    }
+    },
   },
 
   ar: {
@@ -282,10 +313,16 @@ const i18n = window.i18n || {
 
     heroKicker: "ريد ستور • الرامة",
     heroTitle: "كحول بريميوم وبيرة باردة — طلب سريع عبر واتساب",
-    heroText: "اختر ويسكي، فودكا، بيرة وأكثر. أضف للسلة ثم أرسل طلبك بضغطة واحدة.",
+    heroText:
+      "اختر ويسكي، فودكا، بيرة وأكثر. أضف للسلة ثم أرسل طلبك بضغطة واحدة.",
     shopNow: "تصفح المنتجات",
     waOrder: "اطلب عبر واتساب",
     heroNote: "+18 فقط • الشرب بمسؤولية",
+    heroFast: "استلام/توصيل سريع",
+
+    chipWhisky: "ويسكي",
+    chipVodka: "فودكا",
+    chipBeer: "بيرة",
 
     categories: "الأقسام",
     catHint: "اسحب على الهاتف • مرر على الكمبيوتر",
@@ -296,7 +333,8 @@ const i18n = window.i18n || {
     total: "المجموع",
     checkout: "إرسال الطلب عبر واتساب",
     clear: "تفريغ السلة",
-    legal: "المنتجات المقيّدة تتطلب العمر القانوني. بالمتابعة أنت تؤكد أنك بالعمر القانوني.",
+    legal:
+      "المنتجات المقيّدة تتطلب العمر القانوني. بالمتابعة أنت تؤكد أنك بالعمر القانوني.",
 
     ageTitle: "تأكيد العمر",
     ageText: "المتجر يبيع الكحول والتبغ. يجب تأكيد العمر القانوني للدخول.",
@@ -341,6 +379,7 @@ const i18n = window.i18n || {
       all: { name: "الكل", tag: "كل المنتجات" },
       tobacco: { name: "تبغ", tag: "مقيّد" },
       alcohol: { name: "كحول", tag: "مقيّد" },
+      whisky: { name: "ويسكي", tag: "سكوتش وأكثر" }, // ✅ NEW
       snacks: { name: "سناكس", tag: "حلويات/مقرمشات" },
       coffee: { name: "قهوة", tag: "ساخن/بارد" },
     },
@@ -365,8 +404,8 @@ const i18n = window.i18n || {
       iced: "قهوة باردة",
       beans: "حبوب/مطحون",
       other: "أخرى",
-    }
-  }
+    },
+  },
 };
 
 // ======== STATE ========
@@ -378,20 +417,44 @@ let lang = detectLanguage();
 
 let products = [];
 const productEls = new Map();
-let productsById = new Map(); // ✅ NEW: fast lookup
+let productsById = new Map(); // fast lookup
+
+// ✅ NEW: prevent any accidental recursive UI updates
+let UI_LOCK = false;
 
 // ======== STORAGE ========
 function loadCart() {
-  try { return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }
-  catch { return []; }
+  try {
+    return JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+  } catch {
+    return [];
+  }
 }
-function saveCart() { localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+function saveCart() {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
 
-function isAgeOk() { return sessionStorage.getItem(AGE_KEY) === "true"; }
-function setAgeOk(val) { sessionStorage.setItem(AGE_KEY, val ? "true" : "false"); }
+function isAgeOk() {
+  return sessionStorage.getItem(AGE_KEY) === "true";
+}
+function setAgeOk(val) {
+  sessionStorage.setItem(AGE_KEY, val ? "true" : "false");
+}
+
+// ======== EFFECTIVE FILTERS (handles virtual categories) ========
+function effectiveMainCategory() {
+  return CATEGORY_PROXY[currentCategory]?.main || currentCategory;
+}
+function effectiveSubCategory() {
+  const forced = CATEGORY_PROXY[currentCategory]?.sub;
+  return forced || currentSubCategory;
+}
+function isForcedSubcat() {
+  return !!CATEGORY_PROXY[currentCategory]?.sub;
+}
 
 // ======== LANGUAGE ========
-function detectLanguage(){
+function detectLanguage() {
   const saved = localStorage.getItem(LANG_KEY);
   if (saved && i18n[saved]) return saved;
 
@@ -401,7 +464,7 @@ function detectLanguage(){
   return "en";
 }
 
-function setLanguage(newLang){
+function setLanguage(newLang) {
   if (!i18n[newLang]) newLang = "en";
   lang = newLang;
   localStorage.setItem(LANG_KEY, newLang);
@@ -421,35 +484,41 @@ function setLanguage(newLang){
 }
 
 // ======== SAFE DOM SETTERS ========
-function setText(id, value){
+function setText(id, value) {
   const el = $(id);
   if (el) el.textContent = String(value ?? "");
 }
-function setPH(id, value){
+function setPH(id, value) {
   const el = $(id);
   if (el) el.placeholder = String(value ?? "");
 }
-function setValue(id, value){
+function setValue(id, value) {
   const el = $(id);
   if (el) el.value = String(value ?? "");
 }
 
 // ======== HELPERS ========
-function formatILS(n){
+function formatILS(n) {
   const v = Math.round(Number(n || 0) * 100) / 100;
   return String(v);
 }
-function cartCount(){ return cart.reduce((s,i)=>s+i.qty,0); }
-function cartTotal(){ return cart.reduce((s,i)=>s+i.price*i.qty,0); }
+function cartCount() {
+  return cart.reduce((s, i) => s + i.qty, 0);
+}
+function cartTotal() {
+  return cart.reduce((s, i) => s + i.price * i.qty, 0);
+}
 
-function waLink(message){
-  return `https://api.whatsapp.com/send?phone=${STORE_WHATSAPP}&text=${encodeURIComponent(message)}`;
+function waLink(message) {
+  return `https://api.whatsapp.com/send?phone=${STORE_WHATSAPP}&text=${encodeURIComponent(
+    message
+  )}`;
 }
 
 // ======== SLIDER I18N ========
-function applySliderI18n(){
+function applySliderI18n() {
   const t = i18n[lang] || i18n.en;
-  document.querySelectorAll("[data-i18n]").forEach(el=>{
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
     const key = el.getAttribute("data-i18n");
     if (!key) return;
     const value = t[key];
@@ -458,9 +527,15 @@ function applySliderI18n(){
 }
 
 // ======== QUICK FILTER FROM SLIDER ========
-function setShopFilter(main, sub){
+function setShopFilter(main, sub) {
+  UI_LOCK = true;
+
   currentCategory = main || "all";
   currentSubCategory = sub || "all";
+
+  // ✅ If main is virtual (like "whisky") enforce its subcat
+  const forced = CATEGORY_PROXY[currentCategory]?.sub;
+  if (forced) currentSubCategory = forced;
 
   const cs = $("categorySelect");
   if (cs) cs.value = currentCategory;
@@ -469,25 +544,27 @@ function setShopFilter(main, sub){
   renderSubCategories();
 
   const sc = $("subCategorySelect");
-  if (sc) sc.value = currentSubCategory;
+  if (sc) sc.value = effectiveSubCategory();
 
   searchTerm = "";
   const si = $("searchInput");
   if (si) si.value = "";
+
+  UI_LOCK = false;
 
   filterProductsView();
   location.hash = "#shop";
 }
 
 // ======== PRODUCT NAME TRANSLATION ========
-function productName(p){
+function productName(p) {
   if (!p) return "";
 
-  if (p.i18nName && typeof p.i18nName === "object"){
+  if (p.i18nName && typeof p.i18nName === "object") {
     return p.i18nName[lang] || p.i18nName.en || p.name || "";
   }
 
-  if (p.name_i18n && typeof p.name_i18n === "object"){
+  if (p.name_i18n && typeof p.name_i18n === "object") {
     return p.name_i18n[lang] || p.name_i18n.en || p.name || "";
   }
 
@@ -498,14 +575,14 @@ function productName(p){
 }
 
 // ======== NORMALIZE ========
-function normalizeProduct(raw){
+function normalizeProduct(raw) {
   const mainCategory = raw.mainCategory || raw.category || "snacks";
   const subCategory = raw.subCategory || "all";
 
   const restricted =
-    (typeof raw.restricted === "boolean")
+    typeof raw.restricted === "boolean"
       ? raw.restricted
-      : (mainCategory === "alcohol" || mainCategory === "tobacco");
+      : mainCategory === "alcohol" || mainCategory === "tobacco";
 
   return {
     ...raw,
@@ -515,21 +592,22 @@ function normalizeProduct(raw){
     restricted,
     inStock: raw.inStock !== false,
     price: Number(raw.price || 0),
-    imgUrl: (raw.imgUrl && String(raw.imgUrl).trim()) ? raw.imgUrl : PLACEHOLDER_IMG
+    imgUrl:
+      raw.imgUrl && String(raw.imgUrl).trim() ? raw.imgUrl : PLACEHOLDER_IMG,
   };
 }
 
 // ======== MERGE SEED + DB ========
-function mergeProducts(seed, dbProducts){
+function mergeProducts(seed, dbProducts) {
   const map = new Map();
 
-  seed.forEach(p=>{
-    const np = normalizeProduct({ ...p, source:"seed" });
+  seed.forEach((p) => {
+    const np = normalizeProduct({ ...p, source: "seed" });
     map.set(np.id, np);
   });
 
-  dbProducts.forEach(p=>{
-    const np = normalizeProduct({ ...p, source:"db" });
+  dbProducts.forEach((p) => {
+    const np = normalizeProduct({ ...p, source: "db" });
     const prev = map.get(np.id);
     map.set(np.id, { ...(prev || {}), ...np });
   });
@@ -538,31 +616,34 @@ function mergeProducts(seed, dbProducts){
 }
 
 // ======== AGE GATE ========
-function showAgeGate(){
+function showAgeGate() {
   $("ageGate")?.classList.remove("hidden");
   document.documentElement.style.overflow = "hidden";
   document.body.style.overflow = "hidden";
 }
-function hideAgeGate(){
+function hideAgeGate() {
   $("ageGate")?.classList.add("hidden");
   document.documentElement.style.overflow = "";
   document.body.style.overflow = "";
 }
-function enforceEntryAgeGate(){
+function enforceEntryAgeGate() {
   if (isAgeOk()) hideAgeGate();
   else showAgeGate();
 }
-function exitWebsite(){
+function exitWebsite() {
   if (history.length > 1) history.back();
   else window.location.href = "https://google.com";
 }
 
 // ======== APPLY LANGUAGE ========
-function applyLanguage(){
+function applyLanguage() {
   const t = i18n[lang] || i18n.en;
 
   document.documentElement.setAttribute("lang", lang);
-  document.documentElement.setAttribute("dir", t.dir || ((lang === "he" || lang === "ar") ? "rtl" : "ltr"));
+  document.documentElement.setAttribute(
+    "dir",
+    t.dir || (lang === "he" || lang === "ar" ? "rtl" : "ltr")
+  );
 
   setText("storeTitle", t.storeTitle);
   setText("storeSubtitle", t.storeSubtitle);
@@ -574,6 +655,11 @@ function applyLanguage(){
   setText("heroTitle", t.heroTitle);
   setText("heroText", t.heroText);
   setText("heroNote", t.heroNote || "");
+  setText("heroFast", t.heroFast || "");
+
+  setText("chipWhisky", t.chipWhisky || "Whisky");
+  setText("chipVodka", t.chipVodka || "Vodka");
+  setText("chipBeer", t.chipBeer || "Beer");
 
   setText("shopNowBtn", t.shopNow);
   setText("waOrderText", t.waOrder || "WhatsApp");
@@ -618,16 +704,16 @@ function applyLanguage(){
 }
 
 // ======== MAIN CATEGORIES ========
-function renderMainCategories(){
+function renderMainCategories() {
   const t = i18n[lang] || i18n.en;
 
   const slider = $("categorySlider");
-  if (slider){
-    slider.innerHTML = MAIN_CATEGORIES.map(c=>{
+  if (slider) {
+    slider.innerHTML = MAIN_CATEGORIES.map((c) => {
       const label = t.cats?.[c.id]?.name || c.id;
       const tag = t.cats?.[c.id]?.tag || "";
       return `
-        <div class="cat ${c.id===currentCategory?"active":""}" data-cat="${c.id}">
+        <div class="cat ${c.id === currentCategory ? "active" : ""}" data-cat="${c.id}">
           <div class="name">${c.icon} ${label}</div>
           <div class="tag">${tag}</div>
         </div>
@@ -636,35 +722,50 @@ function renderMainCategories(){
   }
 
   const select = $("categorySelect");
-  if (select){
-    select.innerHTML = MAIN_CATEGORIES.map(c=>{
+  if (select) {
+    select.innerHTML = MAIN_CATEGORIES.map((c) => {
       const label = t.cats?.[c.id]?.name || c.id;
-      return `<option value="${c.id}" ${c.id===currentCategory?"selected":""}>${label}</option>`;
+      return `<option value="${c.id}" ${
+        c.id === currentCategory ? "selected" : ""
+      }>${label}</option>`;
     }).join("");
     select.value = currentCategory;
   }
 }
 
 // ======== SUB CATEGORIES ========
-function renderSubCategories(){
+function renderSubCategories() {
   const t = i18n[lang] || i18n.en;
-  const list = SUBCATS[currentCategory] || [{ id:"all" }];
 
-  if (!list.some(x => x.id === currentSubCategory)) currentSubCategory = "all";
+  const effMain = effectiveMainCategory();
+  const list = SUBCATS[effMain] || [{ id: "all" }];
+
+  // force subcategory if virtual category is selected
+  const forced = CATEGORY_PROXY[currentCategory]?.sub;
+  if (forced) currentSubCategory = forced;
+
+  if (!list.some((x) => x.id === currentSubCategory)) currentSubCategory = "all";
 
   const select = $("subCategorySelect");
   if (!select) return;
 
-  select.innerHTML = list.map(sc=>{
-    const label = t.subcats?.[sc.id] || sc.id;
-    return `<option value="${sc.id}" ${sc.id===currentSubCategory?"selected":""}>${label}</option>`;
-  }).join("");
+  select.innerHTML = list
+    .map((sc) => {
+      const label = t.subcats?.[sc.id] || sc.id;
+      return `<option value="${sc.id}" ${
+        sc.id === currentSubCategory ? "selected" : ""
+      }>${label}</option>`;
+    })
+    .join("");
 
   select.value = currentSubCategory;
+
+  // ✅ If whisky main category is selected, lock subcategory (prevents strange states)
+  select.disabled = isForcedSubcat();
 }
 
 // ======== PRODUCTS VIEW ========
-function buildProductsOnce(){
+function buildProductsOnce() {
   const list = $("productList");
   if (!list) return;
 
@@ -673,7 +774,7 @@ function buildProductsOnce(){
 
   const t = i18n[lang] || i18n.en;
 
-  products.forEach(p=>{
+  products.forEach((p) => {
     const el = document.createElement("div");
     el.className = "product";
     el.dataset.pid = p.id;
@@ -699,7 +800,9 @@ function buildProductsOnce(){
       <div class="muted small" data-subcatlabel></div>
 
       <div class="price" data-price></div>
-      <div class="muted small" data-oos style="display:${p.inStock ? "none":"block"}">${t.outOfStock}</div>
+      <div class="muted small" data-oos style="display:${
+        p.inStock ? "none" : "block"
+      }">${t.outOfStock}</div>
 
       <button class="btn primary full" data-add="${p.id}" type="button">${t.addToCart}</button>
     `;
@@ -711,41 +814,51 @@ function buildProductsOnce(){
   updateProductTextsOnly();
 }
 
-function updateProductTextsOnly(){
+function updateProductTextsOnly() {
   const t = i18n[lang] || i18n.en;
 
-  productEls.forEach((el, id)=>{
-    const p = productsById.get(id); // ✅ O(1)
+  productEls.forEach((el, id) => {
+    const p = productsById.get(id);
     if (!p) return;
 
-    el.querySelector("[data-pname]")?.replaceChildren(document.createTextNode(productName(p)));
-    el.querySelector("[data-catlabel]")?.replaceChildren(document.createTextNode(t.cats?.[p.mainCategory]?.name || p.mainCategory));
+    el.querySelector("[data-pname]")?.replaceChildren(
+      document.createTextNode(productName(p))
+    );
+    el.querySelector("[data-catlabel]")?.replaceChildren(
+      document.createTextNode(t.cats?.[p.mainCategory]?.name || p.mainCategory)
+    );
 
     const subLabel = t.subcats?.[p.subCategory] || p.subCategory || "";
-    const subText = (p.subCategory && p.subCategory !== "all") ? subLabel : "";
-    el.querySelector("[data-subcatlabel]")?.replaceChildren(document.createTextNode(subText));
+    const subText = p.subCategory && p.subCategory !== "all" ? subLabel : "";
+    el.querySelector("[data-subcatlabel]")?.replaceChildren(
+      document.createTextNode(subText)
+    );
 
     const priceEl = el.querySelector("[data-price]");
     if (priceEl) priceEl.textContent = `₪${formatILS(p.price)}`;
 
     const btn = el.querySelector("[data-add]");
-    if (btn){
+    if (btn) {
       btn.textContent = t.addToCart;
       btn.disabled = !p.inStock;
       btn.classList.toggle("btn-disabled", !p.inStock);
     }
 
     const oos = el.querySelector("[data-oos]");
-    if (oos){
+    if (oos) {
       oos.textContent = t.outOfStock;
       oos.style.display = p.inStock ? "none" : "block";
     }
   });
 }
 
-function productMatches(p){
-  const catOk = currentCategory==="all" || p.mainCategory===currentCategory;
-  const subOk = currentCategory==="all" || currentSubCategory==="all" || p.subCategory===currentSubCategory;
+function productMatches(p) {
+  const effMain = effectiveMainCategory();
+  const effSub = effectiveSubCategory();
+
+  const catOk = effMain === "all" || p.mainCategory === effMain;
+  const subOk =
+    effMain === "all" || effSub === "all" || p.subCategory === effSub;
 
   const s = searchTerm.trim().toLowerCase();
   const name = productName(p).toLowerCase();
@@ -754,35 +867,42 @@ function productMatches(p){
   return catOk && subOk && searchOk;
 }
 
-function filterProductsView(){
-  productEls.forEach((el, id)=>{
-    const p = productsById.get(id); // ✅ O(1)
+function filterProductsView() {
+  productEls.forEach((el, id) => {
+    const p = productsById.get(id);
     if (!p) return;
     el.classList.toggle("hidden", !productMatches(p));
   });
 }
 
 // ======== CART ========
-function addToCart(p){
+function addToCart(p) {
   const displayName = productName(p);
 
-  const found = cart.find(x=>x.id===p.id);
+  const found = cart.find((x) => x.id === p.id);
   if (found) found.qty += 1;
-  else cart.push({ id:p.id, name:displayName, price:p.price, qty:1, restricted: !!p.restricted });
+  else
+    cart.push({
+      id: p.id,
+      name: displayName,
+      price: p.price,
+      qty: 1,
+      restricted: !!p.restricted,
+    });
 
   saveCart();
   renderCart();
   openCart();
 }
 
-function removeFromCart(id){
-  cart = cart.filter(x=>x.id!==id);
+function removeFromCart(id) {
+  cart = cart.filter((x) => x.id !== id);
   saveCart();
   renderCart();
 }
 
-function setQty(id, qty){
-  const item = cart.find(x=>x.id===id);
+function setQty(id, qty) {
+  const item = cart.find((x) => x.id === id);
   if (!item) return;
   item.qty = Math.max(1, qty);
   saveCart();
@@ -790,18 +910,18 @@ function setQty(id, qty){
 }
 
 // ======== CART UI ========
-function openCart(){
+function openCart() {
   $("cartDrawer")?.classList.remove("hidden");
   $("cartBackdrop")?.classList.remove("hidden");
   document.body.classList.add("no-scroll");
 }
-function closeCart(){
+function closeCart() {
   $("cartDrawer")?.classList.add("hidden");
   $("cartBackdrop")?.classList.add("hidden");
   document.body.classList.remove("no-scroll");
 }
 
-function renderCart(){
+function renderCart() {
   const t = i18n[lang] || i18n.en;
 
   setText("cartCount", String(cartCount()));
@@ -810,14 +930,16 @@ function renderCart(){
   const box = $("cartItems");
   if (!box) return;
 
-  if (!cart.length){
+  if (!cart.length) {
     box.innerHTML = `<div class="muted">${t.emptyCart}</div>`;
     const cm0 = $("cartCountMobile");
     if (cm0) cm0.textContent = String(cartCount());
     return;
   }
 
-  box.innerHTML = cart.map(i=>`
+  box.innerHTML = cart
+    .map(
+      (i) => `
     <div class="cart-item">
       <div class="cart-top">
         <div>
@@ -831,26 +953,32 @@ function renderCart(){
         <button data-dec="${i.id}" aria-label="decrease" type="button">−</button>
         <div class="num">${i.qty}</div>
         <button data-inc="${i.id}" aria-label="increase" type="button">+</button>
-        <div class="muted small" style="margin-left:auto;">₪${formatILS(i.price*i.qty)}</div>
+        <div class="muted small" style="margin-left:auto;">₪${formatILS(
+          i.price * i.qty
+        )}</div>
       </div>
     </div>
-  `).join("");
+  `
+    )
+    .join("");
 
-  document.querySelectorAll("[data-remove]").forEach(b =>
-    b.addEventListener("click", () => removeFromCart(b.getAttribute("data-remove")))
+  document.querySelectorAll("[data-remove]").forEach((b) =>
+    b.addEventListener("click", () =>
+      removeFromCart(b.getAttribute("data-remove"))
+    )
   );
-  document.querySelectorAll("[data-inc]").forEach(b =>
+  document.querySelectorAll("[data-inc]").forEach((b) =>
     b.addEventListener("click", () => {
       const id = b.getAttribute("data-inc");
-      const qty = cart.find(x=>x.id===id)?.qty || 1;
-      setQty(id, qty+1);
+      const qty = cart.find((x) => x.id === id)?.qty || 1;
+      setQty(id, qty + 1);
     })
   );
-  document.querySelectorAll("[data-dec]").forEach(b =>
+  document.querySelectorAll("[data-dec]").forEach((b) =>
     b.addEventListener("click", () => {
       const id = b.getAttribute("data-dec");
-      const qty = cart.find(x=>x.id===id)?.qty || 1;
-      setQty(id, qty-1);
+      const qty = cart.find((x) => x.id === id)?.qty || 1;
+      setQty(id, qty - 1);
     })
   );
 
@@ -859,7 +987,7 @@ function renderCart(){
 }
 
 // ======== CHECKOUT ========
-function buildOrderText(){
+function buildOrderText() {
   const name = ($("name")?.value || "").trim();
   const phone = ($("phone")?.value || "").trim();
   const address = ($("address")?.value || "").trim();
@@ -873,18 +1001,21 @@ function buildOrderText(){
   if (notes) lines.push(`Notes: ${notes}`);
   lines.push("");
   lines.push("Items:");
-  cart.forEach(i => lines.push(`- ${i.name} x${i.qty} = ₪${formatILS(i.price*i.qty)}`));
+  cart.forEach((i) => lines.push(`- ${i.name} x${i.qty} = ₪${formatILS(i.price * i.qty)}`));
   lines.push("");
   lines.push(`Total: ₪${formatILS(cartTotal())}`);
 
   return { text: lines.join("\n"), name, phone };
 }
 
-function checkoutWhatsApp(){
+function checkoutWhatsApp() {
   const t = i18n[lang] || i18n.en;
 
   if (!cart.length) return alert(t.cartEmptyAlert);
-  if (!isAgeOk()) { showAgeGate(); return; }
+  if (!isAgeOk()) {
+    showAgeGate();
+    return;
+  }
 
   const { text, name, phone } = buildOrderText();
   if (!name || !phone) return alert(t.namePhoneReq);
@@ -893,15 +1024,14 @@ function checkoutWhatsApp(){
 }
 
 // ======== FIRESTORE LISTENER ========
-function listenProducts(){
+function listenProducts() {
   const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
 
-  onSnapshot(q, (snap)=>{
-    const dbProductsRaw = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  onSnapshot(q, (snap) => {
+    const dbProductsRaw = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     products = mergeProducts(SEED_PRODUCTS, dbProductsRaw);
 
-    // ✅ NEW: build lookup map
-    productsById = new Map(products.map(p => [p.id, p]));
+    productsById = new Map(products.map((p) => [p.id, p]));
 
     buildProductsOnce();
     renderSubCategories();
@@ -910,35 +1040,35 @@ function listenProducts(){
 }
 
 // ======== SLIDER ========
-function initSlider(){
+function initSlider() {
   const slides = document.querySelectorAll(".slide");
   const dots = document.querySelectorAll(".dot");
   if (!slides.length || !dots.length) return;
 
   let current = 0;
 
-  function showSlide(index){
-    slides.forEach(s=>s.classList.remove("active"));
-    dots.forEach(d=>d.classList.remove("active"));
+  function showSlide(index) {
+    slides.forEach((s) => s.classList.remove("active"));
+    dots.forEach((d) => d.classList.remove("active"));
     slides[index].classList.add("active");
     dots[index].classList.add("active");
     current = index;
   }
 
-  dots.forEach(dot=>{
-    dot.addEventListener("click", ()=>{
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => {
       showSlide(Number(dot.dataset.slide));
     });
   });
 
-  setInterval(()=>{
+  setInterval(() => {
     const next = (current + 1) % slides.length;
     showSlide(next);
   }, 3000);
 }
 
 // ======== EVENTS ========
-function initEvents(){
+function initEvents() {
   const ig = $("instagramBtn");
   if (ig) ig.href = INSTAGRAM_URL;
 
@@ -952,21 +1082,23 @@ function initEvents(){
   if (wzM) wzM.href = WAZE_URL;
 
   const langSelect = $("langSelect");
-  if (langSelect){
+  if (langSelect) {
     langSelect.value = lang;
-    langSelect.addEventListener("change", (e)=> setLanguage(e.target.value));
+    langSelect.addEventListener("change", (e) => setLanguage(e.target.value));
   }
   const langSelectM = $("langSelectMobile");
-  if (langSelectM){
+  if (langSelectM) {
     langSelectM.value = lang;
-    langSelectM.addEventListener("change", (e)=> setLanguage(e.target.value));
+    langSelectM.addEventListener("change", (e) =>
+      setLanguage(e.target.value)
+    );
   }
 
-  $("ageYes")?.addEventListener("click", ()=>{
+  $("ageYes")?.addEventListener("click", () => {
     setAgeOk(true);
     hideAgeGate();
   });
-  $("ageNo")?.addEventListener("click", ()=>{
+  $("ageNo")?.addEventListener("click", () => {
     setAgeOk(false);
     exitWebsite();
   });
@@ -977,55 +1109,56 @@ function initEvents(){
   $("closeCartBtn")?.addEventListener("click", closeCart);
   $("cartBackdrop")?.addEventListener("click", closeCart);
 
-  $("backToShopBtn")?.addEventListener("click", ()=>{
+  $("backToShopBtn")?.addEventListener("click", () => {
     closeCart();
-    document.querySelector("#shop")?.scrollIntoView({ behavior:"smooth", block:"start" });
+    document
+      .querySelector("#shop")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
     location.hash = "#shop";
   });
 
   const waq = $("waQuickBtn");
-  if (waq){
-    waq.href = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent("Hi! I want to order from Red Store.")}`;
+  if (waq) {
+    waq.href = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(
+      "Hi! I want to order from Red Store."
+    )}`;
   }
 
-  $("searchInput")?.addEventListener("input", (e)=>{
+  $("searchInput")?.addEventListener("input", (e) => {
     searchTerm = e.target.value || "";
     filterProductsView();
   });
 
-  const mainSearch = $("searchInput");
-  const topSearch = $("searchInputTop");
-  const topSearchM = $("searchInputTopMobile");
+  $("categorySelect")?.addEventListener("change", (e) => {
+    if (UI_LOCK) return;
 
-  function bindSearchMirror(src){
-    if (!src || !mainSearch) return;
-    src.addEventListener("input", (e)=>{
-      mainSearch.value = e.target.value;
-      searchTerm = e.target.value || "";
-      filterProductsView();
-    });
-  }
-  bindSearchMirror(topSearch);
-  bindSearchMirror(topSearchM);
-
-  $("categorySelect")?.addEventListener("change", (e)=>{
     currentCategory = e.target.value;
+    // reset/force subcat
     currentSubCategory = "all";
+    const forced = CATEGORY_PROXY[currentCategory]?.sub;
+    if (forced) currentSubCategory = forced;
+
     renderMainCategories();
     renderSubCategories();
     filterProductsView();
   });
 
-  $("subCategorySelect")?.addEventListener("change", (e)=>{
+  $("subCategorySelect")?.addEventListener("change", (e) => {
+    if (UI_LOCK) return;
+    if (isForcedSubcat()) return; // locked when virtual category selected
     currentSubCategory = e.target.value;
     filterProductsView();
   });
 
-  $("categorySlider")?.addEventListener("click", (e)=>{
+  $("categorySlider")?.addEventListener("click", (e) => {
     const cat = e.target.closest("[data-cat]")?.getAttribute("data-cat");
     if (!cat) return;
+
     currentCategory = cat;
     currentSubCategory = "all";
+    const forced = CATEGORY_PROXY[currentCategory]?.sub;
+    if (forced) currentSubCategory = forced;
+
     renderMainCategories();
     renderSubCategories();
     filterProductsView();
@@ -1035,28 +1168,38 @@ function initEvents(){
   const slider = $("categorySlider");
   const left = $("catLeft");
   const right = $("catRight");
-  if (slider && left && right){
-    left.addEventListener("click", ()=> slider.scrollBy({ left: -260, behavior:"smooth" }));
-    right.addEventListener("click", ()=> slider.scrollBy({ left: 260, behavior:"smooth" }));
+  if (slider && left && right) {
+    left.addEventListener("click", () =>
+      slider.scrollBy({ left: -260, behavior: "smooth" })
+    );
+    right.addEventListener("click", () =>
+      slider.scrollBy({ left: 260, behavior: "smooth" })
+    );
 
-    slider.addEventListener("wheel", (e)=>{
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        slider.scrollLeft += e.deltaY;
-        e.preventDefault();
-      }
-    }, { passive:false });
+    slider.addEventListener(
+      "wheel",
+      (e) => {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+          slider.scrollLeft += e.deltaY;
+          e.preventDefault();
+        }
+      },
+      { passive: false }
+    );
   }
 
-  document.querySelectorAll(".js-hero-filter").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const main = btn.getAttribute("data-shop-cat") || btn.dataset.shopCat || "all";
-      const sub = btn.getAttribute("data-shop-sub") || btn.dataset.shopSub || "all";
+  document.querySelectorAll(".js-hero-filter").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const main =
+        btn.getAttribute("data-shop-cat") || btn.dataset.shopCat || "all";
+      const sub =
+        btn.getAttribute("data-shop-sub") || btn.dataset.shopSub || "all";
       setShopFilter(main, sub);
     });
   });
 
-  document.querySelectorAll(".js-shop-link").forEach(a=>{
-    a.addEventListener("click", (e)=>{
+  document.querySelectorAll(".js-shop-link").forEach((a) => {
+    a.addEventListener("click", (e) => {
       e.preventDefault();
       const main = a.getAttribute("data-shop-cat") || "all";
       const sub = a.getAttribute("data-shop-sub") || "all";
@@ -1065,30 +1208,33 @@ function initEvents(){
   });
 
   $("checkoutWaBtn")?.addEventListener("click", checkoutWhatsApp);
-  $("clearCartBtn")?.addEventListener("click", ()=>{
+  $("clearCartBtn")?.addEventListener("click", () => {
     cart = [];
     saveCart();
     renderCart();
   });
 
   // ✅ Add-to-cart (FAST)
-  document.addEventListener("click", (e)=>{
+  document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-add]");
     if (!btn) return;
 
     const id = btn.getAttribute("data-add");
-    const p = productsById.get(id); // ✅ O(1)
+    const p = productsById.get(id);
     if (!p) return;
 
     if (!p.inStock) return;
-    if (!isAgeOk()) { showAgeGate(); return; }
+    if (!isAgeOk()) {
+      showAgeGate();
+      return;
+    }
 
     addToCart(p);
   });
 }
 
 // ======== BOOT ========
-function boot(){
+function boot() {
   applyLanguage();
   applySliderI18n();
   renderMainCategories();
