@@ -1,4 +1,4 @@
-// app.js (SHOP)
+    // app.js (SHOP)
 
 // ======== DOM HELPER (MUST BE FIRST) ========
 const $ = (id) => document.getElementById(id);
@@ -86,10 +86,8 @@ const i18n = window.i18n || {
     storeSubtitle: "Tobacco • Alcohol • Snacks • Coffee",
     cart: "Cart",
 
-    // ✅ NEW
     backToShop: "Back to shop",
 
-    // Hero v2
     heroKicker: "Red Store • Rameh",
     heroTitle: "Premium Alcohol & Cold Beer — Fast WhatsApp Order",
     heroText: "Choose whisky, vodka, beer and more. Add to cart, then send your order in one tap.",
@@ -125,7 +123,6 @@ const i18n = window.i18n || {
     cartEmptyAlert: "Cart is empty",
     outOfStock: "Out of stock",
 
-    // Slider i18n
     sliderWhiskyTitle: "Johnnie Walker Collection",
     sliderWhiskyText: "Red • Black • Gold • Green • Blue",
     sliderShopWhisky: "Shop Whisky",
@@ -185,7 +182,6 @@ const i18n = window.i18n || {
     storeSubtitle: "טבק • אלכוהול • חטיפים • קפה",
     cart: "עגלה",
 
-    // ✅ NEW
     backToShop: "חזרה לחנות",
 
     heroKicker: "רד סטור • רמה",
@@ -282,7 +278,6 @@ const i18n = window.i18n || {
     storeSubtitle: "تبغ • كحول • سناكس • قهوة",
     cart: "السلة",
 
-    // ✅ NEW
     backToShop: "العودة للمتجر",
 
     heroKicker: "ريد ستور • الرامة",
@@ -383,6 +378,7 @@ let lang = detectLanguage();
 
 let products = [];
 const productEls = new Map();
+let productsById = new Map(); // ✅ NEW: fast lookup
 
 // ======== STORAGE ========
 function loadCart() {
@@ -568,15 +564,12 @@ function applyLanguage(){
   document.documentElement.setAttribute("lang", lang);
   document.documentElement.setAttribute("dir", t.dir || ((lang === "he" || lang === "ar") ? "rtl" : "ltr"));
 
-  // Header
   setText("storeTitle", t.storeTitle);
   setText("storeSubtitle", t.storeSubtitle);
   setText("cartLabel", t.cart);
 
-  // ✅ NEW: Back to shop text
   setText("backToShopBtn", t.backToShop || "Back to shop");
 
-  // Hero (v2)
   setText("heroKicker", t.heroKicker || STORE_NAME);
   setText("heroTitle", t.heroTitle);
   setText("heroText", t.heroText);
@@ -585,7 +578,6 @@ function applyLanguage(){
   setText("shopNowBtn", t.shopNow);
   setText("waOrderText", t.waOrder || "WhatsApp");
 
-  // Badges
   setText("badge1Title", t.badge1Title || "");
   setText("badge1Text", t.badge1Text || "");
   setText("badge2Title", t.badge2Title || "");
@@ -593,37 +585,31 @@ function applyLanguage(){
   setText("badge3Title", t.badge3Title || "");
   setText("badge3Text", t.badge3Text || "");
 
-  // Hero card
   setText("heroCardTitle", t.heroCardTitle || "");
   setText("heroCardText", t.heroCardText || "");
 
-  // Sections
   setText("catTitle", t.categories);
   setText("catHint", t.catHint);
   setText("shopTitle", t.shop);
   setPH("searchInput", t.searchPH);
 
-  // Cart
   setText("cartTitle", t.cartTitle);
   setText("totalLabel", t.total);
   setText("checkoutWaBtn", t.checkout);
   setText("clearCartBtn", t.clear);
   setText("legalText", t.legal);
 
-  // Form placeholders
   setPH("name", t.namePH);
   setPH("phone", t.phonePH);
   setPH("address", t.addressPH);
   setPH("notes", t.notesPH);
 
-  // Age gate
   setText("ageTitle", t.ageTitle);
   setText("ageText", t.ageText);
   setText("ageYes", t.ageYes);
   setText("ageNo", t.ageNo);
   setText("ageHint", t.ageHint);
 
-  // Language selects
   setValue("langSelect", lang);
   setValue("langSelectMobile", lang);
 
@@ -729,7 +715,7 @@ function updateProductTextsOnly(){
   const t = i18n[lang] || i18n.en;
 
   productEls.forEach((el, id)=>{
-    const p = products.find(x=>x.id===id);
+    const p = productsById.get(id); // ✅ O(1)
     if (!p) return;
 
     el.querySelector("[data-pname]")?.replaceChildren(document.createTextNode(productName(p)));
@@ -770,7 +756,7 @@ function productMatches(p){
 
 function filterProductsView(){
   productEls.forEach((el, id)=>{
-    const p = products.find(x=>x.id===id);
+    const p = productsById.get(id); // ✅ O(1)
     if (!p) return;
     el.classList.toggle("hidden", !productMatches(p));
   });
@@ -807,15 +793,11 @@ function setQty(id, qty){
 function openCart(){
   $("cartDrawer")?.classList.remove("hidden");
   $("cartBackdrop")?.classList.remove("hidden");
-
-  // ✅ stop background scroll
   document.body.classList.add("no-scroll");
 }
 function closeCart(){
   $("cartDrawer")?.classList.add("hidden");
   $("cartBackdrop")?.classList.add("hidden");
-
-  // ✅ restore scroll
   document.body.classList.remove("no-scroll");
 }
 
@@ -918,6 +900,9 @@ function listenProducts(){
     const dbProductsRaw = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     products = mergeProducts(SEED_PRODUCTS, dbProductsRaw);
 
+    // ✅ NEW: build lookup map
+    productsById = new Map(products.map(p => [p.id, p]));
+
     buildProductsOnce();
     renderSubCategories();
     filterProductsView();
@@ -954,21 +939,18 @@ function initSlider(){
 
 // ======== EVENTS ========
 function initEvents(){
-  // Desktop header buttons
   const ig = $("instagramBtn");
   if (ig) ig.href = INSTAGRAM_URL;
 
   const wz = $("wazeBtn");
   if (wz) wz.href = WAZE_URL;
 
-  // Mobile header buttons (if exist)
   const igM = $("instagramBtnMobile");
   if (igM) igM.href = INSTAGRAM_URL;
 
   const wzM = $("wazeBtnMobile");
   if (wzM) wzM.href = WAZE_URL;
 
-  // Language selects
   const langSelect = $("langSelect");
   if (langSelect){
     langSelect.value = lang;
@@ -980,7 +962,6 @@ function initEvents(){
     langSelectM.addEventListener("change", (e)=> setLanguage(e.target.value));
   }
 
-  // Age gate
   $("ageYes")?.addEventListener("click", ()=>{
     setAgeOk(true);
     hideAgeGate();
@@ -990,33 +971,28 @@ function initEvents(){
     exitWebsite();
   });
 
-  // Cart open/close
   $("openCartBtn")?.addEventListener("click", openCart);
   $("openCartBtnMobile")?.addEventListener("click", openCart);
 
   $("closeCartBtn")?.addEventListener("click", closeCart);
   $("cartBackdrop")?.addEventListener("click", closeCart);
 
-  // ✅ NEW: Back to shop
   $("backToShopBtn")?.addEventListener("click", ()=>{
     closeCart();
     document.querySelector("#shop")?.scrollIntoView({ behavior:"smooth", block:"start" });
     location.hash = "#shop";
   });
 
-  // WhatsApp quick button
   const waq = $("waQuickBtn");
   if (waq){
     waq.href = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent("Hi! I want to order from Red Store.")}`;
   }
 
-  // Search
   $("searchInput")?.addEventListener("input", (e)=>{
     searchTerm = e.target.value || "";
     filterProductsView();
   });
 
-  // Optional mirrored top search inputs
   const mainSearch = $("searchInput");
   const topSearch = $("searchInputTop");
   const topSearchM = $("searchInputTopMobile");
@@ -1032,7 +1008,6 @@ function initEvents(){
   bindSearchMirror(topSearch);
   bindSearchMirror(topSearchM);
 
-  // Category selects
   $("categorySelect")?.addEventListener("change", (e)=>{
     currentCategory = e.target.value;
     currentSubCategory = "all";
@@ -1046,7 +1021,6 @@ function initEvents(){
     filterProductsView();
   });
 
-  // Category slider click
   $("categorySlider")?.addEventListener("click", (e)=>{
     const cat = e.target.closest("[data-cat]")?.getAttribute("data-cat");
     if (!cat) return;
@@ -1058,7 +1032,6 @@ function initEvents(){
     location.hash = "#shop";
   });
 
-  // Category slider arrows
   const slider = $("categorySlider");
   const left = $("catLeft");
   const right = $("catRight");
@@ -1074,7 +1047,6 @@ function initEvents(){
     }, { passive:false });
   }
 
-  // Hero chips
   document.querySelectorAll(".js-hero-filter").forEach(btn=>{
     btn.addEventListener("click", ()=>{
       const main = btn.getAttribute("data-shop-cat") || btn.dataset.shopCat || "all";
@@ -1083,7 +1055,6 @@ function initEvents(){
     });
   });
 
-  // Slider "Shop" links -> filter shop
   document.querySelectorAll(".js-shop-link").forEach(a=>{
     a.addEventListener("click", (e)=>{
       e.preventDefault();
@@ -1093,7 +1064,6 @@ function initEvents(){
     });
   });
 
-  // Checkout / clear
   $("checkoutWaBtn")?.addEventListener("click", checkoutWhatsApp);
   $("clearCartBtn")?.addEventListener("click", ()=>{
     cart = [];
@@ -1101,13 +1071,13 @@ function initEvents(){
     renderCart();
   });
 
-  // Add-to-cart
+  // ✅ Add-to-cart (FAST)
   document.addEventListener("click", (e)=>{
     const btn = e.target.closest("[data-add]");
     if (!btn) return;
 
     const id = btn.getAttribute("data-add");
-    const p = products.find(x=>x.id===id);
+    const p = productsById.get(id); // ✅ O(1)
     if (!p) return;
 
     if (!p.inStock) return;
