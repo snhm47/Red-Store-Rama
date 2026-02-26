@@ -643,27 +643,27 @@ export const SEED_PRODUCTS = [
   name_i18n: { en: "Double Black 700ml", he: "ג׳וני ווקר דאבל בלאק 700 מ״ל", ar: "جوني ووكر دابل بلاك 700 مل" }
 },
 
-// {
-//   id: "jw_black_label_1000",
-//   mainCategory: "alcohol",
-//   subCategory: "whisky",
-//   restricted: true,
-//   inStock: true,
-//   price: 165,
-//   imgUrl: "assets/products/black_label.png",
-//   name_i18n: { en: "Black Label 1L", he: "ג׳וני ווקר בלאק לייבל ליטר", ar: "جوني ووكر بلاك ليبل 1 لتر" }
-// },
+{
+  id: "jw_black_label_1000",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 165,
+  imgUrl: "assets/products/black_label.png",
+  name_i18n: { en: "Black Label 1L", he: "ג׳וני ווקר בלאק לייבל ליטר", ar: "جوني ووكر بلاك ليبل 1 لتر" }
+},
 
-// {
-//   id: "jw_black_label_700",
-//   mainCategory: "alcohol",
-//   subCategory: "whisky",
-//   restricted: true,
-//   inStock: true,
-//   price: 129,
-//   imgUrl: "assets/products/black_label.png",
-//   name_i18n: { en: "Black Label 700ml", he: "ג׳וני ווקר בלאק לייבל 700 מ״ל", ar: "جوني ووكر بلاك ليبل 700 مل" }
-// },
+{
+  id: "jw_black_label_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 129,
+  imgUrl: "assets/products/black_label.png",
+  name_i18n: { en: "Black Label 700ml", he: "ג׳וני ווקר בלאק לייבל 700 מ״ל", ar: "جوني ووكر بلاك ليبل 700 مل" }
+},
 
 // {
 //   id: "jw_red_label_700",
