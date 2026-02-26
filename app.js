@@ -31,18 +31,14 @@ const LANG_KEY = "redstore_lang_v1";
 
 // ======== CATEGORY + SUBCATEGORY MODEL ========
 // ✅ virtual category: whisky -> alcohol+whisky
-const CATEGORY_PROXY = {
-  whisky: { main: "alcohol", sub: "whisky" },
-};
+// const CATEGORY_PROXY = {
+//   whisky: { main: "alcohol", sub: "whisky" },
+// };
 
 const MAIN_CATEGORIES = [
   { id: "all", icon: "🛒", restricted: false },
   { id: "tobacco", icon: "🚬", restricted: true },
   { id: "alcohol", icon: "🥂", restricted: true },
-
-  // ✅ Whisky appears as a main category
-  { id: "whisky", icon: "🥃", restricted: true },
-
   { id: "snacks", icon: "🍫", restricted: false },
   { id: "coffee", icon: "☕", restricted: false },
 ];
