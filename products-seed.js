@@ -572,5 +572,259 @@ export const SEED_PRODUCTS = [
   price: 119,
   imgUrl: "assets/products/parvada.png",
   name_i18n: { en: "Brawada 700ml", he: "בראוודה 700 מ״ל", ar: "براوادا 700 مل" }
+},
+// =========================
+// JOHNNIE WALKER (Scotch Whisky)
+// =========================
+
+// {
+//   id: "jw_blue_label_700",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 499,
+//   imgUrl: "assets/products/blue_label.png",
+//   name_i18n: { en: "Blue Label 700ml", he: "ג׳וני ווקר בלו לייבל 700 מ״ל", ar: "جوني ووكر بلو ليبل 700 مل" }
+// },
+
+// {
+//   id: "jw_king_george",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 1850,
+//   imgUrl: "assets/products/kg_label.png",
+//   name_i18n: { en: "King George V", he: "ג׳וני ווקר קינג ג׳ורג׳", ar: "جوني ووكر كينغ جورج الخامس" }
+// },
+
+// {
+//   id: "jw_18_700",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 329,
+//   imgUrl: "assets/products/18_label.png",
+//   name_i18n: { en: "18 Years 700ml", he: "ג׳וני ווקר 18 שנה 700 מ״ל", ar: "جوني ووكر 18 سنة 700 مل" }
+// },
+
+// {
+//   id: "jw_gold_label_700",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 179,
+//   imgUrl: "assets/products/gold_label.png",
+//   name_i18n: { en: "Gold Label 700ml", he: "ג׳וני ווקר גולד לייבל 700 מ״ל", ar: "جوني ووكر غولد ليبل 700 مل" }
+// },
+
+// {
+//   id: "jw_gold_label_1000",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 219,
+//   imgUrl: "assets/products/gold_label.png",
+//   name_i18n: { en: "Gold Label 1L", he: "ג׳וני ווקר גולד לייבל ליטר", ar: "جوني ووكر غولد ليبل 1 لتر" }
+// },
+
+// {
+//   id: "jw_double_black_700",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 169,
+//   imgUrl: "assets/products/dou_black.png",
+//   name_i18n: { en: "Double Black 700ml", he: "ג׳וני ווקר דאבל בלאק 700 מ״ל", ar: "جوني ووكر دابل بلاك 700 مل" }
+// },
+
+// {
+//   id: "jw_black_label_1000",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 165,
+//   imgUrl: "assets/products/black_label.png",
+//   name_i18n: { en: "Black Label 1L", he: "ג׳וני ווקר בלאק לייבל ליטר", ar: "جوني ووكر بلاك ليبل 1 لتر" }
+// },
+
+// {
+//   id: "jw_black_label_700",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 129,
+//   imgUrl: "assets/products/black_label.png",
+//   name_i18n: { en: "Black Label 700ml", he: "ג׳וני ווקר בלאק לייבל 700 מ״ל", ar: "جوني ووكر بلاك ليبل 700 مل" }
+// },
+
+// {
+//   id: "jw_red_label_700",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 85,
+//   imgUrl: "assets/products/red_label.png",
+//   name_i18n: { en: "Red Label 700ml", he: "ג׳וני ווקר רד לייבל 700 מ״ל", ar: "جوني ووكر ريد ليبل 700 مل" }
+// },
+
+// {
+//   id: "jw_red_label_1000",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 119,
+//   imgUrl: "assets/products/red_label.png",
+//   name_i18n: { en: "Red Label 1L", he: "ג׳וני ווקר רד לייבל ליטר", ar: "جوني ووكر ريد ليبل 1 لتر" }
+// },
+
+// =========================
+// CHIVAS REGAL
+// =========================
+{
+  id: "chivas_18_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 249,
+  imgUrl: "assets/products/chivas18.png",
+  name_i18n: { en: "Chivas Regal 18 700ml", he: "שיבס ריגל 18 שנה 700 מ״ל", ar: "شيفاز ريغال 18 سنة 700 مل" }
+},
+
+{
+  id: "chivas_12_1000",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 165,
+  imgUrl: "assets/products/chivas12.png",
+  name_i18n: { en: "Chivas Regal 12 1L", he: "שיבס ריגל 12 שנה ליטר", ar: "شيفاز ريغال 12 سنة 1 لتر" }
+},
+
+{
+  id: "chivas_12_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 119,
+  imgUrl: "assets/products/chivas12.png",
+  name_i18n: { en: "Chivas Regal 12 700ml", he: "שיבס ריגל 12 שנה 700 מ״ל", ar: "شيفاز ريغال 12 سنة 700 مل" }
+},
+
+// =========================
+// GLENLIVET
+// =========================
+{
+  id: "glenlivet_18_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 489,
+  imgUrl: "assets/products/glin18.png",
+  name_i18n: { en: "Glenlivet 18 700ml", he: "גלנליווט 18 שנה 700 מ״ל", ar: "غلينليفيت 18 سنة 700 مل" }
+},
+
+{
+  id: "glenlivet_15_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 299,
+  imgUrl: "assets/products/glin15.png",
+  name_i18n: { en: "Glenlivet 15 700ml", he: "גלנליווט 15 שנה 700 מ״ל", ar: "غلينليفيت 15 سنة 700 مل" }
+},
+
+{
+  id: "glenlivet_founders_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 169,
+  imgUrl: "assets/products/founder_reserve.png",
+  name_i18n: { en: "Glenlivet Founder's Reserve 700ml", he: "גלנליווט פאונדרס ריזרב 700 מ״ל", ar: "غلينليفيت فاوندرز ريزيرف 700 مل" }
+},
+
+// =========================
+// GLENMORANGIE
+// =========================
+{
+  id: "glenmorangie_ice_cream_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 399,
+  imgUrl: "assets/products/glen_ice.png",
+  name_i18n: { en: "Glenmorangie Ice Cream 700ml", he: "גלנמורנג'י א טֵייל אוף אייס קרים 700 מ״ל", ar: "غلينمورانجي حكاية الآيس كريم 700 مل" }
+},
+
+{
+  id: "glenmorangie_tokyo_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 379,
+  imgUrl: "assets/products/glen_tokyo.png",
+  name_i18n: { en: "Glenmorangie Tokyo 700ml", he: "גלנמורנג'י טוקיו 700 מ״ל", ar: "غلينمورانجي حكاية طوكيو 700 مل" }
+},
+
+{
+  id: "glenmorangie_lasanta_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 249,
+  imgUrl: "assets/products/glenmor12las.png",
+  name_i18n: { en: "Glenmorangie Lasanta 12 700ml", he: "גלנמורנג'י לאסנטה 12 שנה 700 מ״ל", ar: "غلينمورانجي لاسانتا 12 سنة 700 مل" }
+},
+
+{
+  id: "glenmorangie_12_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 159,
+  imgUrl: "assets/products/glenmor12.png",
+  name_i18n: { en: "Glenmorangie 12 700ml", he: "גלנמורנג'י 12 שנה 700 מ״ל", ar: "غلينمورانجي 12 سنة 700 مل" }
+},
+
+{
+  id: "glenmorangie_14_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 350,
+  imgUrl: "assets/products/glenmor14.png",
+  name_i18n: { en: "Glenmorangie 14 700ml", he: "גלנמורנג'י 14 שנה 700 מ״ל", ar: "غلينمورانجي 14 سنة 700 مل" }
+},
+
+{
+  id: "glenmorangie_16_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 399,
+  imgUrl: "assets/products/glenmor16.png",
+  name_i18n: { en: "Glenmorangie 16 700ml", he: "גלנמורנג'י 16 שנה 700 מ״ל", ar: "غلينمورانجي 16 سنة 700 مل" }
 }
 ];
