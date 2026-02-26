@@ -701,6 +701,8 @@ function buildProductsOnce() {
         <img
           src="${img}"
           alt=""
+          width="320"
+          height="320"
           loading="lazy"
           decoding="async"
           draggable="false"
