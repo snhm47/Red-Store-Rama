@@ -665,26 +665,26 @@ export const SEED_PRODUCTS = [
   name_i18n: { en: "Black Label 700ml", he: "ג׳וני ווקר בלאק לייבל 700 מ״ל", ar: "جوني ووكر بلاك ليبل 700 مل" }
 },
 
-// {
-//   id: "jw_red_label_700",
-//   mainCategory: "alcohol",
-//   subCategory: "whisky",
-//   restricted: true,
-//   inStock: true,
-//   price: 85,
-//   imgUrl: "assets/products/red_label.png",
-//   name_i18n: { en: "Red Label 700ml", he: "ג׳וני ווקר רד לייבל 700 מ״ל", ar: "جوني ووكر ريد ليبل 700 مل" }
-// },
-// {
-//   id: "red_1L",
-//   mainCategory: "alcohol",
-//   subCategory: "whisky",
-//   restricted: true,
-//   inStock: true,
-//   price: 119,
-//   imgUrl: "assets/products/red_label.png",
-//   name_i18n: { en: "Red Label 1l", he: "ג׳וני ווקר רד לייבל ליטר", ar: "جوني ووكر ريد ليبل ليتر" }
-// },
+{
+  id: "jw_red_label_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 85,
+  imgUrl: "assets/products/red_label.png",
+  name_i18n: { en: "Red Label 700ml", he: "ג׳וני ווקר רד לייבל 700 מ״ל", ar: "جوني ووكر ريد ليبل 700 مل" }
+},
+{
+  id: "red_1L",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 119,
+  imgUrl: "assets/products/red_label.png",
+  name_i18n: { en: "Red Label 1l", he: "ג׳וני ווקר רד לייבל ליטר", ar: "جوني ووكر ريد ليبل ليتر" }
+},
 
 // =========================
 // CHIVAS REGAL
