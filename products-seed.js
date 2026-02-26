@@ -610,16 +610,16 @@ export const SEED_PRODUCTS = [
   name_i18n: { en: "18 Years 700ml", he: "ג׳וני ווקר 18 שנה 700 מ״ל", ar: "جوني ووكر 18 سنة 700 مل" }
 },
 
-// {
-//   id: "jw_gold_label_700",
-//   mainCategory: "alcohol",
-//   subCategory: "whisky",
-//   restricted: true,
-//   inStock: true,
-//   price: 179,
-//   imgUrl: "assets/products/gold_label.png",
-//   name_i18n: { en: "Gold Label 700ml", he: "ג׳וני ווקר גולד לייבל 700 מ״ל", ar: "جوني ووكر غولد ليبل 700 مل" }
-// },
+{
+  id: "jw_gold_label_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 179,
+  imgUrl: "assets/products/gold_label.png",
+  name_i18n: { en: "Gold Label 700ml", he: "ג׳וני ווקר גולד לייבל 700 מ״ל", ar: "جوني ووكر غولد ليبل 700 مل" }
+},
 
 // {
 //   id: "jw_gold_label_1000",
