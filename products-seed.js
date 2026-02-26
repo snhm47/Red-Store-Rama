@@ -588,27 +588,27 @@ export const SEED_PRODUCTS = [
   name_i18n: { en: "Blue Label 700ml", he: "ג׳וני ווקר בלו לייבל 700 מ״ל", ar: "جوني ووكر بلو ليبل 700 مل" }
 },
 
-// {
-//   id: "jw_king_george",
-//   mainCategory: "alcohol",
-//   subCategory: "whisky",
-//   restricted: true,
-//   inStock: true,
-//   price: 1850,
-//   imgUrl: "assets/products/kg_label.png",
-//   name_i18n: { en: "King George V", he: "ג׳וני ווקר קינג ג׳ורג׳", ar: "جوني ووكر كينغ جورج الخامس" }
-// },
+{
+  id: "jw_king_george",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 1850,
+  imgUrl: "assets/products/kg_label.png",
+  name_i18n: { en: "King George V", he: "ג׳וני ווקר קינג ג׳ורג׳", ar: "جوني ووكر كينغ جورج الخامس" }
+},
 
-// {
-//   id: "jw_18_700",
-//   mainCategory: "alcohol",
-//   subCategory: "whisky",
-//   restricted: true,
-//   inStock: true,
-//   price: 329,
-//   imgUrl: "assets/products/18_label.png",
-//   name_i18n: { en: "18 Years 700ml", he: "ג׳וני ווקר 18 שנה 700 מ״ל", ar: "جوني ووكر 18 سنة 700 مل" }
-// },
+{
+  id: "jw_18_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 329,
+  imgUrl: "assets/products/18_label.png",
+  name_i18n: { en: "18 Years 700ml", he: "ג׳וני ווקר 18 שנה 700 מ״ל", ar: "جوني ووكر 18 سنة 700 مل" }
+},
 
 // {
 //   id: "jw_gold_label_700",
