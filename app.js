@@ -34,11 +34,14 @@ const LANG_KEY = "redstore_lang_v1";
 // const CATEGORY_PROXY = {
 //   whisky: { main: "alcohol", sub: "whisky" },
 // };
+const CATEGORY_PROXY = {};
 
 const MAIN_CATEGORIES = [
   { id: "all", icon: "🛒", restricted: false },
   { id: "tobacco", icon: "🚬", restricted: true },
   { id: "alcohol", icon: "🥂", restricted: true },
+
+
   { id: "snacks", icon: "🍫", restricted: false },
   { id: "coffee", icon: "☕", restricted: false },
 ];
@@ -154,7 +157,7 @@ const i18n = window.i18n || {
       all: { name: "All", tag: "Everything" },
       tobacco: { name: "Tobacco", tag: "Restricted" },
       alcohol: { name: "Alcohol", tag: "Restricted" },
-      whisky: { name: "Whisky", tag: "Scotch & more" },
+      // whisky: { name: "Whisky", tag: "Scotch & more" },
       snacks: { name: "Snacks", tag: "Chips & sweets" },
       coffee: { name: "Coffee", tag: "Fresh cups" },
     },
