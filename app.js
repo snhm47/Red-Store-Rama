@@ -1,4 +1,4 @@
-// app.js (SHOP) — MOBILE + WHISKY FIX (full file)
+// app.js (SHOP) — FIXED: whisky only as Alcohol subcategory + safer mobile rendering (FULL FILE)
 
 // ======== DOM HELPER (MUST BE FIRST) ========
 const $ = (id) => document.getElementById(id);
@@ -30,18 +30,14 @@ const CART_KEY = "redstore_cart_v3";
 const LANG_KEY = "redstore_lang_v1";
 
 // ======== CATEGORY + SUBCATEGORY MODEL ========
-// ✅ virtual category: whisky -> alcohol+whisky
-// const CATEGORY_PROXY = {
-//   whisky: { main: "alcohol", sub: "whisky" },
-// };
+// ✅ No proxy category anymore: whisky ONLY exists under Alcohol -> whisky
 const CATEGORY_PROXY = {};
 
+// ✅ Whisky removed from MAIN categories
 const MAIN_CATEGORIES = [
   { id: "all", icon: "🛒", restricted: false },
   { id: "tobacco", icon: "🚬", restricted: true },
   { id: "alcohol", icon: "🥂", restricted: true },
-
-
   { id: "snacks", icon: "🍫", restricted: false },
   { id: "coffee", icon: "☕", restricted: false },
 ];
@@ -63,7 +59,7 @@ const SUBCATS = {
     { id: "all" },
     { id: "beer" },
     { id: "vodka" },
-    { id: "whisky" },
+    { id: "whisky" }, // ✅ whisky is ONLY here
     { id: "arak" },
     { id: "wine" },
     { id: "other" },
@@ -157,7 +153,6 @@ const i18n = window.i18n || {
       all: { name: "All", tag: "Everything" },
       tobacco: { name: "Tobacco", tag: "Restricted" },
       alcohol: { name: "Alcohol", tag: "Restricted" },
-      // whisky: { name: "Whisky", tag: "Scotch & more" },
       snacks: { name: "Snacks", tag: "Chips & sweets" },
       coffee: { name: "Coffee", tag: "Fresh cups" },
     },
@@ -253,7 +248,6 @@ const i18n = window.i18n || {
       all: { name: "הכל", tag: "כל המוצרים" },
       tobacco: { name: "טבק", tag: "מוגבל" },
       alcohol: { name: "אלכוהול", tag: "מוגבל" },
-      whisky: { name: "וויסקי", tag: "סקוטי ועוד" },
       snacks: { name: "חטיפים", tag: "מתוקים/מלוחים" },
       coffee: { name: "קפה", tag: "חם/קר" },
     },
@@ -349,7 +343,6 @@ const i18n = window.i18n || {
       all: { name: "الكل", tag: "كل المنتجات" },
       tobacco: { name: "تبغ", tag: "مقيّد" },
       alcohol: { name: "كحول", tag: "مقيّد" },
-      whisky: { name: "ويسكي", tag: "سكوتش وأكثر" },
       snacks: { name: "سناكس", tag: "حلويات/مقرمشات" },
       coffee: { name: "قهوة", tag: "ساخن/بارد" },
     },
@@ -393,13 +386,22 @@ let UI_LOCK = false;
 
 // ======== STORAGE ========
 function loadCart() {
-  try { return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }
-  catch { return []; }
+  try {
+    return JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+  } catch {
+    return [];
+  }
 }
-function saveCart() { localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+function saveCart() {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
 
-function isAgeOk() { return sessionStorage.getItem(AGE_KEY) === "true"; }
-function setAgeOk(val) { sessionStorage.setItem(AGE_KEY, val ? "true" : "false"); }
+function isAgeOk() {
+  return sessionStorage.getItem(AGE_KEY) === "true";
+}
+function setAgeOk(val) {
+  sessionStorage.setItem(AGE_KEY, val ? "true" : "false");
+}
 
 // ======== EFFECTIVE FILTERS ========
 function effectiveMainCategory() {
@@ -431,8 +433,8 @@ function setLanguage(newLang) {
   applyLanguage();
   applySliderI18n();
 
-  renderMainCategories();         // desktop + mobile
-  renderSubCategories();          // desktop + mobile
+  renderMainCategories();
+  renderSubCategories();
 
   updateProductTextsOnly();
   filterProductsView();
@@ -461,17 +463,28 @@ function formatILS(n) {
   const v = Math.round(Number(n || 0) * 100) / 100;
   return String(v);
 }
-function cartCount() { return cart.reduce((s, i) => s + i.qty, 0); }
-function cartTotal() { return cart.reduce((s, i) => s + i.price * i.qty, 0); }
-
+function cartCount() {
+  return cart.reduce((s, i) => s + i.qty, 0);
+}
+function cartTotal() {
+  return cart.reduce((s, i) => s + i.price * i.qty, 0);
+}
 function waLink(message) {
-  return `https://api.whatsapp.com/send?phone=${STORE_WHATSAPP}&text=${encodeURIComponent(message)}`;
+  return `https://api.whatsapp.com/send?phone=${STORE_WHATSAPP}&text=${encodeURIComponent(
+    message
+  )}`;
+}
+function safeImgUrl(url) {
+  const s = String(url || "").trim();
+  if (!s) return PLACEHOLDER_IMG;
+  // keep it simple (avoid weird chars breaking HTML)
+  return s;
 }
 
 // ======== SLIDER I18N ========
 function applySliderI18n() {
   const t = i18n[lang] || i18n.en;
-  $$("[data-i18n]").forEach(el => {
+  $$("[data-i18n]").forEach((el) => {
     const key = el.getAttribute("data-i18n");
     if (!key) return;
     const value = t[key];
@@ -502,9 +515,9 @@ function normalizeProduct(raw) {
   const subCategory = raw.subCategory || "all";
 
   const restricted =
-    (typeof raw.restricted === "boolean")
+    typeof raw.restricted === "boolean"
       ? raw.restricted
-      : (mainCategory === "alcohol" || mainCategory === "tobacco");
+      : mainCategory === "alcohol" || mainCategory === "tobacco";
 
   return {
     ...raw,
@@ -514,7 +527,7 @@ function normalizeProduct(raw) {
     restricted,
     inStock: raw.inStock !== false,
     price: Number(raw.price || 0),
-    imgUrl: (raw.imgUrl && String(raw.imgUrl).trim()) ? raw.imgUrl : PLACEHOLDER_IMG
+    imgUrl: safeImgUrl(raw.imgUrl),
   };
 }
 
@@ -522,12 +535,12 @@ function normalizeProduct(raw) {
 function mergeProducts(seed, dbProducts) {
   const map = new Map();
 
-  seed.forEach(p => {
+  seed.forEach((p) => {
     const np = normalizeProduct({ ...p, source: "seed" });
     map.set(np.id, np);
   });
 
-  dbProducts.forEach(p => {
+  dbProducts.forEach((p) => {
     const np = normalizeProduct({ ...p, source: "db" });
     const prev = map.get(np.id);
     map.set(np.id, { ...(prev || {}), ...np });
@@ -563,7 +576,7 @@ function applyLanguage() {
   document.documentElement.setAttribute("lang", lang);
   document.documentElement.setAttribute(
     "dir",
-    t.dir || ((lang === "he" || lang === "ar") ? "rtl" : "ltr")
+    t.dir || (lang === "he" || lang === "ar" ? "rtl" : "ltr")
   );
 
   setText("storeTitle", t.storeTitle);
@@ -600,7 +613,6 @@ function applyLanguage() {
   setText("shopTitle", t.shop);
   setPH("searchInput", t.searchPH);
 
-  // optional mirrored searches if you have them in mobile html
   setPH("searchInputTop", t.searchPH);
   setPH("searchInputTopMobile", t.searchPH);
 
@@ -629,10 +641,9 @@ function applyLanguage() {
 function renderMainCategories() {
   const t = i18n[lang] || i18n.en;
 
-  // sliders (desktop + possible mobile)
-  const sliders = [ $("categorySlider"), $("categorySliderMobile") ].filter(Boolean);
-  sliders.forEach(slider => {
-    slider.innerHTML = MAIN_CATEGORIES.map(c => {
+  const sliders = [$("categorySlider"), $("categorySliderMobile")].filter(Boolean);
+  sliders.forEach((slider) => {
+    slider.innerHTML = MAIN_CATEGORIES.map((c) => {
       const label = t.cats?.[c.id]?.name || c.id;
       const tag = t.cats?.[c.id]?.tag || "";
       return `
@@ -644,12 +655,13 @@ function renderMainCategories() {
     }).join("");
   });
 
-  // selects (desktop + possible mobile)
-  const selects = [ $("categorySelect"), $("categorySelectMobile") ].filter(Boolean);
-  selects.forEach(select => {
-    select.innerHTML = MAIN_CATEGORIES.map(c => {
+  const selects = [$("categorySelect"), $("categorySelectMobile")].filter(Boolean);
+  selects.forEach((select) => {
+    select.innerHTML = MAIN_CATEGORIES.map((c) => {
       const label = t.cats?.[c.id]?.name || c.id;
-      return `<option value="${c.id}" ${c.id === currentCategory ? "selected" : ""}>${label}</option>`;
+      return `<option value="${c.id}" ${
+        c.id === currentCategory ? "selected" : ""
+      }>${label}</option>`;
     }).join("");
     select.value = currentCategory;
   });
@@ -659,21 +671,24 @@ function renderMainCategories() {
 function renderSubCategories() {
   const t = i18n[lang] || i18n.en;
 
-  // if whisky virtual selected => force subcat
   const forced = CATEGORY_PROXY[currentCategory]?.sub;
   if (forced) currentSubCategory = forced;
 
   const effMain = effectiveMainCategory();
   const list = SUBCATS[effMain] || [{ id: "all" }];
 
-  if (!list.some(x => x.id === currentSubCategory)) currentSubCategory = "all";
+  if (!list.some((x) => x.id === currentSubCategory)) currentSubCategory = "all";
 
-  const selects = [ $("subCategorySelect"), $("subCategorySelectMobile") ].filter(Boolean);
-  selects.forEach(select => {
-    select.innerHTML = list.map(sc => {
-      const label = t.subcats?.[sc.id] || sc.id;
-      return `<option value="${sc.id}" ${sc.id === currentSubCategory ? "selected" : ""}>${label}</option>`;
-    }).join("");
+  const selects = [$("subCategorySelect"), $("subCategorySelectMobile")].filter(Boolean);
+  selects.forEach((select) => {
+    select.innerHTML = list
+      .map((sc) => {
+        const label = t.subcats?.[sc.id] || sc.id;
+        return `<option value="${sc.id}" ${
+          sc.id === currentSubCategory ? "selected" : ""
+        }>${label}</option>`;
+      })
+      .join("");
     select.value = currentSubCategory;
     select.disabled = isForcedSubcat();
   });
@@ -689,12 +704,12 @@ function buildProductsOnce() {
 
   const t = i18n[lang] || i18n.en;
 
-  products.forEach(p => {
+  products.forEach((p) => {
     const el = document.createElement("div");
     el.className = "product";
     el.dataset.pid = p.id;
 
-    const img = p.imgUrl || PLACEHOLDER_IMG;
+    const img = safeImgUrl(p.imgUrl) || PLACEHOLDER_IMG;
 
     el.innerHTML = `
       <div class="pimg">
@@ -717,7 +732,9 @@ function buildProductsOnce() {
       <div class="muted small" data-subcatlabel></div>
 
       <div class="price" data-price></div>
-      <div class="muted small" data-oos style="display:${p.inStock ? "none":"block"}">${t.outOfStock}</div>
+      <div class="muted small" data-oos style="display:${
+        p.inStock ? "none" : "block"
+      }">${t.outOfStock}</div>
 
       <button class="btn primary full" data-add="${p.id}" type="button">${t.addToCart}</button>
     `;
@@ -736,12 +753,16 @@ function updateProductTextsOnly() {
     const p = productsById.get(id);
     if (!p) return;
 
-    el.querySelector("[data-pname]")?.replaceChildren(document.createTextNode(productName(p)));
-    el.querySelector("[data-catlabel]")?.replaceChildren(document.createTextNode(t.cats?.[p.mainCategory]?.name || p.mainCategory));
+    const nameEl = el.querySelector("[data-pname]");
+    if (nameEl) nameEl.textContent = productName(p);
+
+    const catEl = el.querySelector("[data-catlabel]");
+    if (catEl) catEl.textContent = t.cats?.[p.mainCategory]?.name || p.mainCategory;
 
     const subLabel = t.subcats?.[p.subCategory] || p.subCategory || "";
-    const subText = (p.subCategory && p.subCategory !== "all") ? subLabel : "";
-    el.querySelector("[data-subcatlabel]")?.replaceChildren(document.createTextNode(subText));
+    const subText = p.subCategory && p.subCategory !== "all" ? subLabel : "";
+    const subEl = el.querySelector("[data-subcatlabel]");
+    if (subEl) subEl.textContent = subText;
 
     const priceEl = el.querySelector("[data-price]");
     if (priceEl) priceEl.textContent = `₪${formatILS(p.price)}`;
@@ -775,11 +796,15 @@ function productMatches(p) {
   return catOk && subOk && searchOk;
 }
 
+let _filterRaf = 0;
 function filterProductsView() {
-  productEls.forEach((el, id) => {
-    const p = productsById.get(id);
-    if (!p) return;
-    el.classList.toggle("hidden", !productMatches(p));
+  cancelAnimationFrame(_filterRaf);
+  _filterRaf = requestAnimationFrame(() => {
+    productEls.forEach((el, id) => {
+      const p = productsById.get(id);
+      if (!p) return;
+      el.classList.toggle("hidden", !productMatches(p));
+    });
   });
 }
 
@@ -787,9 +812,16 @@ function filterProductsView() {
 function addToCart(p) {
   const displayName = productName(p);
 
-  const found = cart.find(x => x.id === p.id);
+  const found = cart.find((x) => x.id === p.id);
   if (found) found.qty += 1;
-  else cart.push({ id: p.id, name: displayName, price: p.price, qty: 1, restricted: !!p.restricted });
+  else
+    cart.push({
+      id: p.id,
+      name: displayName,
+      price: p.price,
+      qty: 1,
+      restricted: !!p.restricted,
+    });
 
   saveCart();
   renderCart();
@@ -797,13 +829,13 @@ function addToCart(p) {
 }
 
 function removeFromCart(id) {
-  cart = cart.filter(x => x.id !== id);
+  cart = cart.filter((x) => x.id !== id);
   saveCart();
   renderCart();
 }
 
 function setQty(id, qty) {
-  const item = cart.find(x => x.id === id);
+  const item = cart.find((x) => x.id === id);
   if (!item) return;
   item.qty = Math.max(1, qty);
   saveCart();
@@ -827,7 +859,7 @@ function renderCart() {
 
   const count = String(cartCount());
   setText("cartCount", count);
-  setText("cartCountMobile", count); // ✅ update if exists
+  setText("cartCountMobile", count);
 
   setText("cartTotal", formatILS(cartTotal()));
 
@@ -839,7 +871,9 @@ function renderCart() {
     return;
   }
 
-  box.innerHTML = cart.map(i => `
+  box.innerHTML = cart
+    .map(
+      (i) => `
     <div class="cart-item">
       <div class="cart-top">
         <div>
@@ -853,25 +887,29 @@ function renderCart() {
         <button data-dec="${i.id}" aria-label="decrease" type="button">−</button>
         <div class="num">${i.qty}</div>
         <button data-inc="${i.id}" aria-label="increase" type="button">+</button>
-        <div class="muted small" style="margin-left:auto;">₪${formatILS(i.price * i.qty)}</div>
+        <div class="muted small" style="margin-left:auto;">₪${formatILS(
+          i.price * i.qty
+        )}</div>
       </div>
     </div>
-  `).join("");
+  `
+    )
+    .join("");
 
-  $$("[data-remove]").forEach(b =>
+  $$("[data-remove]").forEach((b) =>
     b.addEventListener("click", () => removeFromCart(b.getAttribute("data-remove")))
   );
-  $$("[data-inc]").forEach(b =>
+  $$("[data-inc]").forEach((b) =>
     b.addEventListener("click", () => {
       const id = b.getAttribute("data-inc");
-      const qty = cart.find(x => x.id === id)?.qty || 1;
+      const qty = cart.find((x) => x.id === id)?.qty || 1;
       setQty(id, qty + 1);
     })
   );
-  $$("[data-dec]").forEach(b =>
+  $$("[data-dec]").forEach((b) =>
     b.addEventListener("click", () => {
       const id = b.getAttribute("data-dec");
-      const qty = cart.find(x => x.id === id)?.qty || 1;
+      const qty = cart.find((x) => x.id === id)?.qty || 1;
       setQty(id, qty - 1);
     })
   );
@@ -892,7 +930,7 @@ function buildOrderText() {
   if (notes) lines.push(`Notes: ${notes}`);
   lines.push("");
   lines.push("Items:");
-  cart.forEach(i => lines.push(`- ${i.name} x${i.qty} = ₪${formatILS(i.price * i.qty)}`));
+  cart.forEach((i) => lines.push(`- ${i.name} x${i.qty} = ₪${formatILS(i.price * i.qty)}`));
   lines.push("");
   lines.push(`Total: ₪${formatILS(cartTotal())}`);
 
@@ -903,7 +941,10 @@ function checkoutWhatsApp() {
   const t = i18n[lang] || i18n.en;
 
   if (!cart.length) return alert(t.cartEmptyAlert);
-  if (!isAgeOk()) { showAgeGate(); return; }
+  if (!isAgeOk()) {
+    showAgeGate();
+    return;
+  }
 
   const { text, name, phone } = buildOrderText();
   if (!name || !phone) return alert(t.namePhoneReq);
@@ -916,9 +957,9 @@ function listenProducts() {
   const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
 
   onSnapshot(q, (snap) => {
-    const dbProductsRaw = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const dbProductsRaw = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     products = mergeProducts(SEED_PRODUCTS, dbProductsRaw);
-    productsById = new Map(products.map(p => [p.id, p]));
+    productsById = new Map(products.map((p) => [p.id, p]));
 
     buildProductsOnce();
     renderSubCategories();
@@ -927,26 +968,29 @@ function listenProducts() {
 }
 
 // ======== SLIDER ========
+let _sliderTimer = null;
 function initSlider() {
   const slides = $$(".slide");
   const dots = $$(".dot");
   if (!slides.length || !dots.length) return;
 
+  if (_sliderTimer) clearInterval(_sliderTimer);
+
   let current = 0;
 
   function showSlide(index) {
-    slides.forEach(s => s.classList.remove("active"));
-    dots.forEach(d => d.classList.remove("active"));
-    slides[index].classList.add("active");
-    dots[index].classList.add("active");
+    slides.forEach((s) => s.classList.remove("active"));
+    dots.forEach((d) => d.classList.remove("active"));
+    slides[index]?.classList.add("active");
+    dots[index]?.classList.add("active");
     current = index;
   }
 
-  dots.forEach(dot => {
+  dots.forEach((dot) => {
     dot.addEventListener("click", () => showSlide(Number(dot.dataset.slide)));
   });
 
-  setInterval(() => {
+  _sliderTimer = setInterval(() => {
     const next = (current + 1) % slides.length;
     showSlide(next);
   }, 3000);
@@ -954,7 +998,7 @@ function initSlider() {
 
 // ======== EVENTS (desktop + mobile bindings) ========
 function bindSelectChange(ids, handler) {
-  ids.forEach(id => {
+  ids.forEach((id) => {
     const el = $(id);
     if (!el) return;
     el.addEventListener("change", handler);
@@ -962,19 +1006,23 @@ function bindSelectChange(ids, handler) {
 }
 
 function bindInput(ids, handler) {
-  ids.forEach(id => {
+  ids.forEach((id) => {
     const el = $(id);
     if (!el) return;
-    el.addEventListener("input", handler);
+    el.addEventListener("input", handler, { passive: true });
   });
 }
 
 function initEvents() {
   // links
-  const ig = $("instagramBtn"); if (ig) ig.href = INSTAGRAM_URL;
-  const wz = $("wazeBtn"); if (wz) wz.href = WAZE_URL;
-  const igM = $("instagramBtnMobile"); if (igM) igM.href = INSTAGRAM_URL;
-  const wzM = $("wazeBtnMobile"); if (wzM) wzM.href = WAZE_URL;
+  const ig = $("instagramBtn");
+  if (ig) ig.href = INSTAGRAM_URL;
+  const wz = $("wazeBtn");
+  if (wz) wz.href = WAZE_URL;
+  const igM = $("instagramBtnMobile");
+  if (igM) igM.href = INSTAGRAM_URL;
+  const wzM = $("wazeBtnMobile");
+  if (wzM) wzM.href = WAZE_URL;
 
   // language selects (desktop + mobile)
   const langSelect = $("langSelect");
@@ -989,8 +1037,14 @@ function initEvents() {
   }
 
   // age gate
-  $("ageYes")?.addEventListener("click", () => { setAgeOk(true); hideAgeGate(); });
-  $("ageNo")?.addEventListener("click", () => { setAgeOk(false); exitWebsite(); });
+  $("ageYes")?.addEventListener("click", () => {
+    setAgeOk(true);
+    hideAgeGate();
+  });
+  $("ageNo")?.addEventListener("click", () => {
+    setAgeOk(false);
+    exitWebsite();
+  });
 
   // cart open/close (desktop + mobile)
   $("openCartBtn")?.addEventListener("click", openCart);
@@ -1006,13 +1060,16 @@ function initEvents() {
 
   // quick WA
   const waq = $("waQuickBtn");
-  if (waq) waq.href = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent("Hi! I want to order from Red Store.")}`;
+  if (waq) {
+    waq.href = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(
+      "Hi! I want to order from Red Store."
+    )}`;
+  }
 
   // search: bind ALL possible search inputs (desktop + mobile/top)
   const onSearch = (e) => {
     const v = e.target.value || "";
     searchTerm = v;
-    // mirror into main search input if different
     const main = $("searchInput");
     if (main && e.target !== main) main.value = v;
     filterProductsView();
@@ -1025,9 +1082,6 @@ function initEvents() {
 
     currentCategory = e.target.value;
     currentSubCategory = "all";
-
-    const forced = CATEGORY_PROXY[currentCategory]?.sub;
-    if (forced) currentSubCategory = forced;
 
     renderMainCategories();
     renderSubCategories();
@@ -1054,9 +1108,6 @@ function initEvents() {
       currentCategory = cat;
       currentSubCategory = "all";
 
-      const forced = CATEGORY_PROXY[currentCategory]?.sub;
-      if (forced) currentSubCategory = forced;
-
       renderMainCategories();
       renderSubCategories();
       filterProductsView();
@@ -1066,7 +1117,7 @@ function initEvents() {
   bindCatSlider("categorySlider");
   bindCatSlider("categorySliderMobile");
 
-  // arrows (desktop ids you showed)
+  // arrows (desktop ids)
   const slider = $("categorySlider");
   const left = $("catLeft");
   const right = $("catRight");
@@ -1074,16 +1125,20 @@ function initEvents() {
     left.addEventListener("click", () => slider.scrollBy({ left: -260, behavior: "smooth" }));
     right.addEventListener("click", () => slider.scrollBy({ left: 260, behavior: "smooth" }));
 
-    slider.addEventListener("wheel", (e) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        slider.scrollLeft += e.deltaY;
-        e.preventDefault();
-      }
-    }, { passive: false });
+    slider.addEventListener(
+      "wheel",
+      (e) => {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+          slider.scrollLeft += e.deltaY;
+          e.preventDefault();
+        }
+      },
+      { passive: false }
+    );
   }
 
   // hero quick filters
-  $$(".js-hero-filter").forEach(btn => {
+  $$(".js-hero-filter").forEach((btn) => {
     btn.addEventListener("click", () => {
       const main = btn.getAttribute("data-shop-cat") || btn.dataset.shopCat || "all";
       const sub = btn.getAttribute("data-shop-sub") || btn.dataset.shopSub || "all";
@@ -1109,7 +1164,10 @@ function initEvents() {
     if (!p) return;
 
     if (!p.inStock) return;
-    if (!isAgeOk()) { showAgeGate(); return; }
+    if (!isAgeOk()) {
+      showAgeGate();
+      return;
+    }
 
     addToCart(p);
   });
@@ -1121,9 +1179,6 @@ function setShopFilter(main, sub) {
 
   currentCategory = main || "all";
   currentSubCategory = sub || "all";
-
-  const forced = CATEGORY_PROXY[currentCategory]?.sub;
-  if (forced) currentSubCategory = forced;
 
   // update selects (both)
   setValue("categorySelect", currentCategory);
