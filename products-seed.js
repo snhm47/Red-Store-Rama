@@ -577,16 +577,16 @@ export const SEED_PRODUCTS = [
 // JOHNNIE WALKER (Scotch Whisky)
 // =========================
 
-// {
-//   id: "jw_blue_label_700",
-//   mainCategory: "alcohol",
-//   subCategory: "whisky",
-//   restricted: true,
-//   inStock: true,
-//   price: 499,
-//   imgUrl: "assets/products/blue_label.png",
-//   name_i18n: { en: "Blue Label 700ml", he: "ג׳וני ווקר בלו לייבל 700 מ״ל", ar: "جوني ووكر بلو ليبل 700 مل" }
-// },
+{
+  id: "jw_blue_label_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 499,
+  imgUrl: "assets/products/blue_label.png",
+  name_i18n: { en: "Blue Label 700ml", he: "ג׳וני ווקר בלו לייבל 700 מ״ל", ar: "جوني ووكر بلو ليبل 700 مل" }
+},
 
 // {
 //   id: "jw_king_george",
