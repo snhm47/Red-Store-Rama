@@ -621,27 +621,27 @@ export const SEED_PRODUCTS = [
   name_i18n: { en: "Gold Label 700ml", he: "ג׳וני ווקר גולד לייבל 700 מ״ל", ar: "جوني ووكر غولد ليبل 700 مل" }
 },
 
-// {
-//   id: "jw_gold_label_1000",
-//   mainCategory: "alcohol",
-//   subCategory: "whisky",
-//   restricted: true,
-//   inStock: true,
-//   price: 219,
-//   imgUrl: "assets/products/gold_label.png",
-//   name_i18n: { en: "Gold Label 1L", he: "ג׳וני ווקר גולד לייבל ליטר", ar: "جوني ووكر غولد ليبل 1 لتر" }
-// },
+{
+  id: "jw_gold_label_1000",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 219,
+  imgUrl: "assets/products/gold_label.png",
+  name_i18n: { en: "Gold Label 1L", he: "ג׳וני ווקר גולד לייבל ליטר", ar: "جوني ووكر غولد ليبل 1 لتر" }
+},
 
-// {
-//   id: "jw_double_black_700",
-//   mainCategory: "alcohol",
-//   subCategory: "whisky",
-//   restricted: true,
-//   inStock: true,
-//   price: 169,
-//   imgUrl: "assets/products/dou_black.png",
-//   name_i18n: { en: "Double Black 700ml", he: "ג׳וני ווקר דאבל בלאק 700 מ״ל", ar: "جوني ووكر دابل بلاك 700 مل" }
-// },
+{
+  id: "jw_double_black_700",
+  mainCategory: "alcohol",
+  subCategory: "whisky",
+  restricted: true,
+  inStock: true,
+  price: 169,
+  imgUrl: "assets/products/dou_black.png",
+  name_i18n: { en: "Double Black 700ml", he: "ג׳וני ווקר דאבל בלאק 700 מ״ל", ar: "جوني ووكر دابل بلاك 700 مل" }
+},
 
 // {
 //   id: "jw_black_label_1000",
