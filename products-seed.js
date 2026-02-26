@@ -642,20 +642,20 @@ export const SEED_PRODUCTS = [
   imgUrl: "assets/products/dou_black.png",
   name_i18n: { en: "Double Black 700ml", he: "ג׳וני ווקר דאבל בלאק 700 מ״ל", ar: "جوني ووكر دابل بلاك 700 مل" }
 },
-{
-  id: "jw_red_label_700",
-  mainCategory: "alcohol",
-  subCategory: "whisky",
-  restricted: true,
-  inStock: true,
-  price: 85,
-  imgUrl: "assets/products/red_label_700.png",
-  name_i18n: { 
-    en: "Red Label 700ml", 
-    he: "ג׳וני ווקר רד לייבל 700 מ״ל", 
-    ar: "جوني ووكر ريد ليبل 700 مل" 
-  }
-},
+// {
+//   id: "jw_red_label_700",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 85,
+//   imgUrl: "assets/products/red_label_700.png",
+//   name_i18n: { 
+//     en: "Red Label 700ml", 
+//     he: "ג׳וני ווקר רד לייבל 700 מ״ל", 
+//     ar: "جوني ووكر ريد ليبل 700 مل" 
+//   }
+// },
 {
   id: "jw_red_label_1L",
   mainCategory: "alcohol",
