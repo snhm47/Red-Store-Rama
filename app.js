@@ -1,4 +1,4 @@
-// app.js (SHOP) — FIXED: whisky only as Alcohol subcategory + safer mobile rendering (FULL FILE)
+// app.js (SHOP) — FIXED: safer merge/normalize + prevents mobile crash on bad products
 
 // ======== DOM HELPER (MUST BE FIRST) ========
 const $ = (id) => document.getElementById(id);
@@ -433,8 +433,10 @@ function setLanguage(newLang) {
   applyLanguage();
   applySliderI18n();
 
+  UI_LOCK = true;
   renderMainCategories();
   renderSubCategories();
+  UI_LOCK = false;
 
   updateProductTextsOnly();
   filterProductsView();
@@ -477,7 +479,6 @@ function waLink(message) {
 function safeImgUrl(url) {
   const s = String(url || "").trim();
   if (!s) return PLACEHOLDER_IMG;
-  // keep it simple (avoid weird chars breaking HTML)
   return s;
 }
 
@@ -509,8 +510,13 @@ function productName(p) {
   return p.name || "";
 }
 
-// ======== NORMALIZE ========
+// ======== NORMALIZE (HARDENED) ========
 function normalizeProduct(raw) {
+  // If id is missing or not a valid string => return null (skip)
+  const rid = raw?.id;
+  const id = typeof rid === "string" ? rid.trim() : "";
+  if (!id) return null;
+
   const mainCategory = raw.mainCategory || raw.category || "snacks";
   const subCategory = raw.subCategory || "all";
 
@@ -521,7 +527,7 @@ function normalizeProduct(raw) {
 
   return {
     ...raw,
-    id: raw.id,
+    id,
     mainCategory,
     subCategory,
     restricted,
@@ -531,17 +537,19 @@ function normalizeProduct(raw) {
   };
 }
 
-// ======== MERGE SEED + DB ========
+// ======== MERGE SEED + DB (HARDENED) ========
 function mergeProducts(seed, dbProducts) {
   const map = new Map();
 
   seed.forEach((p) => {
     const np = normalizeProduct({ ...p, source: "seed" });
+    if (!np) return;
     map.set(np.id, np);
   });
 
   dbProducts.forEach((p) => {
     const np = normalizeProduct({ ...p, source: "db" });
+    if (!np) return;
     const prev = map.get(np.id);
     map.set(np.id, { ...(prev || {}), ...np });
   });
@@ -659,9 +667,7 @@ function renderMainCategories() {
   selects.forEach((select) => {
     select.innerHTML = MAIN_CATEGORIES.map((c) => {
       const label = t.cats?.[c.id]?.name || c.id;
-      return `<option value="${c.id}" ${
-        c.id === currentCategory ? "selected" : ""
-      }>${label}</option>`;
+      return `<option value="${c.id}" ${c.id === currentCategory ? "selected" : ""}>${label}</option>`;
     }).join("");
     select.value = currentCategory;
   });
@@ -684,11 +690,10 @@ function renderSubCategories() {
     select.innerHTML = list
       .map((sc) => {
         const label = t.subcats?.[sc.id] || sc.id;
-        return `<option value="${sc.id}" ${
-          sc.id === currentSubCategory ? "selected" : ""
-        }>${label}</option>`;
+        return `<option value="${sc.id}" ${sc.id === currentSubCategory ? "selected" : ""}>${label}</option>`;
       })
       .join("");
+
     select.value = currentSubCategory;
     select.disabled = isForcedSubcat();
   });
@@ -704,7 +709,11 @@ function buildProductsOnce() {
 
   const t = i18n[lang] || i18n.en;
 
+  const frag = document.createDocumentFragment();
+
   products.forEach((p) => {
+    if (!p?.id) return;
+
     const el = document.createElement("div");
     el.className = "product";
     el.dataset.pid = p.id;
@@ -732,16 +741,16 @@ function buildProductsOnce() {
       <div class="muted small" data-subcatlabel></div>
 
       <div class="price" data-price></div>
-      <div class="muted small" data-oos style="display:${
-        p.inStock ? "none" : "block"
-      }">${t.outOfStock}</div>
+      <div class="muted small" data-oos style="display:${p.inStock ? "none" : "block"}">${t.outOfStock}</div>
 
       <button class="btn primary full" data-add="${p.id}" type="button">${t.addToCart}</button>
     `;
 
-    list.appendChild(el);
+    frag.appendChild(el);
     productEls.set(p.id, el);
   });
+
+  list.appendChild(frag);
 
   updateProductTextsOnly();
 }
@@ -887,9 +896,7 @@ function renderCart() {
         <button data-dec="${i.id}" aria-label="decrease" type="button">−</button>
         <div class="num">${i.qty}</div>
         <button data-inc="${i.id}" aria-label="increase" type="button">+</button>
-        <div class="muted small" style="margin-left:auto;">₪${formatILS(
-          i.price * i.qty
-        )}</div>
+        <div class="muted small" style="margin-left:auto;">₪${formatILS(i.price * i.qty)}</div>
       </div>
     </div>
   `
@@ -952,18 +959,28 @@ function checkoutWhatsApp() {
   window.open(waLink(text), "_blank");
 }
 
-// ======== FIRESTORE LISTENER ========
+// ======== FIRESTORE LISTENER (WRAPPED) ========
 function listenProducts() {
   const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
 
   onSnapshot(q, (snap) => {
-    const dbProductsRaw = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    products = mergeProducts(SEED_PRODUCTS, dbProductsRaw);
-    productsById = new Map(products.map((p) => [p.id, p]));
+    try {
+      const dbProductsRaw = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      const merged = mergeProducts(SEED_PRODUCTS, dbProductsRaw);
 
-    buildProductsOnce();
-    renderSubCategories();
-    filterProductsView();
+      products = merged;
+      productsById = new Map(products.map((p) => [p.id, p]));
+
+      UI_LOCK = true;
+      buildProductsOnce();
+      renderSubCategories();
+      UI_LOCK = false;
+
+      filterProductsView();
+    } catch (err) {
+      console.error("Products snapshot render failed:", err);
+      // Worst-case: do not crash UI
+    }
   });
 }
 
