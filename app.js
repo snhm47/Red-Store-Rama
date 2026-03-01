@@ -25,7 +25,7 @@ const INSTAGRAM_URL = "https://www.instagram.com/red_store_ramah/";
 const WAZE_URL =
   "https://ul.waze.com/ul?place=ChIJXbDQDq4xHBURMSYTp0TbYQ4&ll=32.93647600%2C35.36472470&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location";
 
-const PLACEHOLDER_IMG = "assets/products/placeholder.jpg";
+const PLACEHOLDER_IMG = "assets/products/logo.jpg";
 
 // ======== KEYS ========
 const AGE_KEY = "redstore_age_ok_session_v1";
