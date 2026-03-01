@@ -622,7 +622,7 @@ export const SEED_PRODUCTS = [
     restricted: true,
     inStock: true,
     price: 85,
-    imgUrl: "assets/products/red_label.png",
+    imgUrl: "assets/products/red_label_700.png",
     name_i18n: { en: "Red Label 700ml", he: "ג׳וני ווקר רד לייבל 700 מ״ל", ar: "جوني ووكر ريد ليبل 700 مل" },
   },
   {
