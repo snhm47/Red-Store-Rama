@@ -625,34 +625,34 @@ export const SEED_PRODUCTS = [
 },
 
 // ✅ RED LABEL (ADDED BACK, CLEAN)
-{
-  id: "jw_red_label_700",
-  mainCategory: "alcohol",
-  subCategory: "whisky",
-  restricted: true,
-  inStock: true,
-  price: 85,
-  imgUrl: "assets/products/red_label.png",
-  name_i18n: {
-    en: "Red Label 700ml",
-    he: "ג׳וני ווקר רד לייבל 700 מ״ל",
-    ar: "جوني ووكر ريد ليبل 700 مل"
-  }
-},
-{
-  id: "jw_red_label_1000",
-  mainCategory: "alcohol",
-  subCategory: "whisky",
-  restricted: true,
-  inStock: true,
-  price: 119,
-  imgUrl: "assets/products/red_label.png",
-  name_i18n: {
-    en: "Red Label 1L",
-    he: "ג׳וני ווקר רד לייבל 1 ליטר",
-    ar: "جوني ووكر ريد ليبل 1 لتر"
-  }
-},
+// {
+//   id: "jw_red_label_700",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 85,
+//   imgUrl: "assets/products/red_label.png",
+//   name_i18n: {
+//     en: "Red Label 700ml",
+//     he: "ג׳וני ווקר רד לייבל 700 מ״ל",
+//     ar: "جوني ووكر ريد ليبل 700 مل"
+//   }
+// },
+// {
+//   id: "jw_red_label_1000",
+//   mainCategory: "alcohol",
+//   subCategory: "whisky",
+//   restricted: true,
+//   inStock: true,
+//   price: 119,
+//   imgUrl: "assets/products/red_label.png",
+//   name_i18n: {
+//     en: "Red Label 1L",
+//     he: "ג׳וני ווקר רד לייבל 1 ליטר",
+//     ar: "جوني ووكر ريد ليبل 1 لتر"
+//   }
+// },
 
 {
   id: "jw_black_label_1000",
